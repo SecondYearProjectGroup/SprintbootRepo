@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Graduate Student Management System</title>
+    <link rel="stylesheet" href="/css/index.css">
+
+</head>
+<body>
+
+<ul class="topnav">
+    <li><a class="active" href="/home">Home</a></li>
+    <li class="right"><a href="/login">Log in</a></li>
+</ul>
+
+
+<div class="navbar" style="background-color: rgb(47, 129, 236);">
+    <img src="/img/PeradeniyaLogo.jpg" alt="PGSMS" width="50px" height="50px" style="margin-left: 10px;">
+
+    <div class="dropdown" style="margin-left: 400px;">
+        <button class="dropbtn">Computer Engineering
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#link1">Facilities</a>
+            <a href="#link2">Specializations</a>
+            <a href="#link3">About</a>
+        </div>
+    </div>
+
+    <div class="dropdown" >
+        <button class="dropbtn">Postgraduate Studies
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#link1">Researches</a>
+            <a href="#link2">Research Facilities</a>
+            <a href="#link3">Procedure</a>
+        </div>
+    </div>
+
+    <div class="dropdown" >
+        <button class="dropbtn">Centers & Units
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#link1">Computer Engineering Department</a>
+            <a href="#link2">Center for Engineering Research</a>
+            <a href="#link3">Computing Centre</a>
+        </div>
+    </div>
+
+    <div class="dropdown" >
+        <button class="dropbtn">Department & Staff
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a href="#link1">Student Help guide</a>
+            <a href="#link2">Department ADPC</a>
+            <a href="#link3">IQAC</a>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="container">
+    <img src="/img/Picture1.jpg" alt="Students" style="width:100%;">
+
+    <div class="centered">
+        <h1 style="font-size: 5em; ;" >Enroll Now</h1>
+        <h2 style="font-size: 3em;">Post Graduate Student Management System</h2>
+    </div>
+</div>
+
+<div class="form-container">
+    <form action="/enroll" method="post" class="form-center">
+        <table width="150%">
+            <tr>
+                <td>Name with Initials</td>
+                <td><input type="text" name="nameWithInitials" size="30"></td>
+            </tr>
+            <tr>
+                <td>Full Name</td>
+                <td><input type="text" name="fullName" size="30"></td>
+            </tr>
+            <tr>
+                <td>Contact Number</td>
+                <td><input type="tel" name="contactNumber" size="30"></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" name="email" size="30"></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><textarea name="address" rows="4" cols="30"></textarea></td>
+            </tr>
+            <br>
+        </table>
+        <br>
+        <hr>
+
+        <h3>Educational/Professional Qualifications</h3>
+
+        <table width="140%">
+            <tr>
+                <td>University / Institute</td>
+                <td><input type="text" name="university" size="30"></td>
+            </tr>
+            <tr>
+                <td>From</td>
+                <td><input type="text" name="fromDate" size="30"></td>
+            </tr>
+            <tr>
+                <td>To</td>
+                <td><input type="text" name="toDate" size="30"></td>
+            </tr>
+            <tr>
+                <td>Degree</td>
+                <td><input type="text" name="degree" size="30"></td>
+            </tr>
+            <tr>
+                <td>Field</td>
+                <td><input type="text" name="field" size="30"></td>
+            </tr>
+            <tr>
+                <td>Class / Pass</td>
+                <td><input type="text" name="classPass" size="30"></td>
+            </tr>
+        </table>
+
+        <br>
+        Attach Files: <input type="file" name="attachment" size="30">
+        <br><br>
+        <hr>
+
+        <h3>List of Publications</h3>
+        <textarea name="publications" rows="4" cols="67"></textarea>
+
+        <br><br><hr>
+        <h3>Proposed Program of Study</h3>
+        <select name="programOfStudy">
+            <option value="PhD">PhD</option>
+            <option value="MPhil">MPhil</option>
+            <option value="Program 1">Program 1</option>
+            <option value="Program 2">Program 2</option>
+        </select>
+
+        <br><br><hr><br><br>
+        <input type="submit" value="Submit"><br><br>
+    </form>
+
+</div>
+
+
+</body>
