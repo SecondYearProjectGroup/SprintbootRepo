@@ -2,6 +2,23 @@ function Alert() {
     window.alert("You enrolled successfully.");
 }
 
+// Approve/ Reject Students in Registered Students
+document.addEventListener('DOMContentLoaded', function() {
+    const statusCell = document.getElementById('abc');
+    const rightButton = document.getElementById('approve-button');
+    const wrongButton = document.getElementById('reject-button');
+
+    rightButton.addEventListener('click', function() {
+        statusCell.innerHTML = '<strong>Approved</strong>';
+        statusCell.style.color = 'green'; // Set color to green for "Approved"
+    });
+
+    wrongButton.addEventListener('click', function() {
+        statusCell.innerHTML = '<strong>Rejected</strong>';
+        statusCell.style.color = 'red'; // Set color to red for "Rejected"
+    });
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     var notificationButton = document.getElementById('notificationButton');
     var notificationPanel = document.getElementById('notificationPanel');

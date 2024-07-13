@@ -153,43 +153,56 @@
                 </thead>
                 <tbody>
 
-                <tr  th:each="student : ${liststudent }">
-                    <td>1</td>
-                    <td>S. Perera</td>
-                    <td>Supun Perera</td>
-                    <td>0111111111</td>
-                    <td>thatjaaafa@gmail.com</td>
-                    <td>Kegalle</td>
-                    <td>University of Peredeniya</td>
-                    <td>2009</td>
-                    <td>2013</td>
-                    <td>Engi</td>
-                    <td>Com</td>
-                    <td>First class</td>
-                    <td>Files</td>
-                    <td>No</td>
-                    <td>PhD</td>
-                </tr>
+<!--                <tr  th:each="student : ${liststudent }">-->
+<!--                    <td>1</td>-->
+<!--                    <td>S. Perera</td>-->
+<!--                    <td>Supun Perera</td>-->
+<!--                    <td>0111111111</td>-->
+<!--                    <td>thatjaaafa@gmail.com</td>-->
+<!--                    <td>Kegalle</td>-->
+<!--                    <td>University of Peredeniya</td>-->
+<!--                    <td>2009</td>-->
+<!--                    <td>2013</td>-->
+<!--                    <td>Engi</td>-->
+<!--                    <td>Com</td>-->
+<!--                    <td>First class</td>-->
+<!--                    <td>Files</td>-->
+<!--                    <td>No</td>-->
+<!--                    <td>PhD</td>-->
+<!--                </tr>-->
+
+<!--                <tr  th:each="student : ${liststudent }">-->
+<!--                    <td>1</td>-->
+<!--                    <td>S. Perera</td>-->
+<!--                    <td>Supun Perera</td>-->
+<!--                    <td>0111111111</td>-->
+<!--                    <td>thatjaaafa@gmail.com</td>-->
+<!--                    <td>Kegalle</td>-->
+<!--                    <td>University of Peredeniya</td>-->
+<!--                    <td>2009</td>-->
+<!--                    <td>2013</td>-->
+<!--                    <td>Engi</td>-->
+<!--                    <td>Com</td>-->
+<!--                    <td>First class</td>-->
+<!--                    <td>Files</td>-->
+<!--                    <td>No</td>-->
+<!--                    <td>PhD</td>-->
+<!--                </tr>-->
 
                 <tr  th:each="student : ${liststudent }">
-                    <td>1</td>
-                    <td>S. Perera</td>
-                    <td>Supun Perera</td>
-                    <td>0111111111</td>
-                    <td>thatjaaafa@gmail.com</td>
-                    <td>Kegalle</td>
-                    <td>University of Peredeniya</td>
-                    <td>2009</td>
-                    <td>2013</td>
-                    <td>Engi</td>
-                    <td>Com</td>
-                    <td>First class</td>
-                    <td>Files</td>
-                    <td>No</td>
-                    <td>PhD</td>
-                </tr>
-
-                <tr  th:each="student : ${liststudent }">
+                    <td id="abc">
+                        <div class="btn-group">
+                            <!-- Approve Form -->
+                            <form th:action="@{'/handleApproval/' + ${student.id}}" method="post">
+                                <input type="hidden" name="action" value="Approved">
+                                <button type="submit" id="approve-button">Approve</button>
+                            </form>
+                            <!-- Reject Form -->
+                            <form th:action="@{'/handleApproval/' + ${student.id}}" method="post">
+                                <input type="hidden" name="action" value="rejected">
+                                <button type="submit" id="reject-button">Reject</button>
+                            </form>
+                    </td>
                     <td th:text="${student.id}">Student ID</td>
                     <td th:text="${student.nameWithInitials}">StudentName</td>
                     <td th:text="${student.fullName}">FullName</td>
@@ -204,12 +217,12 @@
                     <td th:text="${student.classPass}">Class</td>
                     <td th:text="${student.publications}">Publications</td>
                     <td th:text="${student.programOfStudy}">ProgramOfStudy</td>
-                    <td>
-                        <a th:href="@{'/edit/' + ${student.id}}">Edit</a>
-                    </td>
-                    <td>
-                        <a th:href="@{'/delete/' + ${student.id}}">Delete</a>
-                    </td>
+<!--                    <td>-->
+<!--                        <a th:href="@{'/edit/' + ${student.id}}">Edit</a>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <a th:href="@{'/delete/' + ${student.id}}">Delete</a>-->
+<!--                    </td>-->
                 </tr>
                 </tbody>
             </table>
