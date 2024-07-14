@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10bb73b3-fca7-4c64-9c29-da48416dfcd8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/EnrolledStudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/EnrolledStudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/EnrolledStudentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/EnrolledStudentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/static/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/static/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/templates/Enrolledstu.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/templates/Enrolledstu.html" afterDir="false" />
     </list>
@@ -21,6 +21,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -41,9 +44,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Shell Script.Unnamed.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Dasu",
+    "jdk.selected.JAVA_MODULE": "17",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/ASUS/Desktop/Com Sem 4/CO200 Second Year Project/SprintbootRepo/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/static/js"
+    "last_opened_file_path": "C:/Users/ASUS/Desktop/Com Sem 4/CO200 Second Year Project/SprintbootRepo/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/static/js",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -66,6 +74,17 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/UserRepository.java</url>
+          <line>5</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SprintbootRepo$StudentManagementApplication.ic" NAME="StudentManagementApplication Coverage Results" MODIFIED="1720875829562" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
