@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf().disable()
 
                 .authorizeHttpRequests()
-                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard", "/enrolledstu", "/css/**", "/js/**" , "/img/**" ).permitAll()
+                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard", "/enrolledstu", "/handleApproval/**" ,"/css/**", "/js/**" , "/img/**" ).permitAll()
                 .requestMatchers("home").permitAll()
 
                 .and()

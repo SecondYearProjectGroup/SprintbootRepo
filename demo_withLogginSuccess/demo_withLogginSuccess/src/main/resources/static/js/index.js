@@ -106,21 +106,60 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Approve/ Reject Students in Registered Students
+//document.addEventListener('DOMContentLoaded', function() {
+//    const statusCell = document.getElementById('status-cell');
+//    const rightButton = document.getElementById('approve-button');
+//    const wrongButton = document.getElementById('reject-button');
+//
+//    rightButton.addEventListener('click', function() {
+//        statusCell.innerHTML = '<strong>Approved</strong>';
+//        statusCell.style.color = 'green'; // Set color to green for "Approved"
+//    });
+//
+//    wrongButton.addEventListener('click', function() {
+//        statusCell.innerHTML = '<strong>Rejected</strong>';
+//        statusCell.style.color = 'red'; // Set color to red for "Rejected"
+//    });
+//});
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    const statusCell = document.getElementById('status-cell');
-    const rightButton = document.getElementById('approve-button');
-    const wrongButton = document.getElementById('reject-button');
+            const statusCell = document.getElementById('status-cell');
+            const approveButton = document.getElementById('approve-button');
+            const rejectButton = document.getElementById('reject-button');
 
-    rightButton.addEventListener('click', function() {
-        statusCell.innerHTML = '<strong>Approved</strong>';
-        statusCell.style.color = 'green'; // Set color to green for "Approved"
-    });
+            function handleButtonClick(button, action) {
+                const studentId = button.getAttribute('data-id');
 
-    wrongButton.addEventListener('click', function() {
-        statusCell.innerHTML = '<strong>Rejected</strong>';
-        statusCell.style.color = 'red'; // Set color to red for "Rejected"
-    });
-});
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/handleApproval/" + studentId, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            alert("Success: " + xhr.responseText);
+                        } else {
+                            alert("Error: " + xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send("action=" + action);
+
+                // Update the status cell
+                statusCell.innerHTML = '<strong>' + action.charAt(0).toUpperCase() + action.slice(1) + '</strong>';
+                statusCell.style.color = action === 'Approved' ? 'green' : 'red';
+            }
+
+            approveButton.addEventListener('click', function() {
+                handleButtonClick(this, 'Approved');
+            });
+
+            rejectButton.addEventListener('click', function() {
+                handleButtonClick(this, 'rejected');
+            });
+        });
+
+
 
 // Calendar in Main container
 $(document).ready(function() {
