@@ -1,3 +1,5 @@
+<!--Start of HeaderAfterLogin-->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,12 +8,30 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>PostGraduate Student Management System</title>
+
+    <!-- Including CSS file -->
     <link rel="stylesheet" href="/css/index.css">
-    <script src="/js/index.js"></script>
+
+    <!-- Including jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Including External script file -->
+    <script src="/js/index.js" defer></script>
+
+    <!-- Calendar -->
+    <link rel="stylesheet" href="/css/evo-calendar.min.css">
+    <link rel="stylesheet" href="/css/evo-calendar.royal-navy.css">
+    <link rel="stylesheet" href="/css/evo-calendar.royal-navy.min.css">
+
+    <!-- Calendar Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="/js/evo-calendar.min.js"></script>
+
 </head>
 
 <body style="margin: 0%; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;">
+
+<!-- Navigation bar -->
 <div class = "navbars">
     <ul class="topnav">
         <li><a class="active" href="/welcome">Home</a></li>
@@ -24,6 +44,7 @@
     </ul>
 </div>
 
+<!-- Notification Panel -->
 <div id="notificationPanel" class="notification-panel">
     <h4 style="text-align: center; color:#400752; margin:0px">Notifications</h4>
     <hr>
@@ -33,7 +54,10 @@
     <!-- Add your notifications here -->
 </div>
 
+<!--Start of the main content -->
 <div class = "main" style="margin-top: 45px;">
+
+    <!-- Second Navigation Bar -->
     <div class="navbar" style="background-color: #666666;">
         <img src="https://i.ibb.co/9hRdFVt/cropped-web-front-page-logo.png" alt="PGSMS" width="50px" height="50px" style="margin-left: 10px;">
 
@@ -83,6 +107,7 @@
     </div>
 </div>
 
+<!-- Start of Whole Container -->
 <div class="wholeContainer">
     <div class="sidebar-left">
         <h3 style="color: #400752; margin-top: 0px;">Main Topics</h3>
@@ -94,6 +119,7 @@
         </ul>
     </div>
 
+    <!-- Start of Right Sidebar -->
     <div class="sidebar-right" id="rightSidebar">
         <button class="toggle-btn" id="hideSidebarBtn">X</button>
         <h3 style="color: #400752; margin-top: 0px;">Research</h3>
@@ -103,35 +129,46 @@
             <li><a href="#topic3">Topic 3</a></li>
             <li><a href="#topic4">Topic 4</a></li>
         </ul>
+
+        <!-- Calendar in the Right Sidebar -->
         <h3 style="color: #400752; margin-top: 0px;">Calender</h3>
+        <!-- <iframe src="https://calendar.google.com/calendar/embed?src=thathsaraishan%40gmail.com&ctz=Asia%2FColombo&hl=en&showTitle=0&showDate=0&showNav=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH" style="border: 0" width="100%" height="200" frameborder="0" scrolling="no"></iframe> -->
+        <div class="hero-sidebar">
+            <div id="sidebar-calendar"></div>
+        </div>
+
         <br>
         <br>
         <h3 style="color: #400752; margin-top: 0px;">External Links</h3>
     </div>
 
+    <!-- Start of Main Content -->
     <div class="contentMain" id="mainContent">
 
         <button class="toggle-btn" id="showSidebarBtn" style="display: none;"><<</button>
+        <!--End of HeaderAfterLogin-->
+
+        <!--Start of the main content-->
 
 
-
-
-
-        <dev class="topic">
+        <div class="topic">
             <h1>Registered Students</h1>
-        </dev>
+        </div>
 
         <div class = "RegisteredTable">
             <table>
                 <thead>
                 <tr>
                     <th colspan="6">Student Details</th>
-                    <th colspan="7">Educational/ Professional Qualifications</th>
+                    <th colspan="6">Educational/ Professional Qualifications</th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
 
                 <tr>
+                    <th>Status</th>
                     <th>Student ID</th>
                     <th>Name with Initials</th>
                     <th>Full Name</th>
@@ -147,61 +184,34 @@
                     <th>Attached Files</th>
                     <th>Publications</th>
                     <th>Program of Study</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
 
-<!--                <tr  th:each="student : ${liststudent }">-->
-<!--                    <td>1</td>-->
-<!--                    <td>S. Perera</td>-->
-<!--                    <td>Supun Perera</td>-->
-<!--                    <td>0111111111</td>-->
-<!--                    <td>thatjaaafa@gmail.com</td>-->
-<!--                    <td>Kegalle</td>-->
-<!--                    <td>University of Peredeniya</td>-->
-<!--                    <td>2009</td>-->
-<!--                    <td>2013</td>-->
-<!--                    <td>Engi</td>-->
-<!--                    <td>Com</td>-->
-<!--                    <td>First class</td>-->
-<!--                    <td>Files</td>-->
-<!--                    <td>No</td>-->
-<!--                    <td>PhD</td>-->
-<!--                </tr>-->
-
-<!--                <tr  th:each="student : ${liststudent }">-->
-<!--                    <td>1</td>-->
-<!--                    <td>S. Perera</td>-->
-<!--                    <td>Supun Perera</td>-->
-<!--                    <td>0111111111</td>-->
-<!--                    <td>thatjaaafa@gmail.com</td>-->
-<!--                    <td>Kegalle</td>-->
-<!--                    <td>University of Peredeniya</td>-->
-<!--                    <td>2009</td>-->
-<!--                    <td>2013</td>-->
-<!--                    <td>Engi</td>-->
-<!--                    <td>Com</td>-->
-<!--                    <td>First class</td>-->
-<!--                    <td>Files</td>-->
-<!--                    <td>No</td>-->
-<!--                    <td>PhD</td>-->
-<!--                </tr>-->
+                <!--                <tr  th:each="student : ${liststudent }">-->
+                <!--                    <td>1</td>-->
+                <!--                    <td>S. Perera</td>-->
+                <!--                    <td>Supun Perera</td>-->
+                <!--                    <td>0111111111</td>-->
+                <!--                    <td>thatjaaafa@gmail.com</td>-->
+                <!--                    <td>Kegalle</td>-->
+                <!--                    <td>University of Peredeniya</td>-->
+                <!--                    <td>2009</td>-->
+                <!--                    <td>2013</td>-->
+                <!--                    <td>Engi</td>-->
+                <!--                    <td>Com</td>-->
+                <!--                    <td>First class</td>-->
+                <!--                    <td>Files</td>-->
+                <!--                    <td>No</td>-->
+                <!--                    <td>PhD</td>-->
+                <!--                </tr>-->
 
                 <tr  th:each="student : ${liststudent }">
-                    <td id="abc">
+                    <td id="status-cell">
                         <div class="btn-group">
-                            <!-- Approve Form -->
-                            <form th:action="@{'/handleApproval/' + ${student.id}}" method="post">
-                                <input type="hidden" name="action" value="Approved">
-                                <button type="submit" id="approve-button">Approve</button>
-                            </form>
-                            <!-- Reject Form -->
-                            <form th:action="@{'/handleApproval/' + ${student.id}}" method="post">
-                                <input type="hidden" name="action" value="rejected">
-                                <button type="submit" id="reject-button">Reject</button>
-                            </form>
+                            <button id="approve-button">Approve</button>
+                            <button id="reject-button">Reject</button>
+                        </div>
                     </td>
                     <td th:text="${student.id}">Student ID</td>
                     <td th:text="${student.nameWithInitials}">StudentName</td>
@@ -215,14 +225,15 @@
                     <td th:text="${student.degree}">Degree</td>
                     <td th:text="${student.field}">Field</td>
                     <td th:text="${student.classPass}">Class</td>
+                    <td th:text="${student.classPass}">Class</td> <!-- Want to add Attached files here -->
                     <td th:text="${student.publications}">Publications</td>
                     <td th:text="${student.programOfStudy}">ProgramOfStudy</td>
-<!--                    <td>-->
-<!--                        <a th:href="@{'/edit/' + ${student.id}}">Edit</a>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <a th:href="@{'/delete/' + ${student.id}}">Delete</a>-->
-<!--                    </td>-->
+                    <!--                    <td>-->
+                    <!--                        <a th:href="@{'/edit/' + ${student.id}}">Edit</a>-->
+                    <!--                    </td>-->
+                    <!--                    <td>-->
+                    <!--                        <a th:href="@{'/delete/' + ${student.id}}">Delete</a>-->
+                    <!--                    </td>-->
                 </tr>
                 </tbody>
             </table>
@@ -231,7 +242,9 @@
 
 
 
+        <!-- End of the main content -->
 
+        <!--Start of Footer -->
     </div>
 </div>
 
@@ -245,6 +258,8 @@
     <br>
     <br>
 </footer>
+
+<!--End of Footer-->
 
 </body>
 </html>
