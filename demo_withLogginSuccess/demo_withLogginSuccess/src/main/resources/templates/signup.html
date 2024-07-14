@@ -151,36 +151,47 @@
         <!--Start of the main content-->
 
 
-
         <div class="topic">
-            <h1>Login</h1>
+            <h1>Sign Up</h1>
         </div>
 
         <div class="login-form">
-            <form th:action="@{/login}" method="post" role="form" th:object="${user}">
+            <form action="/signup" method="post">
                 <table>
                     <tr>
-                        <td><input th:field="*{username}" type="text" id="username" name="username" size="36" placeholder="Username..."></td>
+                        <td><input type="text" name="firstName" size="36" placeholder="Name..."></td>
                     </tr>
                     <tr>
-                        <td><input th:field="*{password}" type="password" id="password" name="password" minlength="8" size="36" placeholder="Password..."></td>
+                        <td><input type="text" name="LastName" size="36" placeholder="Name..."></td>
+                    </tr>
+                    <tr>
+                        <td><input type="email" name="email" size="36" placeholder="Email..."></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="username" size="36" placeholder="Username..."></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="password" name="password" minlength="8" size="36" placeholder="Password..."></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="repwd" name="repwd" minlength="8" size="36" placeholder="Repeat Password..."></td>
                     </tr>
                     <tr>
                         <td><hr></td>
                     </tr>
                     <tr>
-                        <td><input type="submit" value="Login"></td>
+                        <td><input type="submit" value="Sign Up"></td>
                     </tr>
                     <tr>
-                        <td><p style="font-family: Arial, Helvetica, sans-serif; font-size:12px;">New Here? <a th:href="@{/signup}">Register</a></p></td>
+                        <td><p style="font-family: Arial, Helvetica, sans-serif; font-size:12px;">Already have registered? <a href="/login">Login</a></p></td>
                     </tr>
                 </table>
+                <br>
 
                 <br><br>
             </form>
         </div>
         <br><br><br><br><br>
-
         <!-- End of the main content -->
 
         <!--Start of Footer -->

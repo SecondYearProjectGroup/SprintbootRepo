@@ -57,11 +57,11 @@ public class EnrolledStudentController {
         }
     }
 
-    @GetMapping("/Enrolledstu")
+    @GetMapping("/enrolledstu")
     public String viewHomePage(Model model) {
         List<Student> liststudent = enrolledStudentService.listAll();
         model.addAttribute("liststudent", liststudent);
         System.out.print("Get / ");
-        return "Enrolledstu";
+        return "enrolledstu";
     }
 }
