@@ -1,28 +1,42 @@
+<!--Start of Header-->
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-
     <title>PostGraduate Student Management System</title>
+
+    <!-- Including CSS file -->
     <link rel="stylesheet" href="/css/index.css">
-    <script src="/js/index.js"></script>
+
+    <!-- Including jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Including External script file -->
+    <script src="/js/index.js" defer></script>
+
 </head>
 
 <body style="margin: 0%; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;">
+
+<!-- Navigation bar -->
 <div class = "navbars">
     <ul class="topnav">
-        <li><a class="active" href="/welcome">Home</a></li>
-        <li><a class="right" href="/home">Home</a></li>
-        <li class="right"><a href="/login">Log in</a></li>
+        <li><a class="active" href="/welcome">Home1</a></li>
+        <li><a class="right" href="/home">Home2</a></li>
+        <li class="right"><a href="/login">Login</a></li>
         <li class="right"><a href="/enroll">Enroll</a></li>
     </ul>
 </div>
 
+
+<!--Start of the main content -->
 <div class = "main" style="margin-top: 45px;">
+
+    <!-- Second Navigation Bar -->
     <div class="navbar" style="background-color: #666666;">
         <img src="https://i.ibb.co/9hRdFVt/cropped-web-front-page-logo.png" alt="PGSMS" width="50px" height="50px" style="margin-left: 10px;">
 
@@ -72,6 +86,7 @@
     </div>
 </div>
 
+<!-- Start of Whole Container -->
 <div class="wholeContainer">
     <div class="sidebar-left">
         <h3 style="color: #400752; margin-top: 0px;">Main Topics</h3>
@@ -83,36 +98,41 @@
         </ul>
     </div>
 
+
+    <!-- Start of Main Content -->
     <div class="contentMainBeforeLogin" id="mainContent">
 
         <button class="toggle-btn" id="showSidebarBtn" style="display: none;"><<</button>
+        <!--End of Header-->
 
 
 
+
+        <!--Start of the main content-->
         <img src="https://i.ibb.co/ZxJ90GH/Screenshot-2024-06-08-135710.png" alt="Students" style="width:100%;">
 
         <div class="form-container">
             <form action="/enroll" method="post">
-                <table style="width: 150%;">
+                <table style="width: 100%;">
                     <tr>
                         <td>Name with Initials</td>
-                        <td><input type="text" name="nameWithInitials" size="30" placeholder="Your Name..."></td>
+                        <td><input type="text" name="nameWithInitials" placeholder="Your Name..."></td>
                     </tr>
                     <tr>
                         <td>Full Name</td>
-                        <td><input type="text" name="fullName" size="30" placeholder="Your Full Name..."></td>
+                        <td><input type="text" name="fullName" placeholder="Your Full Name..."></td>
                     </tr>
                     <tr>
                         <td>Contact Number</td>
-                        <td><input type="tel" name="contactNumber" size="30" placeholder="Contact Number..."></td>
+                        <td><input type="tel" name="contactNumber" placeholder="Contact Number..."></td>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td><input type="email" name="email" size="30" placeholder="Email Address..."></td>
+                        <td><input type="email" name="email" placeholder="Email Address..."></td>
                     </tr>
                     <tr>
                         <td>Address</td>
-                        <td><textarea name="address" rows="4" cols="34"></textarea></td>
+                        <td><textarea name="address" rows="4"></textarea></td>
                     </tr>
                     <br>
                 </table>
@@ -123,34 +143,34 @@
 
                 <div id="form-sections-container">
                     <div class="form-section" id="original-form-section">
-                        <table style="width: 140%;">
+                        <table style="width: 100%;">
                             <tr>
                                 <td>University / Institute</td>
-                                <td><input type="text" name="university" size="30" placeholder="University..."></td>
+                                <td><input type="text" name="university" placeholder="University..."></td>
                             </tr>
                             <tr>
                                 <td>From</td>
-                                <td><input type="text" name="fromDate" size="30" placeholder="From..."></td>
+                                <td><input type="text" name="fromDate" placeholder="From..."></td>
                             </tr>
                             <tr>
                                 <td>To</td>
-                                <td><input type="text" name="toDate" size="30" placeholder="To..."></td>
+                                <td><input type="text" name="toDate" placeholder="To..."></td>
                             </tr>
                             <tr>
                                 <td>Degree</td>
-                                <td><input type="text" name="degree" size="30" placeholder="Degree..."></td>
+                                <td><input type="text" name="degree" placeholder="Degree..."></td>
                             </tr>
                             <tr>
                                 <td>Field</td>
-                                <td><input type="text" name="field" size="30" placeholder="Field..."></td>
+                                <td><input type="text" name="field" placeholder="Field..."></td>
                             </tr>
                             <tr>
                                 <td>Class/Pass</td>
-                                <td><input type="text" name="classPass" size="30" placeholder="Class..."></td>
+                                <td><input type="text" name="classPass" placeholder="Class..."></td>
                             </tr>
                         </table>
                         <br>
-                        Attach Files: <input type="file" name="attachment" size="30">
+                        Attach Files: <input type="file" name="attachment">
                         <br><br>
                     </div>
                 </div>
@@ -158,24 +178,6 @@
                 <button type="button" id="add-section">Add Section</button>
                 <button type="button" id="remove-section" style="display:none;">--</button>
 
-                <script>
-                    $(document).ready(function() {
-                        $('#add-section').click(function() {
-                            var newSection = $('#original-form-section').clone();
-                            newSection.find('input[type="text"]').val('');
-                            newSection.find('input[type="file"]').val('');
-                            newSection.removeAttr('id');  // Remove the id attribute to avoid duplicate ids
-                            $('#form-sections-container').append(newSection);
-                            $('#remove-section').show();
-                        });
-                        $('#remove-section').click(function() {
-                            $('#form-sections-container .form-section').last().remove();
-                            if ($('#form-sections-container .form-section').length <= 1) {
-                                $('#remove-section').hide();  // Hide the "Remove Last Section" button if only the original section is left
-                            }
-                        });
-                    });
-                </script>
                 <hr>
 
                 <h3>List of Publications</h3>
@@ -184,8 +186,8 @@
                 <br><br><hr>
                 <h3>Proposed Program of Study</h3>
                 <select name="programOfStudy">
-                    <option value="program1">PhD</option>
-                    <option value="program1">MPhil</option>
+                    <option value="PhD">PhD</option>
+                    <option value="MPhil">MPhil</option>
                     <option value="program1">Program 1</option>
                     <option value="program2">Program 2</option>
 
@@ -197,7 +199,9 @@
         </div>
 
 
+        <!-- End of the main content -->
 
+        <!--Start of Footer -->
     </div>
 </div>
 
@@ -211,6 +215,8 @@
     <br>
     <br>
 </footer>
+
+<!--End of Footer-->
 
 </body>
 </html>
