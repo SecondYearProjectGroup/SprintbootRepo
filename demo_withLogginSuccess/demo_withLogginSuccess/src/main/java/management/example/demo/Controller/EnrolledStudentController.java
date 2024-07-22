@@ -50,20 +50,30 @@ public class EnrolledStudentController {
         //Handle the APPROVED action
         if ("Approved".equalsIgnoreCase(action)) {
             enrolledStudentService.confirm(student);
+
+            //To save the confirmed student in an another entity
+            //confirmedStudentService.saveStudent();
+
+            //Set the details to the send the email
             String toEmail = student.getEmail();
             String subject = "Your enrollment is confirmed";
-            String body = "Rejected enrollment to the" + enrolledStudentService.get(id).getProgramOfStudy() + "\n" +
+            String body = "Your enrollment to the" + enrolledStudentService.get(id).getProgramOfStudy() + "is successfully confirmed." +"\n" +
                     "Your username = " + enrolledStudentService.get(id).getFullName() + "\n" +
                     "Your password = " + enrolledStudentService.get(id).getContactNumber();
-            //emailService.sendMail(toEmail, subject, body);
+
+            //Send the email
+            emailService.sendMail(toEmail, subject, body);
+
+            //Display the message
             return ResponseEntity.ok("Approval email sent successfully.");
         }
+
         //Handle the REJECT action
         else if ("rejected".equalsIgnoreCase(action)) {
             String toEmail = student.getEmail();
             String subject = "Your enrollment is rejected";
             String body = "Your enrollment is rejected.";
-            //emailService.sendMail(toEmail, subject, body);
+            emailService.sendMail(toEmail, subject, body);
             return ResponseEntity.ok("Rejection email sent successfully.");
         }
         return ResponseEntity.badRequest().body("Invalid action.");

@@ -23,22 +23,61 @@ public class LoginService implements UserService {
         this.userRepository = userRepository;
     }
 
+    //Find the user by the id
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    //Save users, overriding the save method in the user service
     @Override
     public User save(User user_) {
+        //Set username, firstname, lastname, email and the  encoded password
         User user = new User(   user_.getUsername(),
                                 user_.getFirstName(),
                                 user_.getLastName(),
                                 user_.getEmail(),
                                 passwordEncoder.encode(user_.getPassword()));
+        //Save user in the database through the repository layer
         return userRepository.save(user);
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  /*

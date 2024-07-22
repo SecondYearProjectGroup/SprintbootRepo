@@ -12,6 +12,7 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
+    //Send the email
     @GetMapping("/send-email")
     public String sendEmail(@RequestParam String toEmail, @RequestParam String subject, @RequestParam String body) {
         emailService.sendMail(toEmail, subject, body);

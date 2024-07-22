@@ -30,10 +30,12 @@ public class StudentController {
         //Save the enrolled student
         studentService.saveStudent(student);
         model.addText("Student enrolled successfully!");
-        //Send an email to the administrator to inform the enrollment
+        //Email the administrator to inform the enrollment
         String toEmail = "dasunikawya2001.1@gmail.com";
         String subject = "A student Enrollment";
-        String body = "New student has enrolled. \n" + "Name : " + student.getFullName() + "\n" + "Address : " + student.getAddress() + "\n";
+        String body = "New student has enrolled. \n" + "Name : "
+                + student.getFullName() + "\n" + "Address : "
+                + student.getAddress() + "\n";
         emailService.sendMail(toEmail , subject, body);
         return "enroll";
     }
