@@ -1,5 +1,6 @@
 package management.example.demo.Controller;
 
+import jakarta.mail.MessagingException;
 import management.example.demo.Model.Student;
 import management.example.demo.Service.EmailService;
 import management.example.demo.Service.EnrolledStudentService;
@@ -37,7 +38,7 @@ public class EnrolledStudentController {
 
     @PostMapping("/handleApproval/{id}")
     //ResponseEntity<String> is used to represent an HTTP response, including status codes, headers, and body
-    public ResponseEntity<String> confirmEnrollment(@PathVariable(name = "id") Long id, @RequestParam("action") String action) {
+    public ResponseEntity<String> confirmEnrollment(@PathVariable(name = "id") Long id, @RequestParam("action") String action) throws MessagingException {
 
         //Retrieve the student from the student entity using the provided id.
         Student student = enrolledStudentService.get(id);
@@ -49,7 +50,11 @@ public class EnrolledStudentController {
 
         //Handle the APPROVED action
         if ("Approved".equalsIgnoreCase(action)) {
+            //Set the status of the student as "Approved" in the student table
+            student.setStatus("Approved");
             enrolledStudentService.confirm(student);
+            enrolledStudentService.saveStudent(student);
+
 
             //To save the confirmed student in an another entity
             //confirmedStudentService.saveStudent();
@@ -62,7 +67,9 @@ public class EnrolledStudentController {
                     "Your password = " + enrolledStudentService.get(id).getContactNumber();
 
             //Send the email
-            emailService.sendMail(toEmail, subject, body);
+            //emailService.sendMail(toEmail, subject, body);
+            //Send email with the attachment of application
+            emailService.sendEmailWithAttachment(toEmail , subject, body);
 
             //Display the message
             return ResponseEntity.ok("Approval email sent successfully.");
@@ -70,6 +77,8 @@ public class EnrolledStudentController {
 
         //Handle the REJECT action
         else if ("rejected".equalsIgnoreCase(action)) {
+            //Set the status of the student as "Rejected" in the student table
+            student.setStatus("Rejected");
             String toEmail = student.getEmail();
             String subject = "Your enrollment is rejected";
             String body = "Your enrollment is rejected.";

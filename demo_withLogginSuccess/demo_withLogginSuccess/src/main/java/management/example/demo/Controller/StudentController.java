@@ -1,6 +1,7 @@
 package management.example.demo.Controller;
 
 import ch.qos.logback.core.model.Model;
+import jakarta.mail.MessagingException;
 import management.example.demo.Model.Student;
 import management.example.demo.Service.EmailService;
 import management.example.demo.Service.StudentService;
@@ -26,7 +27,7 @@ public class StudentController {
     }
 
     @PostMapping("/enroll")
-    public String enrollStudent(Student student, Model model) {
+    public String enrollStudent(Student student, Model model) throws MessagingException {
         //Save the enrolled student
         studentService.saveStudent(student);
         model.addText("Student enrolled successfully!");
@@ -36,7 +37,9 @@ public class StudentController {
         String body = "New student has enrolled. \n" + "Name : "
                 + student.getFullName() + "\n" + "Address : "
                 + student.getAddress() + "\n";
-        emailService.sendMail(toEmail , subject, body);
+        //Email the administrator informing student enrollment
+        //emailService.sendMail(toEmail , subject, body);
+
         return "enroll";
     }
 

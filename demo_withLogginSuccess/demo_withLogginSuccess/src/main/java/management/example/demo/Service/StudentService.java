@@ -10,7 +10,10 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+
+
     public Student saveStudent(Student student) {
+        //student.setStatus(Student.Status.valueOf("PENDING"));
         return studentRepository.save(student);
     }
 }
