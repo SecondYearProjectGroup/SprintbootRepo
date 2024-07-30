@@ -1,13 +1,15 @@
 package management.example.demo.Service;
 
 
-
 import management.example.demo.Model.User;
 import management.example.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import management.example.demo.enums.Role;
 
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Service
@@ -32,12 +34,24 @@ public class LoginService implements UserService {
     //Save users, overriding the save method in the user service
     @Override
     public User save(User user_) {
-        //Set username, firstname, lastname, email and the  encoded password
-        User user = new User(   user_.getUsername(),
-                                user_.getFirstName(),
-                                user_.getLastName(),
-                                user_.getEmail(),
-                                passwordEncoder.encode(user_.getPassword()));
+        // Get the roles from the user_ object if any
+        Set<Role> roles = user_.getRoles();
+
+        // If no roles are set, you can initialize with a default role, e.g., STUDENT
+        if (roles == null || roles.isEmpty()) {
+            roles = new HashSet<>();
+            roles.add(Role.USER); // Or set to a default role as per your application's logic
+        }
+
+        // Create a new User object with the provided details and roles
+        User user = new User(
+                user_.getUsername(),
+                user_.getFirstName(),
+                user_.getLastName(),
+                user_.getEmail(),
+                passwordEncoder.encode(user_.getPassword()),
+                roles
+        );
         //Save user in the database through the repository layer
         return userRepository.save(user);
     }

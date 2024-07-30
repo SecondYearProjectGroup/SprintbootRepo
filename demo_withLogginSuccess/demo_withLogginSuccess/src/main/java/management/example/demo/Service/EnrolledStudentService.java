@@ -10,9 +10,12 @@ import management.example.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import management.example.demo.enums.Role;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class EnrolledStudentService {
@@ -41,6 +44,8 @@ public class EnrolledStudentService {
     }
 
     public User confirm(Student user_){
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.STUDENT);
         User user = new User(
                 //Assuming fullName as the username, firstName, and LastName
                 user_.getFullName(),
@@ -49,7 +54,8 @@ public class EnrolledStudentService {
                 //Get the email
                 user_.getEmail(),
                 //Assuming contactNumber as the password
-                passwordEncoder.encode(user_.getContactNumber()));
+                passwordEncoder.encode(user_.getContactNumber()),
+                roles);
         return userRepository.save(user); //Save user in the database
     }
 
