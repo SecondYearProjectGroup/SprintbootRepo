@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf().disable()
 
                 .authorizeHttpRequests()
-                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard", "/enrolledstu", "/css/**", "/js/**" , "/img/**" ).permitAll()
+                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard", "/enrolledstu", "/handleApproval/**" ,"/css/**", "/js/**" , "/img/**" ,"/public/**" ).permitAll()
                 .requestMatchers("home").permitAll()
 
                 .and()
@@ -58,6 +58,59 @@ public class SecurityConfig {
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //import management.example.demo.Service.LoginService;
 //import org.springframework.beans.factory.annotation.Autowired;

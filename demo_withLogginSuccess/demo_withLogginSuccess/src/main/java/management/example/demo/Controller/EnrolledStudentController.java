@@ -1,5 +1,6 @@
 package management.example.demo.Controller;
 
+import jakarta.mail.MessagingException;
 import management.example.demo.Model.Student;
 import management.example.demo.Service.EmailService;
 import management.example.demo.Service.EnrolledStudentService;
@@ -35,56 +36,55 @@ public class EnrolledStudentController {
         return "redirect:/";
     }
 
-//    @PostMapping("/handleApproval/{id}")
-//    public void confirmEnrollment(@PathVariable(name = "id") Long id , @RequestParam("action") String action) {
-//        System.out.println(action);
-//        if ("Approved".equals(action)) {
-//            Student student = enrolledStudentService.get(id);
-//            enrolledStudentService.confirm(student);
-//            //Send an email to the student that informing the confirmation
-//            String toEmail = enrolledStudentService.get(id).getEmail();
-//            System.out.println(toEmail);
-//            String subject = "Your enrollment is confirmed";
-//            String body = "Successfully enrolled to the " + enrolledStudentService.get(id).getProgramOfStudy();
-//            emailService.sendMail(toEmail, subject, body);
-//        }
-//        else if ("rejected".equals(action)) {
-//            //Send an email to the student that informing the confirmation
-//            String toEmail = enrolledStudentService.get(id).getEmail();
-//            String subject = "Your enrollment is rejected";
-//            String body = "Rejected enrollment to the" + enrolledStudentService.get(id).getProgramOfStudy() + "\n" +
-//                    "Your username = " + enrolledStudentService.get(id).getFullName() + "/n" +
-//                    "Your password = " + enrolledStudentService.get(id).getContactNumber();
-//            emailService.sendMail(toEmail, subject, body);
-//        }
-//    }
-
     @PostMapping("/handleApproval/{id}")
-    public ResponseEntity<String> confirmEnrollment(@PathVariable(name = "id") Long id, @RequestParam("action") String action) {
+    //ResponseEntity<String> is used to represent an HTTP response, including status codes, headers, and body
+    public ResponseEntity<String> confirmEnrollment(@PathVariable(name = "id") Long id, @RequestParam("action") String action) throws MessagingException {
+
+        //Retrieve the student from the student entity using the provided id.
         Student student = enrolledStudentService.get(id);
-        System.out.println("Action: " + action);
-        System.out.println("Student ID: " + id);
+
+        //Check the student exiting
         if (student == null) {
             return ResponseEntity.badRequest().body("Student not found.");
         }
 
-        if ("Approved".equals(action)) {
+        //Handle the APPROVED action
+        if ("Approved".equalsIgnoreCase(action)) {
+            //Set the status of the student as "Approved" in the student table
+            student.setStatus("Approved");
             enrolledStudentService.confirm(student);
+            enrolledStudentService.saveStudent(student);
+
+
+            //To save the confirmed student in an another entity
+            //confirmedStudentService.saveStudent();
+
+            //Set the details to the send the email
             String toEmail = student.getEmail();
             String subject = "Your enrollment is confirmed";
-            String body = "Successfully enrolled to the " + student.getProgramOfStudy();
-            emailService.sendMail(toEmail, subject, body);
+            String body = "Your enrollment to the" + enrolledStudentService.get(id).getProgramOfStudy() + "is successfully confirmed." +"\n" +
+                    "Your username = " + enrolledStudentService.get(id).getFullName() + "\n" +
+                    "Your password = " + enrolledStudentService.get(id).getContactNumber();
+
+            //Send the email
+            //emailService.sendMail(toEmail, subject, body);
+            //Send email with the attachment of application
+            emailService.sendEmailWithAttachment(toEmail , subject, body);
+
+            //Display the message
             return ResponseEntity.ok("Approval email sent successfully.");
-        } else if ("rejected".equals(action)) {
+        }
+
+        //Handle the REJECT action
+        else if ("rejected".equalsIgnoreCase(action)) {
+            //Set the status of the student as "Rejected" in the student table
+            student.setStatus("Rejected");
             String toEmail = student.getEmail();
             String subject = "Your enrollment is rejected";
-            String body = "Rejected enrollment to the " + student.getProgramOfStudy() + "\n" +
-                    "Your username = " + student.getFullName() + "\n" +
-                    "Your password = " + student.getContactNumber();
+            String body = "Your enrollment is rejected.";
             emailService.sendMail(toEmail, subject, body);
             return ResponseEntity.ok("Rejection email sent successfully.");
         }
-
         return ResponseEntity.badRequest().body("Invalid action.");
     }
 

@@ -1,20 +1,22 @@
 package management.example.demo.Model;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
+import java.time.LocalDate;
+import java.util.Date;
+
 @Getter
+@Setter
 @Entity
-public class Student {
+public class ConfirmedStudent {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String regNumber;
+    //private Long id;
+
+
     private String nameWithInitials;
     private String fullName;
     private String contactNumber;
@@ -30,6 +32,18 @@ public class Student {
     private String programOfStudy;
     private String status;
 
+
+
+
+    @Getter
+    @Transient //This attribute is not in the database table
+    static int count =0;
+
+    //Manage the count variable
+    //Constructor
+    public ConfirmedStudent(){
+        count++;
+    }
 
 
 }

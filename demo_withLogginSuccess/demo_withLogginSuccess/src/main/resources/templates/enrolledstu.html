@@ -207,12 +207,34 @@
                 <!--                </tr>-->
 
                 <tr  th:each="student : ${liststudent }">
+<!--                    <td id="status-cell">-->
+<!--                    <div class="btn-group">-->
+<!--                        <button id="approve-button">Approve</button>-->
+<!--                        <button id="reject-button">Reject</button>-->
+<!--                    </div>-->
+<!--                </td>-->
+
+
+
+<!--                    <td>-->
+<!--            <span th:if="${student.status == 'PENDING'}">-->
+<!--                <button th:onclick="'approveStudent(' + ${student.id} + ')'" >Approve</button>-->
+<!--                <button th:onclick="'rejectStudent(' + ${student.id} + ')'" >Reject</button>-->
+<!--            </span>-->
+<!--                        <span th:if="${student.status == 'APPROVED'}">Approved</span>-->
+<!--                        <span th:if="${student.status == 'REJECTED'}">Rejected</span>-->
+<!--                    </td>-->
+
+
+
                     <td id="status-cell">
                         <div class="btn-group">
-                            <button id="approve-button">Approve</button>
-                            <button id="reject-button">Reject</button>
+                            <button id="approve-button" data-action="Approved" data-id="1">Approve</button> <!-- Replace 1 with the actual student ID -->
+                            <button id="reject-button" data-action="rejected" data-id="1">Reject</button> <!-- Replace 1 with the actual student ID -->
                         </div>
                     </td>
+
+
                     <td th:text="${student.id}">Student ID</td>
                     <td th:text="${student.nameWithInitials}">StudentName</td>
                     <td th:text="${student.fullName}">FullName</td>

@@ -26,12 +26,14 @@ public class SignUpController {
         this.userService = userService;
     }
 
+    //Show sigh up page
     @GetMapping("/signup")
-    public String register(Model model, User userDto) {
-        model.addAttribute("user", userDto);
+    public String register(Model model, User user) {
+        model.addAttribute("user", user);
         return "signup";
     }
 
+    //Save the users in the user entity by calling user service
     @PostMapping("/signup")
     public String registerSava(@ModelAttribute("user") User user_, Model model) {
         User user = userService.findByUsername(user_.getUsername());
@@ -43,6 +45,45 @@ public class SignUpController {
         return "redirect:/login";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //import management.example.demo.Model.User;
 //import management.example.demo.Service.SignUpService;
 //import org.springframework.beans.factory.annotation.Autowired;
