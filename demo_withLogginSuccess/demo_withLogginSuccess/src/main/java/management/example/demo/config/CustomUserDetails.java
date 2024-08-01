@@ -1,31 +1,45 @@
 package management.example.demo.config;
 
-import java.util.Collection;
-
+import management.example.demo.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
 
     private String username;
-    private String pwd;
-    private Collection<? extends GrantedAuthority> authorities;
+    private String password;
+    private Set<Role> roles;
 
-    public CustomUserDetails(String username, String pwd, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(String username, String password, Set<Role> roles) {
         this.username = username;
-        this.pwd = pwd;
-        this.authorities = authorities;
-
+        this.password = password;
+        this.roles = roles;
     }
+
+//    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        //Create a stream from the 'roles' set;
+        return roles.stream()
+                //Transform each 'Role' object in the stream into a 'SimpleGrantedAuthority' object
+                //role.name(): The name() method of the enum returns the name of the enum constant (ex; 'ADMIN' , 'STUDENT')
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toSet());
     }
+    //Reference - https://youtu.be/7lnevNCaTLQ?si=WR34_oonZCS2XUaG
+    //SimpleGrantedAuthority is a simple implementation of the GrantedAuthority interface,
+    // and it's often used to represent roles or permissions in Spring Security.
 
     @Override
     public String getPassword() {
-        return pwd;
+        return password;
     }
 
     @Override

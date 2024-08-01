@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +31,21 @@ public class ConfirmedStudent {
     private String programOfStudy;
     private String status;
 
+    @ManyToOne
+    //Assign Supervisor to the student
+    private Supervisor supervisor;
+
+
+
+    //Student's submissions
+    @OneToMany
+    @JoinTable(
+            name = "student_submission",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "submission_id")
+    )
+    @Getter
+    private List<Submission> submissions;
 
 
 

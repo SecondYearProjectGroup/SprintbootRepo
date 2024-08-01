@@ -1,11 +1,10 @@
 package management.example.demo.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,5 +23,12 @@ public class Supervisor {
 
     //There should be several supervisees in a table. How handle it???
     //Option 01: Join table with the confirmed student table.
+    @OneToMany
+    @JoinTable(
+            name = "supervisor_supervisees",
+            joinColumns = @JoinColumn(name = "supervisor_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<ConfirmedStudent> supervisees;
 
 }

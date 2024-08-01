@@ -1,25 +1,32 @@
 package management.example.demo.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Getter
-@Setter
+@Entity
 public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-    private Long studentId;
-    private Date submissionDate;
-    //To have comments
-    //private String comments;
+    private Long id;
+
+    private String title;
+
+    //Submissions
+    @ManyToOne
+    private ConfirmedStudent confirmedStudent;
+
+    //Examiners who is assigned to submissions
+    @ManyToMany
+    @JoinTable(
+            name = "submission_examiner",
+            joinColumns = @JoinColumn(name = "submission_id"),
+            inverseJoinColumns = @JoinColumn(name = "examiner_id")
+    )
+    @Getter
+    private List<Examiner> examiners = new ArrayList<>();
 }

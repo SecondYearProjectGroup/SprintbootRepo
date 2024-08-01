@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10bb73b3-fca7-4c64-9c29-da48416dfcd8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/enums/Role.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/EnrolledStudentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/EnrolledStudentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/LoginService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/test/java/management/example/demo/Controller/EnrolledStudentControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/test/java/management/example/demo/Controller/EnrolledStudentControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/ConfirmedStudent.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/ConfirmedStudent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Supervisor.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Supervisor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,10 +24,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit5 Test Class" />
-        <option value="Class" />
         <option value="Kotlin Enum" />
-        <option value="Interface" />
         <option value="Enum" />
+        <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -57,34 +52,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.StudentManagementApplication.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EnrolledStudentControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EnrolledStudentControllerTest.testConfirmEnrollment_Approved.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.EnrolledStudentControllerTest.testConfirmEnrollment_Rejected.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EnrollmentControllerTest.executor&quot;: &quot;Coverage&quot;,
-    &quot;JUnit.LoginServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SecurityConfigTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SecurityConfigTest.login_ShouldAuthenticateUser.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SecurityConfigTest.login_ShouldReturnError_WhenCredentialsAreInvalid.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Shell Script.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Dasu&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ASUS/Desktop/Com Sem 4/CO200 Second Year Project/secondYearProject/file/file&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.StudentManagementApplication.executor": "Run",
+    "JUnit.EnrolledStudentControllerTest.executor": "Run",
+    "JUnit.EnrolledStudentControllerTest.testConfirmEnrollment_Approved.executor": "Debug",
+    "JUnit.EnrolledStudentControllerTest.testConfirmEnrollment_Rejected.executor": "Run",
+    "JUnit.EnrollmentControllerTest.executor": "Coverage",
+    "JUnit.LoginServiceTest.executor": "Run",
+    "JUnit.SecurityConfigTest.executor": "Run",
+    "JUnit.SecurityConfigTest.login_ShouldAuthenticateUser.executor": "Run",
+    "JUnit.SecurityConfigTest.login_ShouldReturnError_WhenCredentialsAreInvalid.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Shell Script.Unnamed.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "Dasu",
+    "jdk.selected.JAVA_MODULE": "17",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ASUS/Desktop/Com Sem 4/CO200 Second Year Project/secondYearProject/file/file",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "advanced.settings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -93,7 +88,7 @@
       <recent name="management.example.demo.Controller" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.EnrolledStudentControllerTest">
+  <component name="RunManager">
     <configuration name="EnrolledStudentControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <extension name="coverage">
@@ -191,6 +186,17 @@
       <updated>1720852042194</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
