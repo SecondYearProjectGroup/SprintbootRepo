@@ -1,11 +1,10 @@
 package management.example.demo.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,6 +18,7 @@ public class Examiner {
     private String fullName;
     private String department;
     private String email;
-    private int examinees;
 
+    @ManyToMany(mappedBy = "examiners")
+    private List<Submission> submissions;
 }

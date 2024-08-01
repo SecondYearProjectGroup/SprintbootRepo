@@ -82,6 +82,8 @@ public class EnrolledStudentService {
         confirmedStudentRepository.save(confirmedStudent);
     }
 
+    //Assign supervisors to the students (by the admin)
+
 
 
 }
