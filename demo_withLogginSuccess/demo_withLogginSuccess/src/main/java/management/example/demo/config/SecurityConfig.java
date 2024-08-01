@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard", "/enrolledstu", "/handleApproval/**", "/css/**", "/js/**", "/img/**", "/public/**").permitAll()
+                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard","/upload", "/enrolledstu", "/handleApproval/**", "/css/**", "/js/**", "/img/**", "/public/**").permitAll()
                 .requestMatchers("/home").permitAll()
                 .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
                 .requestMatchers("/student/**").hasAuthority(Role.STUDENT.name())

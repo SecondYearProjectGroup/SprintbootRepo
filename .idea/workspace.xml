@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10bb73b3-fca7-4c64-9c29-da48416dfcd8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/ConfirmedStudent.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/ConfirmedStudent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Supervisor.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Supervisor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/FileUplodCoroller.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/FileUplodCoroller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/FileUploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/FileUploadService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +71,7 @@
     "Shell Script.Unnamed.executor": "Run",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "Dasu",
+    "git-widget-placeholder": "main",
     "jdk.selected.JAVA_MODULE": "17",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/ASUS/Desktop/Com Sem 4/CO200 Second Year Project/secondYearProject/file/file",
