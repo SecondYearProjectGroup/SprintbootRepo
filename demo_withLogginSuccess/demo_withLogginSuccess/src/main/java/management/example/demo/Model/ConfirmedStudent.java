@@ -38,7 +38,13 @@ public class ConfirmedStudent {
 
 
     //Student's submissions
-    @OneToMany(mappedBy = "confirmedStudent")
+    @OneToMany
+    @JoinTable(
+            name = "student_submission",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "submission_id")
+    )
+    @Getter
     private List<Submission> submissions;
 
 
