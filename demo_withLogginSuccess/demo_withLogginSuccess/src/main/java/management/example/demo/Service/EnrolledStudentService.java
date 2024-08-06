@@ -7,12 +7,11 @@ import management.example.demo.Model.User;
 import management.example.demo.Repository.ConfirmedStudentRepository;
 import management.example.demo.Repository.StudentRepository;
 import management.example.demo.Repository.UserRepository;
+import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import management.example.demo.enums.Role;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +64,7 @@ public class EnrolledStudentService {
         ConfirmedStudent confirmedStudent = new ConfirmedStudent();
         //confirmedStudent.setId(user_.getId());
         //Generate the registration number
-        confirmedStudent.setRegNumber("PG/"+ LocalDate.now().getYear() + "/" + String.valueOf(ConfirmedStudent.getCount()));
+        //confirmedStudent.setRegNumber("PG/"+ LocalDate.now().getYear() + "/" + String.valueOf(ConfirmedStudent.getCount()));
         confirmedStudent.setNameWithInitials(user_.getNameWithInitials());
         confirmedStudent.setFullName(user_.getFullName());
         confirmedStudent.setEmail(user_.getEmail());

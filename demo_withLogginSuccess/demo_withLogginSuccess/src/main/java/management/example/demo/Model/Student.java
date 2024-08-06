@@ -29,7 +29,7 @@ public class Student {
     private String publications;
     private String programOfStudy;
     private String status;
-
+    private String attachementFile;
 
 
 }

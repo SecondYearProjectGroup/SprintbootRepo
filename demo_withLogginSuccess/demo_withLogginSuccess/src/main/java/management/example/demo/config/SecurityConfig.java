@@ -2,7 +2,6 @@ package management.example.demo.config;
 
 
 import management.example.demo.Service.CustomUserDetailsService;
-import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,11 +36,12 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard","/upload", "/enrolledstu", "/handleApproval/**", "/css/**", "/js/**", "/img/**", "/public/**").permitAll()
+                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard","/upload", "/enrolledstu", "/handleApproval/**","/assignSupervisor/**",
+                        "/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/home").permitAll()
-                .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
-                .requestMatchers("/student/**").hasAuthority(Role.STUDENT.name())
-                .requestMatchers("/teacher/**").hasAuthority(Role.SUPERVISOR.name())
+//                .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
+//                .requestMatchers("/student/**").hasAuthority(Role.STUDENT.name())
+//                .requestMatchers("/teacher/**").hasAuthority(Role.SUPERVISOR.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

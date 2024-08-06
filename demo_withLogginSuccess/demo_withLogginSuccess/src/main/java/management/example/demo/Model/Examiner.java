@@ -21,4 +21,11 @@ public class Examiner {
 
     @ManyToMany(mappedBy = "examiners")
     private List<Submission> submissions;
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
 }
