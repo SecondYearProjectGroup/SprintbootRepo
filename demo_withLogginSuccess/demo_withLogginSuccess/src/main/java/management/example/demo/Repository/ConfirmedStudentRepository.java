@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConfirmedStudentRepository extends JpaRepository<ConfirmedStudent, String> {
     User save(User user);
+
 }

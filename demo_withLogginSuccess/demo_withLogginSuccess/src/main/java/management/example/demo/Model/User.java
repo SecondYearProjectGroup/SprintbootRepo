@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import management.example.demo.enums.Role;
 
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -30,6 +31,10 @@ public class User {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     private Set<Role> roles;
+
+    //To have the relationship with the notification entity
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
 
 
     public User() {
@@ -65,3 +70,17 @@ public class User {
     }
 
 }
+
+
+/*
+* NOTES:
+* cascade
+The cascade attribute defines which operations should be cascaded from the parent entity to the associated entities. The CascadeType enum includes the following options:
+
+ALL: Applies all cascade operations (persist, merge, remove, refresh, detach).
+PERSIST: When the parent entity is persisted, the related entities are also persisted.
+MERGE: When the parent entity is merged, the related entities are also merged.
+REMOVE: When the parent entity is removed, the related entities are also removed.
+REFRESH: When the parent entity is refreshed, the related entities are also refreshed.
+DETACH: When the parent entity is detached, the related entities are also detached.
+* */

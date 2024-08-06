@@ -34,6 +34,13 @@ public class ConfirmedStudentService {
     public ConfirmedStudent get(String id){
         return confirmedStudentRepository.findById(id).get();
     }
+
+    //Get all the submissions of a student
+    public List<Submission> getAllSubmissions(String stuId){
+        ConfirmedStudent confirmedStudent = get(stuId);
+        return submissionRepository.findByConfirmedStudent(confirmedStudent);
+    }
+
     //Assign Supervisor
     public Supervisor assignSupervisor(String  id, Long supervisorId){
         //Find the supervisor

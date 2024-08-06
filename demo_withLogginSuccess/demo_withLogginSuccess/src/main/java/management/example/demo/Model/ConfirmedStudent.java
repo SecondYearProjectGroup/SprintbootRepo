@@ -11,9 +11,9 @@ import java.util.List;
 @Entity
 public class ConfirmedStudent {
     @Id
-    //private String regNumber;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //private String regNumber;
 
 
     private String nameWithInitials;

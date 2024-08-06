@@ -266,8 +266,15 @@ public class AdminController {
     public ResponseEntity<String> setDeadline(@PathVariable(name = "stuId") Long stuId, @PathVariable(name = "id") Long id, @RequestParam Date deadline) {
         Submission submission = submissionService.get(id);
         submission.setDeadline(deadline);
+        submissionService.saveSubmissionsParameters(submissionService.get(id));
         System.out.println("Deadline has set successfully.");
         return ResponseEntity.ok("Deadline has set successfully.");
+    }
+
+    //Add section to submit the reports to the students
+    @PostMapping("/addSubmitSection/{stuId}")
+    public void addSectionToSubmit(Submission submission, @RequestParam String title){
+        submissionService.addSubmissionField(submission,title);
     }
 }
 
