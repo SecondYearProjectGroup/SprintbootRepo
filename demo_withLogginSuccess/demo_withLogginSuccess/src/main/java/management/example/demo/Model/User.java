@@ -18,8 +18,8 @@ public class User {
     private Long id;
 
     private String username;
-    private String firstName;
-    private String LastName;
+    private String name;
+    //private String LastName;
     private String email;
     private String password;
     //private String role;
@@ -41,11 +41,10 @@ public class User {
 
     }
 
-    public User(String username, String firstName,String LastName, String email, String password, Set<Role> roles) {
+    public User(String username, String name, String email, String password, Set<Role> roles) {
         super();
+        this.name = name;
         this.username = username;
-        this.firstName = firstName;
-        this.LastName = LastName;
         this.email = email;
         this.password = password;
         this.roles = roles;

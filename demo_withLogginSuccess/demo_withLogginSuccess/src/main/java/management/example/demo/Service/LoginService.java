@@ -60,8 +60,7 @@ public class LoginService implements UserService {
         // Create a new User object with the provided details and roles
         User user = new User(
                 user_.getUsername(),
-                user_.getFirstName(),
-                user_.getLastName(),
+                user_.getName(),
                 user_.getEmail(),
                 passwordEncoder.encode(user_.getPassword()),
                 roles

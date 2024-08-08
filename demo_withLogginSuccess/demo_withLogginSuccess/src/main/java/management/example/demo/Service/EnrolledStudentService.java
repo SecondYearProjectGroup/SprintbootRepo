@@ -49,7 +49,7 @@ public class EnrolledStudentService {
                 //Assuming fullName as the username, firstName, and LastName
                 user_.getFullName(),
                 user_.getFullName(),
-                user_.getFullName(),
+                //user_.getFullName(),
                 //Get the email
                 user_.getEmail(),
                 //Assuming contactNumber as the password
