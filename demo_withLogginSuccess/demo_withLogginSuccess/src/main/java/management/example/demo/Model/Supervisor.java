@@ -15,7 +15,7 @@ public class Supervisor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameWithInitials;
+    //private String nameWithInitials;
     private String fullName;
     //private String department;
     private String email;

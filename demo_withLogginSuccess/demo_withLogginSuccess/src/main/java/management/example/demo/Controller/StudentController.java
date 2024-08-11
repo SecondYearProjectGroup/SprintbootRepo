@@ -4,17 +4,17 @@ import jakarta.mail.MessagingException;
 import management.example.demo.Model.Student;
 import management.example.demo.Service.EmailService;
 import management.example.demo.Service.FileUploadService;
+import management.example.demo.Service.NotificationService;
 import management.example.demo.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping()
 public class StudentController {
 
@@ -26,6 +26,9 @@ public class StudentController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/enroll")
     public String showEnrollmentForm() {
@@ -79,6 +82,8 @@ public class StudentController {
                 "Name : " + student.getFullName() + "\n" +
                 "Address : " + student.getAddress() + "\n";
         emailService.sendMail(toEmail, subject, body);
+        String username = "e20197";
+        notificationService.createNotification(username,subject,body);
 
         System.out.println("Successfully enrolled.");
         Map<String, String> response = new HashMap<>();

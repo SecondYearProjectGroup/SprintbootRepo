@@ -14,7 +14,7 @@ public class Examiner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    private String nameWithInitials;
+    //private String nameWithInitials;
     private String fullName;
     private String department;
     private String email;

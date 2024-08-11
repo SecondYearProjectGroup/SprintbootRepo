@@ -5,7 +5,6 @@ import management.example.demo.Service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,8 +14,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -36,18 +37,22 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/signup", "/enroll" , "/login", "/welcome", "/dashboard","/upload", "/enrolledstu", "/handleApproval/**","/assignSupervisor/**", "/addSubmitSection/**",
+                .requestMatchers("/signup", "/enroll", "/welcome", "/dashboard", "/upload", "/handleApproval/**", "/assignSupervisor/**", "/addSubmitSection/**",
                         "/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/home").permitAll()
-//                .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
-//                .requestMatchers("/student/**").hasAuthority(Role.STUDENT.name())
-//                .requestMatchers("/teacher/**").hasAuthority(Role.SUPERVISOR.name())
+                .requestMatchers("/supervisors", "/notifications").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/home", true)
+                .successHandler((request, response, authentication) -> {
+                    String roles = authentication.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.joining(","));
+                    response.setContentType("text/plain");
+                    response.getWriter().write(roles);
+                })
                 .permitAll()
                 .and()
                 .logout()
@@ -59,10 +64,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -102,7 +103,39 @@ public class SecurityConfig {
 
 
 
-
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf().disable()
+//                .cors().and()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/signup", "/enroll" , "/welcome", "/dashboard","/upload", "/enrolledstu", "/handleApproval/**","/assignSupervisor/**", "/addSubmitSection/**",
+//                        "/css/**", "/js/**", "/img/**").permitAll()
+//                .requestMatchers("/home").permitAll()
+////                .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
+////                .requestMatchers("/student/**").hasAuthority(Role.STUDENT.name())
+////                .requestMatchers("/teacher/**").hasAuthority(Role.SUPERVISOR.name())
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .loginProcessingUrl("/login")
+//                //.defaultSuccessUrl("/home", true)
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login?logout").permitAll();
+//
+//        return http.build();
+//    }
+//
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+//    }
 
 
 

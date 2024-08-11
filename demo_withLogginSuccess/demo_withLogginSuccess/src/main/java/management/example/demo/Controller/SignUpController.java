@@ -7,14 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
-@Controller
+//@Controller
+@RestController
 public class SignUpController {
 
     @Autowired
@@ -85,83 +86,3 @@ public class User {
     // Getters and setters omitted for brevity
 }
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//import management.example.demo.Model.User;
-//import management.example.demo.Service.SignUpService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//
-//@Controller
-//public class SignUpController {
-//
-//    @Autowired
-////    private SignUpService signUpService;
-////    @Autowired
-////    private PasswordEncoder passwordEncoder;
-//
-//
-//    @GetMapping("/signup")
-//    public String showSignUpPage(){
-//        return "signup";
-//    }
-//
-//    @PostMapping("/signup")
-//    public String signUpStudent(User signUp) {
-////        String encodedPassword = passwordEncoder.encode(signUp.getPwd());
-////        System.out.println("Encoded Password at Registration: " + encodedPassword);
-////        signUp.setPwd(encodedPassword);
-//        signUpService.save(signUp);
-//        return "redirect:/login";
-//    }
-//
-//}
-
-
-
-/*
-    @PostMapping("/signup")
-    public String signup(@ModelAttribute User user) {
-        user.setPwd(passwordEncoder.encode(user.getPwd()));
-        UserRepository.save(user);
-        return "redirect:/login";
-    }*/

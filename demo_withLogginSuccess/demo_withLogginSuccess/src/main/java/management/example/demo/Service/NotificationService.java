@@ -5,6 +5,8 @@ import management.example.demo.Model.User;
 import management.example.demo.Repository.NotificationRepository;
 import management.example.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +21,12 @@ public class NotificationService {
     private UserRepository userRepository;
 
     //To get all the notifications
-    public List<Notification> getAllNotifications(String username) {
+    public List<Notification> getAllNotifications() {
+        // Get the current authentication object - USER
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Extract the username from the authentication object
+        String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         return notificationRepository.findByUser(user);
     }

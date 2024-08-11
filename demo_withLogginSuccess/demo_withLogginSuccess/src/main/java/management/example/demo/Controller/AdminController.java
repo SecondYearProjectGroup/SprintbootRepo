@@ -4,15 +4,11 @@ import jakarta.mail.MessagingException;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.SupervisorRepository;
-import management.example.demo.Service.ConfirmedStudentService;
-import management.example.demo.Service.EmailService;
-import management.example.demo.Service.EnrolledStudentService;
-import management.example.demo.Service.SubmissionService;
+import management.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,8 +17,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
-//@RestController
+//@CrossOrigin(origins = "http://localhost:4200")
+//@Controller
+@RestController
 public class AdminController {
 
     @Autowired
@@ -42,6 +39,10 @@ public class AdminController {
 
     @Autowired
     private ExaminerRepository examinerRepository;
+    @Autowired
+    private SupervisorService supervisorService;
+    @Autowired
+    private ExaminerService examinerService;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -193,7 +194,7 @@ public class AdminController {
             //Send the email to the supervisor informing the student's details
             String toEmail = supervisor.getEmail();
             String subject = "New Student Assignment Notification ";
-            String body = "Dear " + supervisor.getNameWithInitials() + ",\n\n" +
+            String body = "Dear " + supervisor.getFullName() + ",\n\n" +
                     "You have been assigned a new student.\n\n" +
                     //"Student ID: " + confirmedStudent.getRegNumber() + "\n" +
                     "Student Name: " + confirmedStudent.getFullName() + "\n" +
@@ -248,7 +249,7 @@ public class AdminController {
                             "Best regards,\n" +
                             "Post Graduate Studies,\n" +
                             "Department of Computer Engineering,UOP\n",
-                    examiner.getNameWithInitials(),
+                    examiner.getFullName(),
                     submission.getTitle(),
                     submission.getId(),
                     //confirmedStudent.getRegNumber(),
@@ -276,6 +277,18 @@ public class AdminController {
     public void addSectionToSubmit(Submission submission, @RequestParam String title){
         submissionService.addSubmissionField(submission,title);
     }
+
+    //List all supervisors to admin
+    @GetMapping("/supervisors")
+    public List<Supervisor> getAllSupervisors(){
+        return supervisorService.listAll();
+    }
+
+    @GetMapping("/examiners")
+    public List<Examiner> getAllExaminers(){
+        return examinerService.listAll();
+    }
+
 }
 
     //To download as an excel
