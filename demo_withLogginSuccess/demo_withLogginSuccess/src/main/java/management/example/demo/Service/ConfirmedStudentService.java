@@ -31,18 +31,39 @@ public class ConfirmedStudentService {
     private SubmissionRepository submissionRepository;
 
 
-    public ConfirmedStudent get(long id){
+    public ConfirmedStudent get(String id){
         return confirmedStudentRepository.findById(id).get();
     }
 
+    //Get all the submissions of a student
+    public List<Submission> getAllSubmissions(String stuId){
+        ConfirmedStudent confirmedStudent = get(stuId);
+        return submissionRepository.findByConfirmedStudent(confirmedStudent);
+    }
+
     //Assign Supervisor
-    public Supervisor assignSupervisor(Long id, Long supervisorId){
+    public Supervisor assignSupervisor(String  id, Long supervisorId){
         //Find the supervisor
         Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
         if (supervisorOpt.isPresent()){
+
+            //Get the supervisor from the database
+            //Get the student from the database
+            //Set the selected supervisor
+            //Again save the student
             Supervisor supervisor = supervisorOpt.get();
             ConfirmedStudent confirmedStudent = get(id);
             confirmedStudent.setSupervisor(supervisor);
+            confirmedStudentRepository.save(confirmedStudent);
+
+            //Get the list of supervisees of the supervisor
+            //Add the new student to the existing list
+            //Set the list and save them
+            List<ConfirmedStudent> supervisees = supervisor.getSupervisees();
+            supervisees.add(confirmedStudent);
+            supervisor.setSupervisees(supervisees);
+            supervisorRepository.save(supervisor);
+
             return supervisor;
         }
         else {
@@ -64,6 +85,13 @@ public class ConfirmedStudentService {
                 if (examinerOpt.isPresent()) {
                     Examiner examiner = examinerOpt.get();
                     submission.getExaminers().add(examiner);
+
+                    //Get the list of submissions assigned to the examiners
+                    //Add the newly added submission to the existing list of submissions
+                    //Save them
+                    List<Submission> submissions = examiner.getSubmissions();
+                    submissions.add(submission);
+                    examinerRepository.save(examiner);
                 }
             }
             return submission.getExaminers();

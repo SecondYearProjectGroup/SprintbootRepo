@@ -11,9 +11,9 @@ import java.util.List;
 @Entity
 public class ConfirmedStudent {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String regNumber;
-    //private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    //private String regNumber;
 
 
     private String nameWithInitials;
@@ -32,6 +32,7 @@ public class ConfirmedStudent {
     private String status;
 
     @ManyToOne
+    @JoinColumn(name = "supervisor_id")
     //Assign Supervisor to the student
     private Supervisor supervisor;
 

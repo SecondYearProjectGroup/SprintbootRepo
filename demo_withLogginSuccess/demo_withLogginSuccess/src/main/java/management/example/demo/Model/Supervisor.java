@@ -15,9 +15,9 @@ public class Supervisor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nameWithInitials;
+    //private String nameWithInitials;
     private String fullName;
-    private String department;
+    //private String department;
     private String email;
     private int noOfSupervisees;
 
@@ -30,5 +30,13 @@ public class Supervisor {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<ConfirmedStudent> supervisees;
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    // Getters and setters
 
 }

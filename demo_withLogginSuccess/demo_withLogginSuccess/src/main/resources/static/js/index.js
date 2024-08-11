@@ -122,42 +122,85 @@ document.addEventListener('DOMContentLoaded', () => {
 //    });
 //});
 
+//
+//document.addEventListener('DOMContentLoaded', function() {
+//            const statusCell = document.getElementById('status-cell');
+//            const approveButton = document.getElementById('approve-button');
+//            const rejectButton = document.getElementById('reject-button');
+//
+//            function handleButtonClick(button, action) {
+//                const studentId = button.getAttribute('data-id');
+//
+//                const xhr = new XMLHttpRequest();
+//                xhr.open("POST", "/handleApproval/" + studentId, true);
+//                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+//                xhr.onreadystatechange = function () {
+//                    if (xhr.readyState === 4) {
+//                        if (xhr.status === 200) {
+//                            alert("Success: " + xhr.responseText);
+//                        } else {
+//                            alert("Error: " + xhr.responseText);
+//                        }
+//                    }
+//                };
+//                xhr.send("action=" + action);
+//
+//                // Update the status cell
+//                statusCell.innerHTML = '<strong>' + action.charAt(0).toUpperCase() + action.slice(1) + '</strong>';
+//                statusCell.style.color = action === 'Approved' ? 'green' : 'red';
+//            }
+//
+//            approveButton.addEventListener('click', function() {
+//                handleButtonClick(this, 'Approved');
+//            });
+//
+//            rejectButton.addEventListener('click', function() {
+//                handleButtonClick(this, 'rejected');
+//            });
+//        });
+
 
 document.addEventListener('DOMContentLoaded', function() {
-            const statusCell = document.getElementById('status-cell');
-            const approveButton = document.getElementById('approve-button');
-            const rejectButton = document.getElementById('reject-button');
+    const approveButtons = document.querySelectorAll('.approve-button');
+    const rejectButtons = document.querySelectorAll('.reject-button');
 
-            function handleButtonClick(button, action) {
-                const studentId = button.getAttribute('data-id');
+    function handleButtonClick(button, action) {
+        const studentId = button.getAttribute('data-id');
+        const statusCell = button.closest('tr').querySelector('#status-cell');
 
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/handleApproval/" + studentId, true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            alert("Success: " + xhr.responseText);
-                        } else {
-                            alert("Error: " + xhr.responseText);
-                        }
-                    }
-                };
-                xhr.send("action=" + action);
-
-                // Update the status cell
-                statusCell.innerHTML = '<strong>' + action.charAt(0).toUpperCase() + action.slice(1) + '</strong>';
-                statusCell.style.color = action === 'Approved' ? 'green' : 'red';
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `/handleApproval/${studentId}`, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    alert("Success: " + xhr.responseText);
+                    // Update the status cell
+                    statusCell.innerHTML = '<strong>' + action + '</strong>';
+                    statusCell.style.color = action === 'Approved' ? 'green' : 'red';
+                } else {
+                    alert("Error: " + xhr.responseText);
+                }
             }
+        };
+        xhr.send(`action=${action}`);
+    }
 
-            approveButton.addEventListener('click', function() {
-                handleButtonClick(this, 'Approved');
-            });
-
-            rejectButton.addEventListener('click', function() {
-                handleButtonClick(this, 'rejected');
-            });
+    approveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            handleButtonClick(this, 'Approved');
         });
+    });
+
+    rejectButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            handleButtonClick(this, 'Rejected');
+        });
+    });
+});
+
+
+
 
 
 
@@ -197,6 +240,13 @@ $(document).ready(function() {
             }
         ]
     });
+
+
+//To download as an excel
+    document.getElementById("downloadButton").addEventListener("click", function() {
+        window.location.href = "/download/excel";
+    });
+
 
     // Clone the calendar element and initialize for sidebar
     // var clonedCalendar = $("#main-calendar").clone();

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import management.example.demo.enums.Role;
 
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -17,8 +18,8 @@ public class User {
     private Long id;
 
     private String username;
-    private String firstName;
-    private String LastName;
+    private String name;
+    //private String LastName;
     private String email;
     private String password;
     //private String role;
@@ -31,16 +32,19 @@ public class User {
     @Column(name = "role")
     private Set<Role> roles;
 
+    //To have the relationship with the notification entity
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
+
 
     public User() {
 
     }
 
-    public User(String username, String firstName,String LastName, String email, String password, Set<Role> roles) {
+    public User(String username, String name, String email, String password, Set<Role> roles) {
         super();
+        this.name = name;
         this.username = username;
-        this.firstName = firstName;
-        this.LastName = LastName;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -65,3 +69,17 @@ public class User {
     }
 
 }
+
+
+/*
+* NOTES:
+* cascade
+The cascade attribute defines which operations should be cascaded from the parent entity to the associated entities. The CascadeType enum includes the following options:
+
+ALL: Applies all cascade operations (persist, merge, remove, refresh, detach).
+PERSIST: When the parent entity is persisted, the related entities are also persisted.
+MERGE: When the parent entity is merged, the related entities are also merged.
+REMOVE: When the parent entity is removed, the related entities are also removed.
+REFRESH: When the parent entity is refreshed, the related entities are also refreshed.
+DETACH: When the parent entity is detached, the related entities are also detached.
+* */

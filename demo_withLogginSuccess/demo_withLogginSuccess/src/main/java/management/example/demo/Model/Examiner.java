@@ -14,11 +14,18 @@ public class Examiner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    private String nameWithInitials;
+    //private String nameWithInitials;
     private String fullName;
     private String department;
     private String email;
 
     @ManyToMany(mappedBy = "examiners")
     private List<Submission> submissions;
+
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
 }

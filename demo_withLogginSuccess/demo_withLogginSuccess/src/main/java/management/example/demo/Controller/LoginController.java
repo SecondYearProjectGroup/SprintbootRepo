@@ -16,4 +16,19 @@ public class LoginController {
         return "login";
     }
 
+
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(Authentication authentication) {
+//        if (authentication != null) {
+//            // Get roles from Authentication object
+//            String roles = authentication.getAuthorities().stream()
+//                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+//                    .collect(Collectors.joining(","));
+//
+//            return ResponseEntity.ok(roles);
+//        }
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+//    }
+
+
 }

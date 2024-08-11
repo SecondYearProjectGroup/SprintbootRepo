@@ -1,12 +1,16 @@
 package management.example.demo.Service;
 
 
+import management.example.demo.Model.Examiner;
+import management.example.demo.Model.Supervisor;
 import management.example.demo.Model.User;
+import management.example.demo.Repository.ExaminerRepository;
+import management.example.demo.Repository.SupervisorRepository;
 import management.example.demo.Repository.UserRepository;
+import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import management.example.demo.enums.Role;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +21,12 @@ public class LoginService implements UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SupervisorRepository supervisorRepository;
+
+    @Autowired
+    private ExaminerRepository examinerRepository;
 
     private UserRepository userRepository;
 
@@ -40,21 +50,56 @@ public class LoginService implements UserService {
         // If no roles are set, you can initialize with a default role, e.g., STUDENT
         if (roles == null || roles.isEmpty()) {
             roles = new HashSet<>();
-            roles.add(Role.USER); // Or set to a default role as per your application's logic
+            //roles.add(Role.USER);// Or set to a default role as per your application's logic
+            //roles.add(Role.ADMIN);
+            roles.add(Role.SUPERVISOR);
+            //roles.add(Role.STUDENT);
+
         }
 
         // Create a new User object with the provided details and roles
         User user = new User(
                 user_.getUsername(),
-                user_.getFirstName(),
-                user_.getLastName(),
+                user_.getName(),
                 user_.getEmail(),
                 passwordEncoder.encode(user_.getPassword()),
                 roles
         );
+
+        // Save the user to the database
+        User savedUser = userRepository.save(user);
+
+        //According to the roles, save them in the entities
+        for (Role role : roles){
+            switch (role) {
+                case SUPERVISOR:
+                    Supervisor supervisor = new Supervisor();
+                    // Set supervisor-specific fields
+                    //supervisor.setId(savedUser.getId());
+                    supervisor.setEmail(savedUser.getEmail());
+                    supervisor.setId(savedUser.getId());
+                    supervisor.setUser(savedUser); // Assume Supervisor has a reference to User
+                    supervisorRepository.save(supervisor);
+                    break;
+
+                case EXAMINER:
+                    Examiner examiner = new Examiner();
+                    // Set examiner-specific fields
+                    //examiner.setId(savedUser.getId());
+                    examiner.setEmail(savedUser.getEmail());
+                    examiner.setId(savedUser.getId());
+                    examiner.setUser(savedUser); // Assume Supervisor has a reference to User
+                    examinerRepository.save(examiner);
+                    break;
+
+            default:
+                break;
+        }}
+
         //Save user in the database through the repository layer
         return userRepository.save(user);
     }
+
 
 }
 
