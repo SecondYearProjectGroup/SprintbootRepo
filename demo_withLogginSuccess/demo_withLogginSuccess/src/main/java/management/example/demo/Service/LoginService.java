@@ -51,8 +51,8 @@ public class LoginService implements UserService {
         if (roles == null || roles.isEmpty()) {
             roles = new HashSet<>();
             //roles.add(Role.USER);// Or set to a default role as per your application's logic
-            //roles.add(Role.ADMIN);
-            roles.add(Role.SUPERVISOR);
+            roles.add(Role.ADMIN);
+            //roles.add(Role.SUPERVISOR);
             //roles.add(Role.STUDENT);
 
         }

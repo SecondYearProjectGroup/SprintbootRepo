@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -59,13 +58,13 @@ public class AdminController {
     }
 
     //Show list of enrolled students page to the admin
-    @GetMapping("/enrolledstu")
-    public String viewHomePage(Model model) {
-        List<Student> liststudent = enrolledStudentService.listAll();
-        model.addAttribute("liststudent", liststudent);
-        System.out.print("Get / ");
-        return "enrolledstu";
-    }
+//    @GetMapping("/enrolledstu")
+//    public String viewHomePage(Model model) {
+//        List<Student> liststudent = enrolledStudentService.listAll();
+//        model.addAttribute("liststudent", liststudent);
+//        System.out.print("Get / ");
+//        return "enrolledstu";
+//    }
 
     //Handle the confirmation of enrolled
     //@PreAuthorize("hasRole('ADMIN')")
@@ -109,13 +108,14 @@ public class AdminController {
         }
 
         //Handle the REJECT action
-        else if ("rejected".equalsIgnoreCase(action)) {
+        else if ("Rejected".equalsIgnoreCase(action)) {
             //Set the status of the student as "Rejected" in the student table
             student.setStatus("Rejected");
             String toEmail = student.getEmail();
             String subject = "Your enrollment is rejected";
             String body = "Your enrollment is rejected.";
             emailService.sendMail(toEmail, subject, body);
+            enrolledStudentService.saveStudent(student);
             return ResponseEntity.ok("Rejection email sent successfully.");
         }
         return ResponseEntity.badRequest().body("Invalid action.");
@@ -276,6 +276,12 @@ public class AdminController {
     @PostMapping("/addSubmitSection/{stuId}")
     public void addSectionToSubmit(Submission submission, @RequestParam String title){
         submissionService.addSubmissionField(submission,title);
+    }
+
+    //List all enrolledStudents to admin
+    @GetMapping("/enrolledstu")
+    public List<Student> getAllEnrolledStudents(){
+        return enrolledStudentService.listAll();
     }
 
     //List all supervisors to admin
