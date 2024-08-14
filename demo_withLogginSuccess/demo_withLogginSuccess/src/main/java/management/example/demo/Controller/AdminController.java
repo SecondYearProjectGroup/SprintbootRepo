@@ -284,6 +284,12 @@ public class AdminController {
         return enrolledStudentService.listAll();
     }
 
+    //List all confirmedStudents to admin
+    @GetMapping("/students")
+    public List<ConfirmedStudent> getAllConfirmedStudents(){
+        return confirmedStudentService.listAll();
+    }
+
     //List all supervisors to admin
     @GetMapping("/supervisors")
     public List<Supervisor> getAllSupervisors(){

@@ -1,9 +1,6 @@
 package management.example.demo.Service;
 
-import management.example.demo.Model.ConfirmedStudent;
-import management.example.demo.Model.Examiner;
-import management.example.demo.Model.Submission;
-import management.example.demo.Model.Supervisor;
+import management.example.demo.Model.*;
 import management.example.demo.Repository.ConfirmedStudentRepository;
 import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.SubmissionRepository;
@@ -30,6 +27,10 @@ public class ConfirmedStudentService {
     @Autowired
     private SubmissionRepository submissionRepository;
 
+
+    public List<ConfirmedStudent> listAll() {
+        return confirmedStudentRepository.findAll();
+    }
 
     public ConfirmedStudent get(String id){
         return confirmedStudentRepository.findById(id).get();
