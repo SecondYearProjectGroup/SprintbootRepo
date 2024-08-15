@@ -53,8 +53,10 @@ public class SecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests()
+
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow preflight requests
-                .requestMatchers("/signup", "/enroll", "/welcome", "/dashboard", "/upload", "/handleApproval/**", "/assignSupervisor/**", "/addSubmitSection/**",
+                .requestMatchers("/signup", "/enroll", "/enrolledstu", "/students","/welcome", "/dashboard", "/upload", "/handleApproval/**", "/assignSupervisor/**", "/addSubmitSection/**",
+
                         "/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/home").permitAll()
                 .requestMatchers("/supervisors").hasAuthority(Role.ADMIN.name())
