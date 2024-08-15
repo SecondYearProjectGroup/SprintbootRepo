@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10bb73b3-fca7-4c64-9c29-da48416dfcd8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/SupervisorController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/AdminService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/ExaminerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/SupervisorService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/ConfirmedStudentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/ConfirmedStudentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/SupervisorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/SupervisorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/NotificationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/SignUpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/SignUpController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/StudentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Examiner.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Examiner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Supervisor.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Supervisor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/LoginService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/NotificationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,31 +75,20 @@
     &quot;JUnit.SecurityConfigTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.SecurityConfigTest.login_ShouldAuthenticateUser.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.SecurityConfigTest.login_ShouldReturnError_WhenCredentialsAreInvalid.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Shell Script.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.StudentManagementApplication.executor&quot;: &quot;Run&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Ishan&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Dasuni&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/ASUS/Desktop/Com Sem 4/CO200 Second Year Project/secondYearProject/file/file&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -104,7 +99,7 @@
       <recent name="management.example.demo.Controller" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.StudentManagementApplication">
+  <component name="RunManager">
     <configuration name="EnrolledStudentControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <extension name="coverage">
@@ -182,18 +177,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StudentManagementApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="demo" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="management.example.demo.StudentManagementApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.EnrolledStudentControllerTest" />
         <item itemvalue="JUnit.SecurityConfigTest" />
+        <item itemvalue="JUnit.EnrolledStudentControllerTest" />
         <item itemvalue="JUnit.LoginServiceTest" />
         <item itemvalue="JUnit.EnrolledStudentControllerTest.testConfirmEnrollment_Approved" />
         <item itemvalue="JUnit.EnrolledStudentControllerTest.testConfirmEnrollment_Rejected" />
@@ -203,8 +190,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
+        <option value="jdk-17.0.10-corretto-17.0.10-4caba194b151-5cd809f4" />
       </set>
     </attachedChunks>
   </component>
@@ -216,16 +202,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1720852042194</updated>
-      <workItem from="1723355377368" duration="21639000" />
-      <workItem from="1723456050882" duration="801000" />
-      <workItem from="1723462057681" duration="2488000" />
-      <workItem from="1723604453231" duration="22425000" />
-      <workItem from="1723703096111" duration="6370000" />
     </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
