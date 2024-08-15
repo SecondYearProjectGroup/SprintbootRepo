@@ -2,6 +2,8 @@ package management.example.demo.Controller;
 
 import jakarta.mail.MessagingException;
 import management.example.demo.Model.Student;
+import management.example.demo.Model.User;
+import management.example.demo.Repository.UserRepository;
 import management.example.demo.Service.EmailService;
 import management.example.demo.Service.FileUploadService;
 import management.example.demo.Service.NotificationService;
@@ -29,6 +31,8 @@ public class StudentController {
 
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/enroll")
     public String showEnrollmentForm() {
@@ -82,8 +86,8 @@ public class StudentController {
                 "Name : " + student.getFullName() + "\n" +
                 "Address : " + student.getAddress() + "\n";
         emailService.sendMail(toEmail, subject, body);
-        String username = "e20197";
-        notificationService.createNotification(username,subject,body);
+        User user = userRepository.findByUsername("e20197");
+        notificationService.sendNotification(user, subject, body);
 
         System.out.println("Successfully enrolled.");
         Map<String, String> response = new HashMap<>();
