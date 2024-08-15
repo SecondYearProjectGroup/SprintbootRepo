@@ -1,8 +1,11 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,10 +22,12 @@ public class Notification {
     @Column(name = "`read`")
     private boolean read;
 
+    private LocalDateTime timestamp;
 
-    //To have the relationship between the user and notification entities
+
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference  // Prevent recursive serialization of the User
     private User user;
 
 
