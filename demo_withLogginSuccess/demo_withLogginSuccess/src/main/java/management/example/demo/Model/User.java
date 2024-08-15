@@ -1,5 +1,6 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +33,9 @@ public class User {
     @Column(name = "role")
     private Set<Role> roles;
 
-    //To have the relationship with the notification entity
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference  // Prevent recursive serialization of Notifications
     private List<Notification> notifications;
-
 
     public User() {
 

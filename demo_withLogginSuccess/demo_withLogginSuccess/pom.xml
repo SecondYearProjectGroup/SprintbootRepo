@@ -118,6 +118,12 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>4.4</version> <!-- Ensure this version is correct and exists in Maven Central -->
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
 	</dependencies>
 
 
