@@ -5,6 +5,7 @@ import management.example.demo.Model.*;
 import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.SupervisorRepository;
 import management.example.demo.Service.*;
+import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 //@Controller
@@ -42,6 +45,9 @@ public class AdminController {
     private SupervisorService supervisorService;
     @Autowired
     private ExaminerService examinerService;
+
+    @Autowired
+    private AdminService adminService;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -119,6 +125,18 @@ public class AdminController {
             return ResponseEntity.ok("Rejection email sent successfully.");
         }
         return ResponseEntity.badRequest().body("Invalid action.");
+    }
+
+
+    @PostMapping("/addStaffMembers")
+    public void addStaffMembers(@RequestParam String name, @RequestParam String email, @RequestParam List<String> role) throws Exception {
+
+        // Convert the list of strings to the set of Role enums
+        Set<Role> roles = role.stream()
+                .map(roleId -> Role.valueOf(roleId.toUpperCase()))
+                .collect(Collectors.toSet());
+
+        adminService.addStaff(name, email, roles);
     }
 
 
