@@ -23,7 +23,7 @@ public class EmailService {
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("dasunikawya2001@gmail.com");
+        message.setFrom("sameekumarasinghe@gmail.com");
         mailSender.send(message);
     }
 
@@ -55,12 +55,12 @@ public class EmailService {
         //helper.setFrom("myemail@gmail.com");
         //helper.addAttachment(file.getName(), file);
         //Path to the file
-        String pathToAttachment = "C:\\Users\\ASUS\\Desktop\\Com Sem 4\\CO200 Second Year Project\\Required Docs\\RPGapplication.pdf";
+        String pathToAttachment = "D:\\Semester 4\\CO200 Computer Engineering Project\\Required Documents\\PG_application.pdf";
 
         //Define the file system resource
         FileSystemResource file = new FileSystemResource(new File(pathToAttachment));
         //Attachment
-        helper.addAttachment("RPGapplication.pdf", file , "application/pdf");
+        helper.addAttachment("PG_application.pdf", file , "application/pdf");
 
         //Send the email
         mailSender.send(mimeMessage);

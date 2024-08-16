@@ -3,18 +3,22 @@ package management.example.demo.Model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
 public class ConfirmedStudent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    //private String regNumber;
 
+
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+
+    @Id
+    private String regNumber;
 
     private String nameWithInitials;
     private String fullName;
@@ -30,6 +34,11 @@ public class ConfirmedStudent {
     private String publications;
     private String programOfStudy;
     private String status;
+
+
+    //This attribute is created for generating registration number
+    @CreationTimestamp
+    private LocalDate createdDate;
 
     @ManyToOne
     @JoinColumn(name = "supervisor_id")
@@ -49,16 +58,26 @@ public class ConfirmedStudent {
     private List<Submission> submissions;
 
 
-
+    //confirmed postgraduate student count in the year
+    //this count will reset when the year changed
     @Getter
     @Transient //This attribute is not in the database table
-    static int count =0;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    static int count;
+
+    //year variable to compare with current year
+    @Getter
+    @Transient
+    static int year = 2024;
 
     //Manage the count variable
     //Constructor
-    public ConfirmedStudent(){
-        count++;
+//    public ConfirmedStudent(){
+//        count++;
+//    }
+
+
+    public static int setCountToOne() {
+        return ConfirmedStudent.count = 1;
     }
-
-
 }

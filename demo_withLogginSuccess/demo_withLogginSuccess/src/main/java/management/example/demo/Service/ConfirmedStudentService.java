@@ -32,12 +32,12 @@ public class ConfirmedStudentService {
         return confirmedStudentRepository.findAll();
     }
 
-    public ConfirmedStudent get(String id){
+    public ConfirmedStudent get(Long id){
         return confirmedStudentRepository.findById(id).get();
     }
 
     //Get all the submissions of a student
-    public List<Submission> getAllSubmissions(String stuId){
+    public List<Submission> getAllSubmissions(Long stuId){
         ConfirmedStudent confirmedStudent = get(stuId);
         return submissionRepository.findByConfirmedStudent(confirmedStudent);
     }
@@ -53,7 +53,7 @@ public class ConfirmedStudentService {
             //Set the selected supervisor
             //Again save the student
             Supervisor supervisor = supervisorOpt.get();
-            ConfirmedStudent confirmedStudent = get(id);
+            ConfirmedStudent confirmedStudent = get(Long.valueOf(id));
             confirmedStudent.setSupervisor(supervisor);
             confirmedStudentRepository.save(confirmedStudent);
 

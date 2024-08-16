@@ -178,7 +178,7 @@ public class AdminController {
     public ResponseEntity<String> assignSupervisor(@PathVariable(name = "id") String id, @RequestParam Long supervisorId) {
 
         //Retrieve the student from the student entity using the provided id.
-        ConfirmedStudent confirmedStudent = confirmedStudentService.get(id);
+        ConfirmedStudent confirmedStudent = confirmedStudentService.get(Long.valueOf(id));
 
         //
         //System.out.println(confirmedStudent.getRegNumber());
@@ -223,7 +223,7 @@ public class AdminController {
     //For url, report id should be added.
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assignExaminers/{stuId}/{id}")
-    public ResponseEntity<String> assignExaminer(@PathVariable(name = "stuId") String stuId, @PathVariable(name = "id") Long id, @RequestParam List<Long> examinerIds) {
+    public ResponseEntity<String> assignExaminer(@PathVariable(name = "stuId") Long stuId, @PathVariable(name = "id") Long id, @RequestParam List<Long> examinerIds) {
 
         //Retrieve the student from the student entity using the provided id.
         ConfirmedStudent confirmedStudent = confirmedStudentService.get(stuId);
