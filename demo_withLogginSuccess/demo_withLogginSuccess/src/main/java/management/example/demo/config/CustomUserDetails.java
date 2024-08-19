@@ -1,5 +1,7 @@
 package management.example.demo.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import management.example.demo.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +11,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+@Getter
+@Setter
 public class CustomUserDetails implements UserDetails {
 
     private String username;
@@ -21,8 +26,6 @@ public class CustomUserDetails implements UserDetails {
         this.roles = roles;
     }
 
-//    public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
