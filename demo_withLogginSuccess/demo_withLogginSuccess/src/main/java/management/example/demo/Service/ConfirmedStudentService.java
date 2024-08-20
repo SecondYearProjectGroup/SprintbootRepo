@@ -32,18 +32,18 @@ public class ConfirmedStudentService {
         return confirmedStudentRepository.findAll();
     }
 
-    public ConfirmedStudent get(String id){
-        return confirmedStudentRepository.findById(id).get();
+    public ConfirmedStudent get(String regNumber){
+        return confirmedStudentRepository.findById(regNumber).get();
     }
 
     //Get all the submissions of a student
-    public List<Submission> getAllSubmissions(String stuId){
-        ConfirmedStudent confirmedStudent = get(stuId);
+    public List<Submission> getAllSubmissions(String regNumber){
+        ConfirmedStudent confirmedStudent = get(regNumber);
         return submissionRepository.findByConfirmedStudent(confirmedStudent);
     }
 
     //Assign Supervisor
-    public Supervisor assignSupervisor(String  id, Long supervisorId){
+    public Supervisor assignSupervisor(String  regNumber, Long supervisorId){
         //Find the supervisor
         Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
         if (supervisorOpt.isPresent()){
@@ -53,7 +53,7 @@ public class ConfirmedStudentService {
             //Set the selected supervisor
             //Again save the student
             Supervisor supervisor = supervisorOpt.get();
-            ConfirmedStudent confirmedStudent = get(id);
+            ConfirmedStudent confirmedStudent = get(regNumber);
             confirmedStudent.setSupervisor(supervisor);
             confirmedStudentRepository.save(confirmedStudent);
 

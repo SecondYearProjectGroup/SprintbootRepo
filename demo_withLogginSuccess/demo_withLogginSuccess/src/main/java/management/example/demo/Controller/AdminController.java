@@ -5,6 +5,7 @@ import management.example.demo.Model.*;
 import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.SupervisorRepository;
 import management.example.demo.Service.*;
+import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 //@Controller
@@ -42,6 +45,9 @@ public class AdminController {
     private SupervisorService supervisorService;
     @Autowired
     private ExaminerService examinerService;
+
+    @Autowired
+    private AdminService adminService;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -122,6 +128,18 @@ public class AdminController {
     }
 
 
+    @PostMapping("/addStaffMembers")
+    public void addStaffMembers(@RequestParam String name, @RequestParam String email, @RequestParam List<String> role) throws Exception {
+
+        // Convert the list of strings to the set of Role enums
+        Set<Role> roles = role.stream()
+                .map(roleId -> Role.valueOf(roleId.toUpperCase()))
+                .collect(Collectors.toSet());
+
+        adminService.addStaff(name, email, roles);
+    }
+
+
     /* */
 //    @PostMapping("/assignSupervisor/{id}")
 //    public ResponseEntity<String> assignSupervisor(@PathVariable(name = "id") Long id, @RequestParam Long supervisorId) {
@@ -174,11 +192,11 @@ public class AdminController {
 
     //Assign the Supervisors
     //@PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assignSupervisor/{id}")
-    public ResponseEntity<String> assignSupervisor(@PathVariable(name = "id") String id, @RequestParam Long supervisorId) {
+    @PostMapping("/assignSupervisor/{regNumber}")
+    public ResponseEntity<String> assignSupervisor(@PathVariable(name = "regNumber") String regNumber, @RequestParam Long supervisorId) {
 
         //Retrieve the student from the student entity using the provided id.
-        ConfirmedStudent confirmedStudent = confirmedStudentService.get(id);
+        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
 
         //
         //System.out.println(confirmedStudent.getRegNumber());
@@ -189,7 +207,7 @@ public class AdminController {
 
         //For this if condition button click should be added.
         if (supervisorOpt.isPresent()) {
-            Supervisor supervisor = confirmedStudentService.assignSupervisor(id, supervisorId);
+            Supervisor supervisor = confirmedStudentService.assignSupervisor(regNumber, supervisorId);
 
             //Send the email to the supervisor informing the student's details
             String toEmail = supervisor.getEmail();
@@ -222,15 +240,15 @@ public class AdminController {
     //For each report examiners have to be assigned.
     //For url, report id should be added.
     //@PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assignExaminers/{stuId}/{id}")
-    public ResponseEntity<String> assignExaminer(@PathVariable(name = "stuId") String stuId, @PathVariable(name = "id") Long id, @RequestParam List<Long> examinerIds) {
+    @PostMapping("/assignExaminers/{regNumber}/{SubmissionId}")
+    public ResponseEntity<String> assignExaminer(@PathVariable(name = "regNumber") String regNumber, @PathVariable(name = "SubmissionId") Long submissionId, @RequestParam List<Long> examinerIds) {
 
         //Retrieve the student from the student entity using the provided id.
-        ConfirmedStudent confirmedStudent = confirmedStudentService.get(stuId);
+        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
         //Retrieve the submission from the submission entity using the provided id.
-        Submission submission = submissionService.get(id);
+        Submission submission = submissionService.get(submissionId);
 
-        List<Examiner> examiners = confirmedStudentService.assignExaminers(id, examinerIds);
+        List<Examiner> examiners = confirmedStudentService.assignExaminers(submissionId, examinerIds);
 
         //Send mails to the examiners to informing the submission assignment
         for (Examiner examiner : examiners) {
@@ -263,11 +281,11 @@ public class AdminController {
 
     //Set deadlines for submissions
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/setDeadline/{stuId}/{id}")
-    public ResponseEntity<String> setDeadline(@PathVariable(name = "stuId") Long stuId, @PathVariable(name = "id") Long id, @RequestParam Date deadline) {
-        Submission submission = submissionService.get(id);
+    @PostMapping("/setDeadline/{regNumber}/{submissionId}")
+    public ResponseEntity<String> setDeadline(@PathVariable(name = "regNumber") String regNumber, @PathVariable(name = "submissionId") Long  submissionId, @RequestParam Date deadline) {
+        Submission submission = submissionService.get(submissionId);
         submission.setDeadline(deadline);
-        submissionService.saveSubmissionsParameters(submissionService.get(id));
+        submissionService.saveSubmissionsParameters(submissionService.get(submissionId));
         System.out.println("Deadline has set successfully.");
         return ResponseEntity.ok("Deadline has set successfully.");
     }

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,9 +64,23 @@ public class EnrolledStudentService {
     //Save the student details in the confirmed student table
     public void saveStudent(Student user_){
         ConfirmedStudent confirmedStudent = new ConfirmedStudent();
+
+        //creating the last digits of the registration number
+
+        Long count ;
+
+        count = confirmedStudentRepository.countByCurrentYear(Year.now().getValue());
+        count++;
+
+        // Format count to always have 3 digits
+        String formattedCount = String.format("%03d", count);
+
         //confirmedStudent.setId(user_.getId());
         //Generate the registration number
         //confirmedStudent.setRegNumber("PG/"+ LocalDate.now().getYear() + "/" + String.valueOf(ConfirmedStudent.getCount()));
+
+        confirmedStudent.setRegNumber("PG/" + user_.getProgramOfStudy() + "/" + ((LocalDate.now().getYear())%100) + "/" + formattedCount);
+
         confirmedStudent.setNameWithInitials(user_.getNameWithInitials());
         confirmedStudent.setFullName(user_.getFullName());
         confirmedStudent.setEmail(user_.getEmail());
