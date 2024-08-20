@@ -1,25 +1,27 @@
 package management.example.demo.config;
 
-import jakarta.servlet.http.HttpServletResponse;
 import management.example.demo.Service.CustomUserDetailsService;
+import management.example.demo.Util.JwtRequestFilter;
 import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +29,9 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -37,7 +42,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Set specific allowed origin
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
 
@@ -53,50 +58,112 @@ public class SecurityConfig {
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .authorizeHttpRequests()
-
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow preflight requests
-
-                .requestMatchers("/signup", "/enroll", "/enrolledstu", "/students", "/addStaffMembers", "/supervisor/students/**", "/welcome", "/supervisors","/examiners", "/dashboard", "/upload", "/handleApproval/**", "/assignSupervisor/**", "/addSubmitSection/**","/css/**", "/js/**", "/img/**").permitAll()
-
-                .requestMatchers("/home").permitAll()
+                .requestMatchers("/login", "/signup", "/enroll", "/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/supervisors").hasAuthority(Role.ADMIN.name())
-                .requestMatchers("/notifications/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginProcessingUrl("/login")
-                .successHandler((request, response, authentication) -> {
-                    String roles = authentication.getAuthorities().stream()
-                            .map(GrantedAuthority::getAuthority)
-                            .collect(Collectors.joining(","));
-                    response.setContentType("text/plain");
-                    response.getWriter().write(roles);
-                })
-                .permitAll()
-                .and()
                 .logout()
-                .logoutUrl("/api/logout")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"message\": \"Logout successful\"}");
-                    response.setStatus(HttpServletResponse.SC_OK);
-                })
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()) // Return HTTP 200 on logout success
                 .permitAll()
                 .and()
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)  // Ensure sessions are always created
-                        .sessionFixation().migrateSession()  // Migrate session to avoid session fixation attacks
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true)
-                        .expiredUrl("/login?expired")
-                );
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(customUserDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
+    }
+}
+
+
+
+
+
+//import management.example.demo.Service.CustomUserDetailsService;
+//import management.example.demo.Util.JwtRequestFilter;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.http.HttpMethod;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.http.SessionCreationPolicy;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.web.SecurityFilterChain;
+//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+//import org.springframework.web.cors.CorsConfiguration;
+//import org.springframework.web.cors.CorsConfigurationSource;
+//import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+//
+//import java.util.Arrays;
+//
+//@Configuration
+//@EnableWebSecurity
+//public class SecurityConfig {
+//
+//    @Autowired
+//    private CustomUserDetailsService customUserDetailsService;
+//
+//    @Bean
+//    public static PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Set specific allowed origin
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+//        configuration.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+//
+//
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf().disable()
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and()
+//                .authorizeHttpRequests()
+//                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                .requestMatchers("/signup", "/enroll", "/enrolledstu", "/students", "/welcome", "/dashboard", "/upload", "/handleApproval/**",
+//                        "/assignSupervisor/**", "/addSubmitSection/**","/css/**", "/js/**", "/img/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                );
+//
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public JwtRequestFilter jwtRequestFilter() {
+//        return new JwtRequestFilter();
+//    }
+//
+//}
+//import org.springframework.web.cors.CorsConfigurationSource;
+//
 
 
 //    @Bean
@@ -112,11 +179,65 @@ public class SecurityConfig {
 //        return source;
 //    }
 
-}
 
 
 
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf().disable()
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and()
+//                .authorizeHttpRequests()
+//
+//                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow preflight requests
+//                .requestMatchers("/signup", "/enroll", "/enrolledstu", "/students", "/welcome", "/dashboard", "/upload", "/handleApproval/**", "/assignSupervisor/**", "/addSubmitSection/**",
+//
+//                        "/css/**", "/js/**", "/img/**").permitAll()
+////                .requestMatchers("/home").permitAll()
+////                .requestMatchers("/supervisors").hasAuthority(Role.ADMIN.name())
+////                .requestMatchers("/notifications/**").authenticated()
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginProcessingUrl("/login")
+////                .successHandler((request, response, authentication) -> {
+////                    String roles = authentication.getAuthorities().stream()
+////                            .map(GrantedAuthority::getAuthority)
+////                            .collect(Collectors.joining(","));
+////                    response.setContentType("text/plain");
+////                    response.getWriter().write(roles);
+////                })
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .logoutUrl("/api/logout")
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+////                .deleteCookies("JSESSIONID")
+////                .logoutSuccessHandler((request, response, authentication) -> {
+////                    response.setContentType("application/json");
+////                    response.getWriter().write("{\"message\": \"Logout successful\"}");
+////                    response.setStatus(HttpServletResponse.SC_OK);
+////                })
+//                .permitAll()
+//                .and()
+////                .sessionManagement(session -> session
+////                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)  // Ensure sessions are always created
+////                        .sessionFixation().migrateSession()  // Migrate session to avoid session fixation attacks
+////                        .maximumSessions(1)
+////                        .maxSessionsPreventsLogin(true)
+////                        .expiredUrl("/login?expired")
+////                )
+//                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
+//        ;
+//
+//        return http.build();
+//    }
 
 
 
