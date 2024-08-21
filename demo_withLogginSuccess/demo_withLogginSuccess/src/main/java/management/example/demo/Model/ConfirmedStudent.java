@@ -15,6 +15,8 @@ public class ConfirmedStudent {
     @Id
     private String regNumber;
 
+    //Username for logging the system
+//    private String username;
     private String nameWithInitials;
     private String fullName;
     private String contactNumber;

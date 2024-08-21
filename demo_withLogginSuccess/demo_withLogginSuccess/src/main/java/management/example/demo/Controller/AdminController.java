@@ -3,6 +3,7 @@ package management.example.demo.Controller;
 import jakarta.mail.MessagingException;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ExaminerRepository;
+import management.example.demo.Repository.StudentRepository;
 import management.example.demo.Repository.SupervisorRepository;
 import management.example.demo.Service.*;
 import management.example.demo.enums.Role;
@@ -49,6 +50,9 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
         ModelAndView mav = new ModelAndView("new");
@@ -58,19 +62,10 @@ public class AdminController {
     }
 
     @RequestMapping("/delete/{id}")
-    public String deletestudent(@PathVariable(name = "id") int id) {
+    public String deleteStudent(@PathVariable(name = "id") int id) {
         enrolledStudentService.delete(id);
         return "redirect:/";
     }
-
-    //Show list of enrolled students page to the admin
-//    @GetMapping("/enrolledstu")
-//    public String viewHomePage(Model model) {
-//        List<Student> liststudent = enrolledStudentService.listAll();
-//        model.addAttribute("liststudent", liststudent);
-//        System.out.print("Get / ");
-//        return "enrolledstu";
-//    }
 
     //Handle the confirmation of enrolled
     //@PreAuthorize("hasRole('ADMIN')")
@@ -88,26 +83,24 @@ public class AdminController {
 
         //Handle the APPROVED action
         if ("Approved".equalsIgnoreCase(action)) {
-            //Set the status of the student as "Approved" in the student table
-            student.setStatus("Approved");
-            enrolledStudentService.confirm(student);
-            enrolledStudentService.saveStudent(student);
-
-
-            //To save the confirmed student in an another entity
-            //confirmedStudentService.saveStudent();
+            ConfirmedStudent confirmedStudent = enrolledStudentService.saveStudent(student);
 
             //Set the details to the send the email
             String toEmail = student.getEmail();
-            String subject = "Your enrollment is confirmed";
-            String body = "Your enrollment to the" + enrolledStudentService.get(id).getProgramOfStudy() + "is successfully confirmed." + "\n" +
-                    "Your username = " + enrolledStudentService.get(id).getFullName() + "\n" +
-                    "Your password = " + enrolledStudentService.get(id).getContactNumber();
+            String subject = "Your enrollment has confirmed";
+            String body = "Your enrollment to the " + confirmedStudent.getProgramOfStudy() + " is successfully confirmed." + "\n" +
+                    "Reg Number : " + confirmedStudent.getRegNumber() + "\n" +
+//                    "Username : " + confirmedStudent.getUsername() + "\n" +
+                    "Password : " + confirmedStudent.getContactNumber();
 
             //Send the email
             //emailService.sendMail(toEmail, subject, body);
             //Send email with the attachment of application
             emailService.sendEmailWithAttachment(toEmail, subject, body);
+
+            //Set the status of the student as "Approved" in the student table
+            student.setStatus("Approved");
+            studentRepository.save(student);
 
             //Display the message
             return ResponseEntity.ok("Approval email sent successfully.");
@@ -117,11 +110,12 @@ public class AdminController {
         else if ("Rejected".equalsIgnoreCase(action)) {
             //Set the status of the student as "Rejected" in the student table
             student.setStatus("Rejected");
+            studentRepository.save(student);
             String toEmail = student.getEmail();
             String subject = "Your enrollment is rejected";
             String body = "Your enrollment is rejected.";
             emailService.sendMail(toEmail, subject, body);
-            enrolledStudentService.saveStudent(student);
+
             return ResponseEntity.ok("Rejection email sent successfully.");
         }
         return ResponseEntity.badRequest().body("Invalid action.");
