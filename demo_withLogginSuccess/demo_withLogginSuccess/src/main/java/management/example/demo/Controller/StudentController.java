@@ -39,31 +39,6 @@ public class StudentController {
         return "enroll";  // enroll.html should be your form page
     }
 
-//    @PostMapping("/enroll")
-//    public String enrollStudent(Student student, @RequestParam("attachment") MultipartFile attachment, Model model) throws MessagingException {
-//
-//        // Handle file upload
-//        String attachemntFileName = "";
-//        if (!attachment.isEmpty()) {
-//            attachemntFileName = fileUploadService.uploadFile(attachment);
-//            student.setAttachementFile(attachemntFileName);
-//        }
-//
-//        //Save the enrolled student
-//        studentService.saveStudent(student);
-//        model.addAttribute("Student enrolled successfully!");
-//        //Email the administrator to inform the enrollment
-//        String toEmail = "dasunikawya2001.1@gmail.com";
-//        String subject = "A student Enrollment";
-//        String body = "New student has enrolled. \n" + "Name : "
-//                + student.getFullName() + "\n" + "Address : "
-//                + student.getAddress() + "\n";
-//        //Email the administrator informing student enrollment
-//        //emailService.sendMail(toEmail , subject, body);
-//
-//        return "enroll";
-//    }
-
     @PostMapping("/enroll")
     public ResponseEntity<Map<String, String>> enrollStudent(
             @ModelAttribute Student student,
@@ -86,6 +61,7 @@ public class StudentController {
                 "Name : " + student.getFullName() + "\n" +
                 "Address : " + student.getAddress() + "\n";
         emailService.sendMail(toEmail, subject, body);
+        //Replace this with the ADMIN USERNAME
         User user = userRepository.findByUsername("e20197");
         notificationService.sendNotification(user, subject, body);
 

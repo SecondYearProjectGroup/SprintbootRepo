@@ -62,7 +62,7 @@ public class EnrolledStudentService {
 
 
     //Save the student details in the confirmed student table
-    public void saveStudent(Student user_){
+    public ConfirmedStudent saveStudent(Student user_){
         ConfirmedStudent confirmedStudent = new ConfirmedStudent();
 
         //creating the last digits of the registration number
@@ -73,7 +73,7 @@ public class EnrolledStudentService {
         count++;
 
         // Format count to always have 3 digits
-        String formattedCount = String.format("%03d", count);
+        String formattedCount = String.format("%02d", count);
 
         //confirmedStudent.setId(user_.getId());
         //Generate the registration number
@@ -83,6 +83,7 @@ public class EnrolledStudentService {
 
         confirmedStudent.setNameWithInitials(user_.getNameWithInitials());
         confirmedStudent.setFullName(user_.getFullName());
+        confirmedStudent.setContactNumber(user_.getContactNumber());
         confirmedStudent.setEmail(user_.getEmail());
         confirmedStudent.setAddress(user_.getAddress());
         confirmedStudent.setUniversity(user_.getUniversity());
@@ -93,12 +94,45 @@ public class EnrolledStudentService {
         confirmedStudent.setClassPass(user_.getClassPass());
         confirmedStudent.setPublications(user_.getPublications());
         confirmedStudent.setProgramOfStudy(user_.getProgramOfStudy());
-        confirmedStudent.setStatus(user_.getStatus());
-        confirmedStudentRepository.save(confirmedStudent);
+        confirmedStudent.setStatus("Provincial Registered");
+
+        //Save the approved student service in the User entity
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.STUDENT);
+
+        //Set the username
+//        String username = removeCharacter(confirmedStudent.getRegNumber(), '/');
+//        confirmedStudent.setUsername(username);
+        User user = new User(
+                //Assuming fullName as the username, firstName, and LastName
+                confirmedStudent.getRegNumber(),
+                confirmedStudent.getNameWithInitials(),
+                confirmedStudent.getEmail(),
+                //Assuming contactNumber as the password
+                passwordEncoder.encode(confirmedStudent.getContactNumber()),
+                roles);
+        userRepository.save(user);
+
+        return confirmedStudentRepository.save(confirmedStudent);
     }
 
     //Assign supervisors to the students (by the admin)
 
+    public String removeCharacter(String input, char toRemove) {
+        // Create a StringBuilder to build the result string
+        StringBuilder result = new StringBuilder();
 
+        // Iterate through the input string
+        for (int i = 0; i < input.length(); i++) {
+            // If the current character is not the one to remove, append it to the result
+            if (input.charAt(i) != toRemove) {
+                result.append(input.charAt(i));
+            }
+        }
 
+        // Convert the StringBuilder to a String and return it
+        return result.toString();
+    }
 }
+
+
