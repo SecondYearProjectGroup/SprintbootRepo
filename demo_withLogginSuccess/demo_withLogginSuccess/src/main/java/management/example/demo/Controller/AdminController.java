@@ -46,7 +46,7 @@ public class AdminController {
     private SupervisorService supervisorService;
     @Autowired
     private ExaminerService examinerService;
-
+    
     @Autowired
     private AdminService adminService;
 
@@ -308,10 +308,23 @@ public class AdminController {
         return supervisorService.listAll();
     }
 
+    // List all examiners to admin
     @GetMapping("/examiners")
     public List<Examiner> getAllExaminers(){
         return examinerService.listAll();
     }
+
+    //Get the student profile for admin
+    @GetMapping("/studentProfileForAdmin/{regNumber}")
+    public ResponseEntity<ConfirmedStudent> getConfirmedStudentByRegNumber(@PathVariable String regNumber) {
+        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
+        if (confirmedStudent != null) {
+            return ResponseEntity.ok(confirmedStudent); // Return 200 OK with the confirmedStudent object
+        } else {
+            return ResponseEntity.notFound().build(); // Return 404 Not Found if confirmStudent is null
+        }
+    }
+
 
 }
 
