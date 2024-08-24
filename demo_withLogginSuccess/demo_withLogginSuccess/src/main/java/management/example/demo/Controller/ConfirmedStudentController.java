@@ -20,7 +20,7 @@ public class ConfirmedStudentController {
     //To get the current logging student register number
     //For students - username is their reg number
     @GetMapping("/profile-student")
-    public ConfirmedStudent getRebNumber(@RequestHeader ("Authorization") String token){
+    public ConfirmedStudent getRegNumber(@RequestHeader ("Authorization") String token){
         String jwtToken = token.substring(7);
         String regNumber = jwtUtil.extractUsername(jwtToken);
         System.out.println(regNumber);
