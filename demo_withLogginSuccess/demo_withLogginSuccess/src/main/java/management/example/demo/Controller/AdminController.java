@@ -6,6 +6,7 @@ import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.StudentRepository;
 import management.example.demo.Repository.SupervisorRepository;
 import management.example.demo.Service.*;
+import management.example.demo.Util.JwtUtil;
 import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +15,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 //@Controller
 @RestController
 public class AdminController {
@@ -52,6 +54,9 @@ public class AdminController {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -315,16 +320,29 @@ public class AdminController {
     }
 
     //Get the student profile for admin
-    @GetMapping("/studentProfileForAdmin/{regNumber}")
-    public ResponseEntity<ConfirmedStudent> getConfirmedStudentByRegNumber(@PathVariable String regNumber) {
-        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
-        if (confirmedStudent != null) {
-            return ResponseEntity.ok(confirmedStudent); // Return 200 OK with the confirmedStudent object
-        } else {
-            return ResponseEntity.notFound().build(); // Return 404 Not Found if confirmStudent is null
-        }
-    }
+    ///@PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/studentProfileForAdmin/{regNumber}")
+//    public ResponseEntity<ConfirmedStudent> getConfirmedStudentByRegNumber(@PathVariable(name = "regNumber") String regNumber) {
+//        System.out.println("Received regNumber: " + regNumber); // Log the received regNumber
+//        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
+//        if (confirmedStudent != null) {
+//            System.out.println("Student found: " + confirmedStudent); // Log the found student
+//            return ResponseEntity.ok(confirmedStudent);
+//        } else {
+//            System.out.println("Student not found for regNumber: " + regNumber); // Log when not found
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
+    @GetMapping("/studentProfileForAdmin/{regNumber}")
+    public ConfirmedStudent getConfirmedStudentByRegNumber(@RequestHeader("Authorization") String token,
+                                                           @PathVariable(name = "regNumber") String regNumber) {
+        String decodedRegNumber = java.net.URLDecoder.decode(regNumber, StandardCharsets.UTF_8);
+        String jwtToken = token.substring(7);
+        String username = jwtUtil.extractUsername(jwtToken);
+        System.out.println("Received regNumber: " + decodedRegNumber);
+        return confirmedStudentService.get(decodedRegNumber);
+    }
 
 }
 
