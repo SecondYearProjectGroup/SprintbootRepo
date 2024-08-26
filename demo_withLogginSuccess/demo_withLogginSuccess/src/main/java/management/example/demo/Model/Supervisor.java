@@ -1,5 +1,6 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class Supervisor {
             joinColumns = @JoinColumn(name = "supervisor_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
+    @JsonIgnore
     private List<ConfirmedStudent> supervisees;
 
     @Getter
