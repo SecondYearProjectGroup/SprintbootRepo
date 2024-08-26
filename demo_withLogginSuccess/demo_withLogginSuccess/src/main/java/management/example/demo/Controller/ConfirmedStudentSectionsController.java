@@ -22,10 +22,13 @@ public class ConfirmedStudentSectionsController {
     }
 
     @PostMapping
-    public ResponseEntity<ConfirmedStudentSections> createSection(@RequestBody ConfirmedStudentSections section) {
+    public ResponseEntity<ConfirmedStudentSections> saveSection(@RequestBody ConfirmedStudentSections section) {
+        System.out.println("Received section: " + section);
+        section.getTiles().forEach(tile -> System.out.println("Tile: " + tile));
         ConfirmedStudentSections savedSection = confirmedStudentSectionsService.saveSection(section);
         return ResponseEntity.ok(savedSection);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSection(@PathVariable Long id) {
