@@ -37,6 +37,11 @@ public class User {
     @JsonManagedReference  // Prevent recursive serialization of Notifications
     private List<Notification> notifications;
 
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Event> events;
+
     public User() {
 
     }
