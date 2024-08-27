@@ -18,7 +18,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true) // Ensures the username is unique in the database
     private String username;
+
     private String name;
     //private String LastName;
     private String email;

@@ -4,6 +4,7 @@ import management.example.demo.Model.Notification;
 import management.example.demo.Model.User;
 import management.example.demo.Repository.UserRepository;
 import management.example.demo.Service.NotificationService;
+import management.example.demo.Util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,21 @@ public class NotificationController {
     private NotificationService notificationService;
 
     @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
     private UserRepository userRepository;
 
-//    @GetMapping("/unread")
-//    public List<Notification> getUnreadNotifications(Principal principal) {
-//        User user = userRepository.findByUsername(principal.getName());
-//        return notificationService.getUnreadNotifications(user);
-//    }
-
-
     @GetMapping("/unread")
+    public List<Notification> getUnreadNotifications(@RequestHeader ("Authorization") String token){
+        String jwtToken = token.substring(7);
+        String username = jwtUtil.extractUsername(jwtToken);
+        User user = userRepository.findByUsername(username);
+        return notificationService.getUnreadNotifications(user);
+    }
+
+
+
     public ResponseEntity<?> getUnreadNotifications(Principal principal) {
         if (principal == null) {
             System.out.println("Principal is null, user is not authenticated.");
