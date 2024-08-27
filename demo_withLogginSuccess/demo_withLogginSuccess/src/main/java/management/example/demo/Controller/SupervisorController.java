@@ -1,6 +1,7 @@
 package management.example.demo.Controller;
 
 import management.example.demo.Model.ConfirmedStudent;
+import management.example.demo.Repository.UserRepository;
 import management.example.demo.Service.ConfirmedStudentService;
 import management.example.demo.Service.SupervisorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,12 @@ public class SupervisorController {
     @Autowired
     private ConfirmedStudentService confirmedStudentService;
 
-    @GetMapping("/students/{supervisorId}")
-    public List<ConfirmedStudent> getConfirmedStudents(@PathVariable Long supervisorId) {
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/students/{username}")
+    public List<ConfirmedStudent> getConfirmedStudents(@PathVariable String username) {
+        Long supervisorId = userRepository.findByUsername(username).getId();
         return supervisorService.getConfirmedStudentsBySupervisorId(supervisorId);
     }
 

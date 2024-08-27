@@ -13,7 +13,7 @@ import java.util.List;
 public class Supervisor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //private String nameWithInitials;
@@ -33,11 +33,11 @@ public class Supervisor {
     @JsonIgnore
     private List<ConfirmedStudent> supervisees;
 
-    @Getter
-    @Setter
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+//    @Getter
+//    @Setter
+//    @OneToOne
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    private User user;
 
     // Getters and setters
 
