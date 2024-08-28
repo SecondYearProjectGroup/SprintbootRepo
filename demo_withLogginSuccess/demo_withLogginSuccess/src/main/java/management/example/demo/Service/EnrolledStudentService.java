@@ -79,7 +79,7 @@ public class EnrolledStudentService {
         //Generate the registration number
         //confirmedStudent.setRegNumber("PG/"+ LocalDate.now().getYear() + "/" + String.valueOf(ConfirmedStudent.getCount()));
 
-        confirmedStudent.setRegNumber("PG/" + user_.getProgramOfStudy() + "/" + ((LocalDate.now().getYear())%100) + "/" + formattedCount);
+        confirmedStudent.setRegNumber("PG_" + user_.getProgramOfStudy() + "_" + ((LocalDate.now().getYear())%100) + "_" + formattedCount);
 
         confirmedStudent.setNameWithInitials(user_.getNameWithInitials());
         confirmedStudent.setFullName(user_.getFullName());

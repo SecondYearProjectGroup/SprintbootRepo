@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Examiner {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     //private String nameWithInitials;
@@ -22,10 +22,5 @@ public class Examiner {
     @ManyToMany(mappedBy = "examiners")
     private List<Submission> submissions;
 
-    @Getter
-    @Setter
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
 
 }
