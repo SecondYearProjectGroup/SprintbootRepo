@@ -5,7 +5,7 @@ import management.example.demo.Model.Student;
 import management.example.demo.Model.User;
 import management.example.demo.Repository.UserRepository;
 import management.example.demo.Service.EmailService;
-import management.example.demo.Service.FileUploadService;
+import management.example.demo.Service.FileService;
 import management.example.demo.Service.NotificationService;
 import management.example.demo.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class StudentController {
     private StudentService studentService;
 
     @Autowired
-    private FileUploadService fileUploadService;
+    private FileService fileUploadService;
 
     @Autowired
     private EmailService emailService;

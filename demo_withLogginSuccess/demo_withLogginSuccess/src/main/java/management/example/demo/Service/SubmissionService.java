@@ -14,7 +14,7 @@ public class SubmissionService  {
     private SubmissionRepository submissionRepository;
 
     @Autowired
-    private FileUploadService fileUploadService;
+    private FileService fileUploadService;
 
     public Submission get(Long id){
         return submissionRepository.findById(id).get();
