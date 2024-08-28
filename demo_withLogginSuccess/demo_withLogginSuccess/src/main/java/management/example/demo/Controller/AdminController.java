@@ -138,57 +138,6 @@ public class AdminController {
         adminService.addStaff(name, email, roles);
     }
 
-
-    /* */
-//    @PostMapping("/assignSupervisor/{id}")
-//    public ResponseEntity<String> assignSupervisor(@PathVariable(name = "id") Long id, @RequestParam Long supervisorId) {
-//        try {
-//            // Retrieve the student from the student entity using the provided id.
-//            ConfirmedStudent confirmedStudent = confirmedStudentService.get(id);
-//
-//            if (confirmedStudent == null) {
-//                System.out.println("ConfirmedStudent not found for ID: " + id);
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
-//            }
-//
-//            // Find the supervisor
-//            Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
-//
-//            if (supervisorOpt.isPresent()) {
-//                Supervisor supervisor = confirmedStudentService.assignSupervisor(id, supervisorId);
-//
-//                // Send the email to the supervisor informing the student's details
-//                String toEmail = supervisor.getEmail();
-//                String subject = "New Student Assignment Notification ";
-//                String body = "Dear " + supervisor.getNameWithInitials() + ",\n\n" +
-//                        "You have been assigned a new student.\n\n" +
-//                        "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
-//                        "Student Name: " + confirmedStudent.getFullName() + "\n" +
-//                        "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
-//                        "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
-//                        "Students Contact Details:\n\n" +
-//                        "Email: " + confirmedStudent.getEmail() + "\n" +
-//                        "Phone: " + confirmedStudent.getContactNumber() + "\n" +
-//                        "Thank you for your continued support.\n\n" +
-//                        "Best regards,\n" +
-//                        "Post Graduate Studies,\n" +
-//                        "Department of Computer Engineering,UOP\n" +
-//                        "[Your Institution/Organization]";
-//
-//                emailService.sendMail(toEmail, subject, body);
-//                System.out.println("Successfully assigned.");
-//                return ResponseEntity.ok("Supervisor assigned successfully.");
-//            } else {
-//                System.out.println("Supervisor not found for ID: " + supervisorId);
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Supervisor not found.");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while assigning the supervisor.");
-//        }
-//    }
-/* */
-
     //Assign the Supervisors
     //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assignSupervisor/{regNumber}")

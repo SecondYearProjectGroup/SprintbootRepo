@@ -53,22 +53,22 @@ public class AdminService {
                 case SUPERVISOR:
                     Supervisor supervisor = new Supervisor();
                     // Set supervisor-specific fields
-                    //supervisor.setId(savedUser.getId());
+                    supervisor.setId(savedUser.getId());
                     supervisor.setEmail(savedUser.getEmail());
                     supervisor.setId(savedUser.getId());
                     supervisor.setFullName(savedUser.getName());
-                    supervisor.setUser(savedUser); // Assume Supervisor has a reference to User
+//                    supervisor.setUser(savedUser); // Assume Supervisor has a reference to User
                     supervisorRepository.save(supervisor);
                     break;
 
                 case EXAMINER:
                     Examiner examiner = new Examiner();
                     // Set examiner-specific fields
-                    //examiner.setId(savedUser.getId());
+                    examiner.setId(savedUser.getId());
                     examiner.setEmail(savedUser.getEmail());
                     examiner.setId(savedUser.getId());
                     examiner.setFullName(savedUser.getName());
-                    examiner.setUser(savedUser); // Assume Supervisor has a reference to User
+                    //examiner.setUser(savedUser); // Assume Supervisor has a reference to User
                     examinerRepository.save(examiner);
                     break;
 

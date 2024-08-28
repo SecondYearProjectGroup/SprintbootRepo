@@ -36,12 +36,11 @@ public class ConfirmedStudent {
     @CreationTimestamp
     private LocalDate createdDate;
 
+    @Getter
     @ManyToOne
     @JoinColumn(name = "supervisor_id")
     //Assign Supervisor to the student
     private Supervisor supervisor;
-
-
 
     //Student's submissions
     @OneToMany

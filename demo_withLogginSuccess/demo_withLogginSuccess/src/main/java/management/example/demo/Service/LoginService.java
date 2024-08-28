@@ -78,7 +78,7 @@ public class LoginService implements UserService {
                     //supervisor.setId(savedUser.getId());
                     supervisor.setEmail(savedUser.getEmail());
                     supervisor.setId(savedUser.getId());
-                    supervisor.setUser(savedUser); // Assume Supervisor has a reference to User
+//                    supervisor.setUser(savedUser); // Assume Supervisor has a reference to User
                     supervisorRepository.save(supervisor);
                     break;
 
@@ -88,7 +88,7 @@ public class LoginService implements UserService {
                     //examiner.setId(savedUser.getId());
                     examiner.setEmail(savedUser.getEmail());
                     examiner.setId(savedUser.getId());
-                    examiner.setUser(savedUser); // Assume Supervisor has a reference to User
+                    //examiner.setUser(savedUser); // Assume Supervisor has a reference to User
                     examinerRepository.save(examiner);
                     break;
 
