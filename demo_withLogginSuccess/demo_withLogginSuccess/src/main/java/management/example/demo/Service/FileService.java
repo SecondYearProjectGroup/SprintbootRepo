@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class FileService {
@@ -25,36 +26,42 @@ public class FileService {
     @Value("${upload.path}")
     private String uploadDir;
 
-    public String uploadFile(MultipartFile file) {
+    public List<String> uploadFile(MultipartFile file) {
         if (file.isEmpty()) {
-            return "Please select a file to upload";
+            return Collections.singletonList("Please select a file to upload");
         }
 
         try {
-            //reads the contents of the uploaded file into a byte array
+            // Generate a unique identifier for the file
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+            // reads the contents of the uploaded file into a byte array
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(uploadDir + file.getOriginalFilename());
-            //writes the byte array to the specified path on the server
+            Path path = Paths.get(uploadDir + uniqueFileName);
+            // writes the byte array to the specified path on the server
             Files.write(path, bytes);
-            String fileName = file.getOriginalFilename();
             String filePath = path.toString();
 
-            //To save the file data into the database
-            //////////////
-            FileMetadata fileMetadata= new FileMetadata();
-            fileMetadata.setFileName(fileName);
+            // To save the file data into the database
+            FileMetadata fileMetadata = new FileMetadata();
+            fileMetadata.setFileName(uniqueFileName); // Save the unique file name
+            fileMetadata.setOriginalFileName(file.getOriginalFilename()); // Save the original file name if needed
             fileMetadata.setFileType(file.getContentType());
             fileMetadata.setFileSize(file.getSize());
             fileMetadata.setUploadDate(LocalDateTime.now().toString());
             fileMetadataRepository.save(fileMetadata);
-            ///////////////
 
-            return fileName; // Return the file path
+            List<String> outputs = new ArrayList<>();
+            outputs.add(uniqueFileName);
+            outputs.add(fileMetadata.getOriginalFileName());
+
+            return outputs     ; // Return the unique file name
         } catch (IOException e) {
             e.printStackTrace();
-            return "File upload failed";
+            return Collections.singletonList("File upload failed");
         }
     }
+
 
     // Method to download the file
     public Resource downloadFile(Long fileId) {
@@ -76,4 +83,31 @@ public class FileService {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
+
+    public Optional<FileMetadata> getFileMetadata(Long id){
+        return fileMetadataRepository.findById(id);
+    }
+
+
+
+    public Resource downloadFileByName(String fileName) {
+        // Fetch file metadata by file name
+        FileMetadata fileMetadata = fileMetadataRepository.findByFileName(fileName)
+                .orElseThrow(() -> new RuntimeException("File not found with name " + fileName));
+
+        try {
+            // Load file as a resource
+            Path filePath = Paths.get(uploadDir).resolve(fileMetadata.getFileName()).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("File not found or is not readable");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
 }

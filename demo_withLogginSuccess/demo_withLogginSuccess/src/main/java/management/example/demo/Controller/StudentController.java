@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -45,10 +47,12 @@ public class StudentController {
             @RequestParam("attachment") MultipartFile attachment) throws MessagingException {
 
         // Handle file upload
-        String attachemntFileName = "";
+        //String attachementFileName = "";
+        List<String> attachmentData = new ArrayList<>();
         if (!attachment.isEmpty()) {
-            attachemntFileName = fileUploadService.uploadFile(attachment);
-            student.setAttachementFile(attachemntFileName);
+            attachmentData = fileUploadService.uploadFile(attachment);
+            student.setAttachementFile(attachmentData.get(0));
+            student.setAttachementFileOriginalName(attachmentData.get(1));
         }
 
         // Save the enrolled student
