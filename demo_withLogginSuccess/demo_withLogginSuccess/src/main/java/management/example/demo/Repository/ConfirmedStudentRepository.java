@@ -19,5 +19,5 @@ public interface ConfirmedStudentRepository extends JpaRepository<ConfirmedStude
     @Query("SELECT COUNT(cs) FROM ConfirmedStudent cs WHERE YEAR(cs.createdDate) = :currentYear")
     long countByCurrentYear(@Param("currentYear") int currentYear);
 
-
+    ConfirmedStudent findBySubmissions_Id(Long submissionId);
 }

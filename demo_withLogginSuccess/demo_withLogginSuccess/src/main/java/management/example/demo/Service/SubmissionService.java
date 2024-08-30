@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 public class SubmissionService  {
 
@@ -21,13 +23,13 @@ public class SubmissionService  {
     }
 
     //Save the submissions
-    public void saveSubmissionsParameters(Submission submission){
-        submissionRepository.save(submission);
+    public Submission saveSubmissionsParameters(Submission submission){
+        return submissionRepository.save(submission);
     }
-
     //Upload the file (report)
     public void saveSubmission(Submission submission, @RequestParam("file")MultipartFile file){
-        submission.setFileName(fileUploadService.uploadFile(file));
+        List attachmentData = fileUploadService.uploadFile(file);
+        submission.setFileName((String) attachmentData.get(1));
         submissionRepository.save(submission);
     }
 

@@ -1,5 +1,6 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class Tile {
     private String type;
     private String title;
     private String routerLink;
+    private String regNumber;
 
     @ManyToOne
     @JoinColumn(name = "section_id")
@@ -28,6 +30,11 @@ public class Tile {
         this.title = title;
         this.routerLink = routerLink;
     }
+
+
+    @OneToOne(mappedBy = "tile")
+    @JsonManagedReference
+    private Submission submission;
 
     // Getters and Setters
 }

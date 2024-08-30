@@ -1,6 +1,6 @@
 package management.example.demo.Service;
 
-import management.example.demo.Model.Feedback;
+import management.example.demo.Model.Forum;
 import management.example.demo.Model.Submission;
 import management.example.demo.Repository.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ public class FeedbackService {
     private SubmissionService submissionService;
 
     //To list all the feedbacks related to a submission of a student
-    public List<Feedback> getAllFeedbacks(Long submissionId){
+    public List<Forum> getAllFeedbacks(Long submissionId){
         Submission submission= submissionService.get(submissionId);
         return feedbackRepository.findById(submission);
     }
 
     //Create a feedback
-    public Feedback addFeedback(Long submissionID, String body){
+    public Forum addFeedback(Long submissionID, String body){
         Submission submission = submissionService.get(submissionID);
-        Feedback feedback = new Feedback();
+        Forum feedback = new Forum();
         feedback.setBody(body);
         feedback.setSubmission(submission);
         return feedbackRepository.save(feedback);

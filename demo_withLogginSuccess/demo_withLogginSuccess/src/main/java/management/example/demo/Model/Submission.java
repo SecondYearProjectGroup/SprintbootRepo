@@ -1,11 +1,12 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -14,12 +15,12 @@ import java.util.List;
 public class Submission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String fileName;
-    private Date deadline;
+    private LocalDateTime openDate;
+    private LocalDateTime deadline;
 
     //Submissions
     @ManyToOne
@@ -38,5 +39,11 @@ public class Submission {
 
     //To have the relationship with the feedback entity
     @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL)
-    private List<Feedback> feedbacks;
+    private List<Forum> feedbacks;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "tile_id")
+    @JsonBackReference
+    private Tile tile;
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Feedback {
+public class Forum {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
