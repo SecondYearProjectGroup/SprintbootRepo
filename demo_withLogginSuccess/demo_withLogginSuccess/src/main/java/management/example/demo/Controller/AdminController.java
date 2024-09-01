@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -230,13 +231,15 @@ public class AdminController {
 
 
     //Set deadlines for submissions
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/setDeadline/{tileId}")
     public ResponseEntity<String> setDeadline( @PathVariable(name = "tileId") Long  tileId,
                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline,
                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime opendate) {
         Submission submission = submissionService.get(tileId);
-        System.out.println(tileId);
+        if (submission == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Submission not found");
+        }
         submission.setDeadline(deadline);
         // Set the openDate to the current date and time
         submission.setOpenDate(opendate);
@@ -245,35 +248,7 @@ public class AdminController {
         return ResponseEntity.ok("Deadline has set successfully.");
     }
 
-//    @PostMapping("/setDeadline/{submissionId}")
-//    public ResponseEntity<String> setDeadline(
-//            @PathVariable(name = "submissionId") Long submissionId,
-//            @RequestBody Map<String, String> requestBody) {
-//
-//        OffsetDateTime deadline = OffsetDateTime.parse(requestBody.get("deadline"));
-//        OffsetDateTime openDate = OffsetDateTime.parse(requestBody.get("openDate"));
-//
-//        // Fetch the submission using the ID
-//        Submission submission = submissionService.get(submissionId);
-//
-//        // Fetch the confirmed student associated with the submission
-//        ConfirmedStudent confirmedStudent = confirmedStudentService.findConfirmedStudentBySubmissionID(submissionId);
-//
-//        // Set the confirmed student
-//        submission.setConfirmedStudent(confirmedStudent);
-//
-//        // Set the deadline and openDate
-//        submission.setDeadline(deadline.toLocalDateTime());
-//        submission.setOpenDate(openDate.toLocalDateTime());
-//
-//        // Save the updated submission entity
-//        submissionService.saveSubmissionsParameters(submission);
-//
-//        System.out.println("Deadline has been set successfully.");
-//        return ResponseEntity.ok("Deadline has been set successfully.");
-//    }
-//
-
+    //Upload the assignment task
 
     //Add section to submit the reports to the students
     @PostMapping("/addSubmitSection/{stuId}")

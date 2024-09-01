@@ -21,6 +21,7 @@ public class Submission {
     private String fileName;
     private LocalDateTime openDate;
     private LocalDateTime deadline;
+    private Boolean submissionStatus;
 
     //Submissions
     @ManyToOne
@@ -46,4 +47,20 @@ public class Submission {
     @JoinColumn(name = "tile_id")
     @JsonBackReference
     private Tile tile;
+
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileMetadata> fileMetadataList = new ArrayList<>();
+
+    // Add a file metadata to the submission
+    public void addFileMetadata(FileMetadata fileMetadata) {
+        fileMetadataList.add(fileMetadata);
+        fileMetadata.setSubmission(this);
+    }
+
+    // Remove a file metadata from the submission
+    public void removeFileMetadata(FileMetadata fileMetadata) {
+        fileMetadataList.remove(fileMetadata);
+        fileMetadata.setSubmission(null);
+    }
+
 }

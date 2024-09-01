@@ -20,4 +20,8 @@ public class FileMetadata {
 
     @ManyToOne
     private Student student;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "submission_id")  // Foreign key column in FileMetadata table
+    private Submission submission;
 }

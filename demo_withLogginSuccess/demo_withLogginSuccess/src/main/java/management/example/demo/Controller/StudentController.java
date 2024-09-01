@@ -74,8 +74,4 @@ public class StudentController {
         response.put("message", "Student enrolled successfully!");
         return ResponseEntity.ok(response);
     }
-
-
-
-
 }

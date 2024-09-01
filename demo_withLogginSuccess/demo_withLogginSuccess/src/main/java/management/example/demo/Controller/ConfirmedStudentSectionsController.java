@@ -49,6 +49,7 @@ public class ConfirmedStudentSectionsController {
                 submission.setTile(tile);
                 submission.setConfirmedStudent(confirmedStudent);
                 submission.setTitle(tile.getTitle());
+                submission.setSubmissionStatus(false);
                 submissionService.saveSubmissionsParameters(submission);
             }
         });

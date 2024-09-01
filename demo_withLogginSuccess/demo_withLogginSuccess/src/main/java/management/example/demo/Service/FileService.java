@@ -63,6 +63,7 @@ public class FileService {
     }
 
 
+
     // Method to download the file
     public Resource downloadFile(Long fileId) {
         // Fetch file metadata from the database
@@ -108,6 +109,58 @@ public class FileService {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
+    }
+
+
+
+
+    // Handles both single and multiple file uploads
+    public List<FileMetadata> uploadFiles_(List<MultipartFile> files) {
+        List<FileMetadata> fileMetadataList = new ArrayList<>();
+
+        if (files == null || files.isEmpty()) {
+            throw new IllegalArgumentException("Please select files to upload");
+        }
+
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                // Skip empty files
+                continue;
+            }
+
+            try {
+                // Generate a unique identifier for the file
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+                // Reads the contents of the uploaded file into a byte array
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(uploadDir + uniqueFileName);
+
+                // Writes the byte array to the specified path on the server
+                Files.write(path, bytes);
+
+                // To save the file data into the database
+                FileMetadata fileMetadata = new FileMetadata();
+                fileMetadata.setFileName(uniqueFileName); // Save the unique file name
+                fileMetadata.setOriginalFileName(file.getOriginalFilename()); // Save the original file name if needed
+                fileMetadata.setFileType(file.getContentType());
+                fileMetadata.setFileSize(file.getSize());
+                fileMetadata.setUploadDate(LocalDateTime.now().toString());
+                fileMetadataRepository.save(fileMetadata);
+
+                fileMetadataList.add(fileMetadata);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle or log the exception as needed
+            }
+        }
+
+        if (fileMetadataList.isEmpty()) {
+            throw new IllegalStateException("No files were uploaded");
+        }
+
+        return fileMetadataList;
     }
 
 }

@@ -28,7 +28,7 @@ public class SubmissionService  {
     }
     //Upload the file (report)
     public void saveSubmission(Submission submission, @RequestParam("file")MultipartFile file){
-        List attachmentData = fileUploadService.uploadFile(file);
+        List<String> attachmentData = fileUploadService.uploadFile(file);
         submission.setFileName((String) attachmentData.get(1));
         submissionRepository.save(submission);
     }

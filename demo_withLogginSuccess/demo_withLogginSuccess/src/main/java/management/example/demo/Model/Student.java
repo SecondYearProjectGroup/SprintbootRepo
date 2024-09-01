@@ -33,6 +33,4 @@ public class Student {
 
     @OneToMany
     private List<FileMetadata> fileMetadata;
-
-
 }
