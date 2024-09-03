@@ -39,8 +39,8 @@ public class Submission {
     private List<Examiner> examiners = new ArrayList<>();
 
     //To have the relationship with the feedback entity
-    @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL)
-    private List<Forum> feedbacks;
+    @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<Forum> feedbacks = new ArrayList<>();
 
     @OneToOne
     @MapsId
@@ -48,7 +48,8 @@ public class Submission {
     @JsonBackReference
     private Tile tile;
 
-    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<FileMetadata> fileMetadataList = new ArrayList<>();
 
     // Add a file metadata to the submission

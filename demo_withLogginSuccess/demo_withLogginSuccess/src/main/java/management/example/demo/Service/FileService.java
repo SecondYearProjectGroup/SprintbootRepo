@@ -1,6 +1,7 @@
 package management.example.demo.Service;
 
 
+import management.example.demo.DTO.FileMetadataDto;
 import management.example.demo.Model.FileMetadata;
 import management.example.demo.Repository.FileMetadataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +114,6 @@ public class FileService {
 
 
 
-
     // Handles both single and multiple file uploads
     public List<FileMetadata> uploadFiles_(List<MultipartFile> files) {
         List<FileMetadata> fileMetadataList = new ArrayList<>();
@@ -161,6 +161,10 @@ public class FileService {
         }
 
         return fileMetadataList;
+    }
+
+    public List<FileMetadataDto> getFileMetadataBySubmissionId(Long submissionId) {
+        return fileMetadataRepository.findFileMetadataDtoBySubmissionId(submissionId);
     }
 
 }

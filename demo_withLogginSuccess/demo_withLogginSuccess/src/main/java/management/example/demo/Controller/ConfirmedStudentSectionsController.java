@@ -2,9 +2,11 @@ package management.example.demo.Controller;
 
 import management.example.demo.Model.ConfirmedStudent;
 import management.example.demo.Model.ConfirmedStudentSections;
+import management.example.demo.Model.Forum;
 import management.example.demo.Model.Submission;
 import management.example.demo.Service.ConfirmedStudentSectionsService;
 import management.example.demo.Service.ConfirmedStudentService;
+import management.example.demo.Service.ForumService;
 import management.example.demo.Service.SubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ public class ConfirmedStudentSectionsController {
 
     @Autowired
     private SubmissionService submissionService;
+
+    @Autowired
+    private ForumService forumService;
 
     @GetMapping("/{regNumber}")
     public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumber(@PathVariable String regNumber) {
@@ -51,6 +56,10 @@ public class ConfirmedStudentSectionsController {
                 submission.setTitle(tile.getTitle());
                 submission.setSubmissionStatus(false);
                 submissionService.saveSubmissionsParameters(submission);
+            } else if (tile.getType().equals("forum")) {
+                Forum forum = new Forum();
+                forum.setConfirmedStudent(confirmedStudent);
+                forumService.saveForum(forum);
             }
         });
 

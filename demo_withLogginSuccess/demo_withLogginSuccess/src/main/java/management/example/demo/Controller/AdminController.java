@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.nio.charset.StandardCharsets;
@@ -60,6 +61,14 @@ public class AdminController {
 
     @Autowired
     private  TileService tileService;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private FileService fileService;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -149,7 +158,6 @@ public class AdminController {
         //Retrieve the student from the student entity using the provided id.
         ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
 
-        //
         //System.out.println(confirmedStudent.getRegNumber());
 
         //Find the supervisor
@@ -159,13 +167,16 @@ public class AdminController {
         //For this if condition button click should be added.
         if (supervisorOpt.isPresent()) {
             Supervisor supervisor = confirmedStudentService.assignSupervisor(regNumber, supervisorId);
+            //Increment the number of supervisees for the supervisor
+            int supervisees = supervisor.getNoOfSupervisees();
+            supervisor.setNoOfSupervisees(supervisees);
 
             //Send the email to the supervisor informing the student's details
             String toEmail = supervisor.getEmail();
             String subject = "New Student Assignment Notification ";
             String body = "Dear " + supervisor.getFullName() + ",\n\n" +
-                    "You have been assigned a new student.\n\n" +
-                    //"Student ID: " + confirmedStudent.getRegNumber() + "\n" +
+                    "You have been assigned to a new student.\n\n" +
+                    "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
                     "Student Name: " + confirmedStudent.getFullName() + "\n" +
                     "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
                     "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
@@ -178,6 +189,10 @@ public class AdminController {
                     "Department of Computer Engineering,UOP\n" +
                     "Post Graduate Studies,\n" +
                     "[Your Institution/Organization]";
+            String notificationBody = "You have been assigned to a new student";
+            emailService.sendMail(toEmail,subject,body);
+//            User userSupervisor =  userService.findByUsername()
+//            notificationService.sendNotification();
             System.out.println("Successfully assigned.");
             return ResponseEntity.ok("Supervisor assigned successfully.");
         } else {
@@ -244,6 +259,30 @@ public class AdminController {
         // Set the openDate to the current date and time
         submission.setOpenDate(opendate);
         submissionService.saveSubmissionsParameters(submissionService.get(tileId));
+
+        ////////////////////////////////
+        //Generate the Email Notifications for the students
+        ConfirmedStudent confirmedStudent = submission.getConfirmedStudent();
+        String toEmail = confirmedStudent.getEmail();
+        String subject = "Deadline Set for Submission of Progress Reports";
+        String body = String.format(
+                "This is a reminder that the deadline for submitting your progress reports has been set.\n\n" +
+                        "Deadline: %s \n \n" +
+                        "Please ensure that your reports are submitted by the specified deadline. " +
+                        "Late submissions may not be accepted or could result in a penalty," +
+                        "Complete and upload your reports on time." +
+                        "If you have any questions or need further clarification, please don't hesitate to reach out your supervisor."
+                        , submission.getDeadline()
+        );
+        emailService.sendMail(toEmail, subject, body);
+        /////////////////////////////////
+        //Generate the Notifications for the students
+        //Get the userId from the student registration number
+        User user = userService.findByUsername(confirmedStudent.getRegNumber());
+        String notificationBody = "Deadline for submitting your progress reports has been set.";
+        notificationService.sendNotification(user, subject, notificationBody);
+        /////////////////////////////////
+
         System.out.println("Deadline has set successfully.");
         return ResponseEntity.ok("Deadline has set successfully.");
     }
@@ -305,6 +344,37 @@ public class AdminController {
         return confirmedStudentService.get(decodedRegNumber);
     }
 
+    //Upload the assighment tasks
+    @PostMapping("/")
+    public ResponseEntity<String> uploadFiles(@RequestParam("files") List<MultipartFile> files,
+                                               @PathVariable(name = "tileId") Long tileId){
+        try {
+            // Upload files and get the metadata
+            List<FileMetadata> uploadResults = fileService.uploadFiles_(files);
+
+            // Retrieve the existing submission
+            Submission submission = submissionService.get(tileId);
+
+            if (submission == null) {
+                return new ResponseEntity<>("Submission not found", HttpStatus.NOT_FOUND);
+            }
+
+
+            //Set the assignment task here (Unique name and the original name)
+            //submission.setAssignmentTask();
+
+            // Save the updated submission
+            submissionService.saveSubmissionsParameters(submission);
+
+            return new ResponseEntity<>("Files uploaded and submission updated successfully", HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("File upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }
 
     //To download as an excel
@@ -322,46 +392,3 @@ public class AdminController {
 //        workbook.write(response.getOutputStream());
 //        workbook.close();
 //    }
-
-
-
-
-
-
-//public ResponseEntity<String> assignSupervisor(@PathVariable(name = "id") Long id, @RequestParam Long supervisorId) {
-//
-//    //Retrieve the student from the student entity using the provided id.
-//    ConfirmedStudent confirmedStudent = confirmedStudentService.get(id);
-//
-//    //Find the supervisor
-//    Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
-//
-//    if (supervisorOpt.isPresent()) {
-//        Supervisor supervisor = supervisorOpt.get();
-//        confirmedStudent.setSupervisor(supervisor);
-//
-//        //Send the email to the supervisor informing the student's details
-//        String toEmail = supervisor.getEmail();
-//        String subject = "New Student Assignment Notification ";
-//        String body = "Dear " + supervisor.getNameWithInitials() + ",\n\n" +
-//                "You have been assigned a new student.\n\n" +
-//                "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
-//                "Student Name: " + confirmedStudent.getFullName() + "\n" +
-//                "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
-//                "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
-//                "Students Contact Details:\n\n" +
-//                "Email: " + confirmedStudent.getEmail() + "\n" +
-//                "Phone: " + confirmedStudent.getContactNumber() + "\n" +
-//                "Thank you for your continued support.\n\n" +
-//                "Best regards,\n" +
-//                "Post Graduate Studies,\n" +
-//                "Department of Computer Engineering,UOP\n" +
-//                "Post Graduate Studies,\n" +
-//                "[Your Institution/Organization]";
-//
-//
-//        return ResponseEntity.ok("Supervisor assigned successfully.");
-//    } else {
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student or Supervisor not found.");
-//    }
-//}

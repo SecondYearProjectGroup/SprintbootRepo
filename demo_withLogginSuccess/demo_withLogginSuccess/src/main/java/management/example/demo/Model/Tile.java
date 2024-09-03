@@ -36,5 +36,13 @@ public class Tile {
     @JsonManagedReference
     private Submission submission;
 
+    @OneToOne(mappedBy = "tile")
+    @JsonManagedReference
+    private Forum forum;
+
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private ConfirmedStudent confirmedStudent;
     // Getters and Setters
 }

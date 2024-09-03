@@ -52,6 +52,11 @@ public class ConfirmedStudentController {
             // Retrieve the existing submission
             Submission submission = submissionService.get(tileId);
 
+            //Set the submission id to all the files
+            for (FileMetadata fileMetadata: uploadResults){
+                fileMetadata.setSubmission(submission);
+            }
+
             if (submission == null) {
                 return new ResponseEntity<>("Submission not found", HttpStatus.NOT_FOUND);
             }

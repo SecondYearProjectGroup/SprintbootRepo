@@ -11,6 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -53,6 +57,27 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+
+
+    @GetMapping("/view/{fileName}")
+    public ResponseEntity<Resource> viewFileInBrowser(@PathVariable String fileName) {
+        Resource resource = fileUploadService.downloadFileByName(fileName);
+
+        // Determine the file's content type
+        String contentType = "application/octet-stream";
+        try {
+            contentType = Files.probeContentType(Paths.get(resource.getFile().getAbsolutePath()));
+        } catch (IOException ex) {
+            // log the exception, contentType will remain as "application/octet-stream"
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+
 
 
 //    @GetMapping("/download/{id}/{attachmentFile}")

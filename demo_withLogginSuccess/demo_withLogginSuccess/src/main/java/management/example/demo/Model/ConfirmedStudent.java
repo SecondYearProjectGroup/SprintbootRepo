@@ -54,6 +54,18 @@ public class ConfirmedStudent {
 
 
 
+    //Feedbacks from the supervisors or examiners
+    @OneToMany
+    @JoinTable(
+            name = "student_submission",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "submission_id")
+    )
+    @Getter
+        private List<Forum> forums;
+
+
+
     //confirmed postgraduate student count in the year
     //this count will reset when the year changed
     @Getter

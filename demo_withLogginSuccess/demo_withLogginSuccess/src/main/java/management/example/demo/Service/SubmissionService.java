@@ -22,6 +22,10 @@ public class SubmissionService  {
         return submissionRepository.findById(id).get();
     }
 
+    public List<Submission> findAll(){
+        return submissionRepository.findAll();
+    }
+
     //Save the submissions
     public Submission saveSubmissionsParameters(Submission submission){
         return submissionRepository.save(submission);
