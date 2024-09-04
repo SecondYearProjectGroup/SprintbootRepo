@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow preflight requests
                 .requestMatchers("/login", "/signup", "/enroll", "/css/**", "/js/**", "/img/**").permitAll()
+                .requestMatchers("/ws/**").permitAll()
                 .requestMatchers("/supervisors").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
@@ -84,6 +85,7 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
 }
 
 

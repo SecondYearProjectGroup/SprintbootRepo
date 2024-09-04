@@ -5,7 +5,7 @@ import management.example.demo.Model.Student;
 import management.example.demo.Model.User;
 import management.example.demo.Repository.UserRepository;
 import management.example.demo.Service.EmailService;
-import management.example.demo.Service.FileUploadService;
+import management.example.demo.Service.FileService;
 import management.example.demo.Service.NotificationService;
 import management.example.demo.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,7 +26,7 @@ public class StudentController {
     private StudentService studentService;
 
     @Autowired
-    private FileUploadService fileUploadService;
+    private FileService fileUploadService;
 
     @Autowired
     private EmailService emailService;
@@ -45,10 +47,12 @@ public class StudentController {
             @RequestParam("attachment") MultipartFile attachment) throws MessagingException {
 
         // Handle file upload
-        String attachemntFileName = "";
+        //String attachementFileName = "";
+        List<String> attachmentData = new ArrayList<>();
         if (!attachment.isEmpty()) {
-            attachemntFileName = fileUploadService.uploadFile(attachment);
-            student.setAttachementFile(attachemntFileName);
+            attachmentData = fileUploadService.uploadFile(attachment);
+            student.setAttachementFile(attachmentData.get(0));
+            student.setAttachementFileOriginalName(attachmentData.get(1));
         }
 
         // Save the enrolled student
@@ -70,8 +74,4 @@ public class StudentController {
         response.put("message", "Student enrolled successfully!");
         return ResponseEntity.ok(response);
     }
-
-
-
-
 }

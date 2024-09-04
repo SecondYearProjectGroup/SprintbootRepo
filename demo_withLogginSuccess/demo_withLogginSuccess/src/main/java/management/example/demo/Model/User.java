@@ -18,7 +18,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true) // Ensures the username is unique in the database
     private String username;
+
     private String name;
     //private String LastName;
     private String email;
@@ -36,6 +38,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference  // Prevent recursive serialization of Notifications
     private List<Notification> notifications;
+
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Event> events;
 
     public User() {
 

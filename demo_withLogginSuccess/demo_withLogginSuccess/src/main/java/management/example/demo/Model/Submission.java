@@ -1,11 +1,12 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -14,12 +15,13 @@ import java.util.List;
 public class Submission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String fileName;
-    private Date deadline;
+    private LocalDateTime openDate;
+    private LocalDateTime deadline;
+    private Boolean submissionStatus;
 
     //Submissions
     @ManyToOne
@@ -37,6 +39,29 @@ public class Submission {
     private List<Examiner> examiners = new ArrayList<>();
 
     //To have the relationship with the feedback entity
-    @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL)
-    private List<Feedback> feedbacks;
+    @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<Forum> feedbacks = new ArrayList<>();
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "tile_id")
+    @JsonBackReference
+    private Tile tile;
+
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<FileMetadata> fileMetadataList = new ArrayList<>();
+
+    // Add a file metadata to the submission
+    public void addFileMetadata(FileMetadata fileMetadata) {
+        fileMetadataList.add(fileMetadata);
+        fileMetadata.setSubmission(this);
+    }
+
+    // Remove a file metadata from the submission
+    public void removeFileMetadata(FileMetadata fileMetadata) {
+        fileMetadataList.remove(fileMetadata);
+        fileMetadata.setSubmission(null);
+    }
+
 }

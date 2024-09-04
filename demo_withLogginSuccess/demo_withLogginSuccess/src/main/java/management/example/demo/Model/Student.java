@@ -1,12 +1,11 @@
 package management.example.demo.Model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -30,6 +29,8 @@ public class Student {
     private String programOfStudy;
     private String status;
     private String attachementFile;
+    private String attachementFileOriginalName;
 
-
+    @OneToMany
+    private List<FileMetadata> fileMetadata;
 }
