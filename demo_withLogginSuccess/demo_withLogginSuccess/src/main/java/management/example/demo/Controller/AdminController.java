@@ -206,11 +206,9 @@ public class AdminController {
     //For each report examiners have to be assigned.
     //For url, report id should be added.
     //@PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/assignExaminers/{regNumber}/{SubmissionId}")
-    public ResponseEntity<String> assignExaminer(@PathVariable(name = "regNumber") String regNumber, @PathVariable(name = "SubmissionId") Long submissionId, @RequestParam List<Long> examinerIds) {
+    @PostMapping("/assignExaminers/{SubmissionId}")
+    public ResponseEntity<String> assignExaminer( @PathVariable(name = "SubmissionId") Long submissionId, @RequestParam List<Long> examinerIds) {
 
-        //Retrieve the student from the student entity using the provided id.
-        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
         //Retrieve the submission from the submission entity using the provided id.
         Submission submission = submissionService.get(submissionId);
 
@@ -225,8 +223,8 @@ public class AdminController {
                             "We are pleased to inform you that you have been assigned as an examiner for a new submission in our system. The details of the submission are as follows:\n\n" +
                             "Submission Title: %s\n" +
                             "Submission ID: %d\n" +
-                            "Student RegNumber: %s\n" +
-                            "Student Name: %s\n\n" +
+//                            "Student RegNumber: %s\n" +
+//                            "Student Name: %s\n\n" +
                             "As an examiner, your role will involve reviewing the submission and providing your evaluation and feedback. We greatly value your expertise and look forward to your insights.\n\n" +
                             "Please access the submission through the system at your earliest convenience. Your timely feedback is crucial for the student's progress and will be highly appreciated.\n\n" +
                             "Should you have any questions or need further information, please do not hesitate to contact us.\n\n" +
@@ -235,9 +233,9 @@ public class AdminController {
                             "Department of Computer Engineering,UOP\n",
                     examiner.getFullName(),
                     submission.getTitle(),
-                    submission.getId(),
+                    submission.getId()
                     //confirmedStudent.getRegNumber(),
-                    confirmedStudent.getFullName()
+                    //confirmedStudent.getFullName()
             );
 
         }

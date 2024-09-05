@@ -18,6 +18,9 @@ public class SubmissionService  {
     @Autowired
     private FileService fileUploadService;
 
+    @Autowired
+    private ExaminerService examinerService;
+
     public Submission get(Long id){
         return submissionRepository.findById(id).get();
     }
@@ -42,4 +45,9 @@ public class SubmissionService  {
         submission.setTitle(title);
         submissionRepository.save(submission);
     }
+
+    public void deleteExaminerFromSubmission(Long submissionId, Long examinerId) {
+        submissionRepository.removeExaminerFromSubmission(submissionId, examinerId);
+    }
+
 }

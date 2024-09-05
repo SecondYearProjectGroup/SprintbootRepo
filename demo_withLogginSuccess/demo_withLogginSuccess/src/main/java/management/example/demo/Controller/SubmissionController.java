@@ -47,7 +47,6 @@ public class SubmissionController {
 
     @GetMapping("uploaded/{submissionId}")
     public List<FileMetadataDto> getFileMetadataBySubmissionId(@PathVariable Long submissionId) {
-        System.out.println("OIERJGIEJGIJF");
         List<FileMetadataDto> fileMetadataDtos = fileService.getFileMetadataBySubmissionId(submissionId);
         for (FileMetadataDto fileMetadataDto: fileMetadataDtos){
             System.out.println(fileMetadataDto);
@@ -55,5 +54,11 @@ public class SubmissionController {
         return fileMetadataDtos;
     }
 
-
+    @DeleteMapping("/examiners/{submissionId}/{examinerId}")
+    public ResponseEntity<Void> deleteExaminer(
+            @PathVariable Long submissionId,
+            @PathVariable Long examinerId) {
+        submissionService.deleteExaminerFromSubmission(submissionId, examinerId);
+        return ResponseEntity.noContent().build();
+    }
 }

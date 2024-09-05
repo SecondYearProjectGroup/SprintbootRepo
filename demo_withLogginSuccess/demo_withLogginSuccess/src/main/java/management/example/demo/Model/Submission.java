@@ -36,6 +36,7 @@ public class Submission {
             inverseJoinColumns = @JoinColumn(name = "examiner_id")
     )
     @Getter
+    @JsonBackReference
     private List<Examiner> examiners = new ArrayList<>();
 
     //To have the relationship with the feedback entity

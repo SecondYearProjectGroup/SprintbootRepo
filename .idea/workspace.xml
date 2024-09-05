@@ -5,14 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10bb73b3-fca7-4c64-9c29-da48416dfcd8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Interceptors/WebSocketAuthenticationInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/FileMetadata.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/FileMetadataRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/FileService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/ExaminerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/FileUplodCoroller.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/FileUploadService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/ConfirmedStudentSectionsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/ConfirmedStudentSectionsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/SubmissionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Controller/SubmissionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Examiner.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Examiner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Submission.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Model/Submission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/ExaminerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/ExaminerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/SubmissionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Repository/SubmissionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/ExaminerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/ExaminerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/SubmissionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/src/main/java/management/example/demo/Service/SubmissionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +34,8 @@
         <option value="JUnit5 Test Class" />
         <option value="Kotlin Enum" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
