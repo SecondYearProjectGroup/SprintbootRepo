@@ -152,52 +152,70 @@ public class AdminController {
 
     //Assign the Supervisors
     //@PreAuthorize("hasRole('ADMIN')")
+//    @PostMapping("/assignSupervisor/{regNumber}")
+//    public ResponseEntity<String> assignSupervisor(@PathVariable(name = "regNumber") String regNumber, @RequestParam Long supervisorId) {
+//
+//        //Retrieve the student from the student entity using the provided id.
+//        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
+//
+//        //System.out.println(confirmedStudent.getRegNumber());
+//
+//        //Find the supervisor
+//        //This can be clear after adding "assignSupervisor submit button" click to the if condition
+//        Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
+//
+//        //For this if condition button click should be added.
+//        if (supervisorOpt.isPresent()) {
+//            Supervisor supervisor = confirmedStudentService.assignSupervisor(regNumber, supervisorId);
+//            //Increment the number of supervisees for the supervisor
+//            int supervisees = supervisor.getNoOfSupervisees() + 1;
+//            supervisor.setNoOfSupervisees(supervisees);
+//
+//            //Send the email to the supervisor informing the student's details
+//            String toEmail = supervisor.getEmail();
+//            String subject = "New Student Assignment Notification ";
+//            String body = "Dear " + supervisor.getFullName() + ",\n\n" +
+//                    "You have been assigned to a new student.\n\n" +
+//                    "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
+//                    "Student Name: " + confirmedStudent.getFullName() + "\n" +
+//                    "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
+//                    "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
+//                    "Students Contact Details:\n\n" +
+//                    "Email: " + confirmedStudent.getEmail() + "\n" +
+//                    "Phone: " + confirmedStudent.getContactNumber() + "\n" +
+//                    "Thank you for your continued support.\n\n" +
+//                    "Best regards,\n" +
+//                    "Post Graduate Studies,\n" +
+//                    "Department of Computer Engineering,UOP\n" +
+//                    "Post Graduate Studies,\n" +
+//                    "[Your Institution/Organization]";
+//            String notificationBody = "You have been assigned to a new student";
+//            emailService.sendMail(toEmail,subject,body);
+//            Optional<User> userSupervisor =  userService.findById(supervisorId);
+//            User user = userSupervisor.get();
+//            notificationService.sendNotification(user, subject, notificationBody);
+//            System.out.println("Successfully assigned.");
+//            return ResponseEntity.ok("Supervisor assigned successfully.");
+//        } else {
+//            System.out.println("Failed");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student or Supervisor not found.");
+//        }
+//    }
+
+    // Controller endpoint to assign or change supervisor
     @PostMapping("/assignSupervisor/{regNumber}")
     public ResponseEntity<String> assignSupervisor(@PathVariable(name = "regNumber") String regNumber, @RequestParam Long supervisorId) {
 
-        //Retrieve the student from the student entity using the provided id.
+        // Retrieve the student using the provided registration number
         ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
 
-        //System.out.println(confirmedStudent.getRegNumber());
+        // Find the new supervisor by ID and reassign supervisor
+        Supervisor newSupervisor = confirmedStudentService.assignSupervisor(regNumber, supervisorId);
 
-        //Find the supervisor
-        //This can be clear after adding "assignSupervisor submit button" click to the if condition
-        Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
-
-        //For this if condition button click should be added.
-        if (supervisorOpt.isPresent()) {
-            Supervisor supervisor = confirmedStudentService.assignSupervisor(regNumber, supervisorId);
-            //Increment the number of supervisees for the supervisor
-            int supervisees = supervisor.getNoOfSupervisees();
-            supervisor.setNoOfSupervisees(supervisees);
-
-            //Send the email to the supervisor informing the student's details
-            String toEmail = supervisor.getEmail();
-            String subject = "New Student Assignment Notification ";
-            String body = "Dear " + supervisor.getFullName() + ",\n\n" +
-                    "You have been assigned to a new student.\n\n" +
-                    "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
-                    "Student Name: " + confirmedStudent.getFullName() + "\n" +
-                    "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
-                    "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
-                    "Students Contact Details:\n\n" +
-                    "Email: " + confirmedStudent.getEmail() + "\n" +
-                    "Phone: " + confirmedStudent.getContactNumber() + "\n" +
-                    "Thank you for your continued support.\n\n" +
-                    "Best regards,\n" +
-                    "Post Graduate Studies,\n" +
-                    "Department of Computer Engineering,UOP\n" +
-                    "Post Graduate Studies,\n" +
-                    "[Your Institution/Organization]";
-            String notificationBody = "You have been assigned to a new student";
-            emailService.sendMail(toEmail,subject,body);
-//            User userSupervisor =  userService.findByUsername()
-//            notificationService.sendNotification();
-            System.out.println("Successfully assigned.");
-            return ResponseEntity.ok("Supervisor assigned successfully.");
+        if (newSupervisor != null) {
+            return ResponseEntity.ok("Supervisor reassigned successfully.");
         } else {
-            System.out.println("Failed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student or Supervisor not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("New supervisor not found.");
         }
     }
 
@@ -205,7 +223,7 @@ public class AdminController {
     //Assign the Examiners to submissions
     //For each report examiners have to be assigned.
     //For url, report id should be added.
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assignExaminers/{SubmissionId}")
     public ResponseEntity<String> assignExaminer( @PathVariable(name = "SubmissionId") Long submissionId, @RequestParam List<Long> examinerIds) {
 
@@ -217,17 +235,15 @@ public class AdminController {
         //Send mails to the examiners to informing the submission assignment
         for (Examiner examiner : examiners) {
             String toEmail = examiner.getEmail();
-            String subject = "New Report Submission Assignment Notification ";
+            String subject = "You have been assigned as an examiner for a new submission";
             String body = String.format(
                     "Dear %s,\n\n" +
                             "We are pleased to inform you that you have been assigned as an examiner for a new submission in our system. The details of the submission are as follows:\n\n" +
                             "Submission Title: %s\n" +
                             "Submission ID: %d\n" +
 //                            "Student RegNumber: %s\n" +
-//                            "Student Name: %s\n\n" +
-                            "As an examiner, your role will involve reviewing the submission and providing your evaluation and feedback. We greatly value your expertise and look forward to your insights.\n\n" +
+//                            "Student Name: %s\n\n"  +
                             "Please access the submission through the system at your earliest convenience. Your timely feedback is crucial for the student's progress and will be highly appreciated.\n\n" +
-                            "Should you have any questions or need further information, please do not hesitate to contact us.\n\n" +
                             "Best regards,\n" +
                             "Post Graduate Studies,\n" +
                             "Department of Computer Engineering,UOP\n",
@@ -237,6 +253,14 @@ public class AdminController {
                     //confirmedStudent.getRegNumber(),
                     //confirmedStudent.getFullName()
             );
+
+            //Send the emails to examiners
+            emailService.sendMail(toEmail,subject,body);
+            //Push the  notifications
+            String notificationBody = "You have been assigned as an examiner for a new submission";
+            Optional<User> userExaminer =  userService.findById(examiner.getId());
+            User user = userExaminer.get();
+            notificationService.sendNotification(user, subject, notificationBody);
 
         }
         return ResponseEntity.ok("Examiners assigned successfully.");
@@ -306,31 +330,23 @@ public class AdminController {
     }
 
     //List all supervisors to admin
-    @GetMapping("/supervisors")
-    public List<Supervisor> getAllSupervisors(){
-        return supervisorService.listAll();
+    @GetMapping("/supervisors/{regNumber}")
+    public List<Supervisor> getAllSupervisors(@PathVariable(name = "regNumber") String regNumber){
+        Supervisor assignedSupervisor = supervisorService.getByStudentRegNumber(regNumber);
+        List<Supervisor> list = supervisorService.listAll();
+        list.remove(assignedSupervisor);
+        return list;
     }
 
     // List all examiners to admin
-    @GetMapping("/examiners")
-    public List<Examiner> getAllExaminers(){
-        return examinerService.listAll();
+    @GetMapping("/examiners/{submissionId}")
+    public List<Examiner> getAllExaminers(@PathVariable(name = "submissionId") Long submissionId){
+        List<Examiner> list1 = examinerService.findBySubmissionId(submissionId); // Examiners assigned to the submission
+        List<Examiner> list2 = examinerService.listAll(); // All examiners
+        // Remove all examiners in list1 from list2
+        list2.removeAll(list1);
+        return list2; // Return remaining examiners in list2 not in list1
     }
-
-    //Get the student profile for admin
-    ///@PreAuthorize("hasRole('ADMIN')")
-//    @GetMapping("/studentProfileForAdmin/{regNumber}")
-//    public ResponseEntity<ConfirmedStudent> getConfirmedStudentByRegNumber(@PathVariable(name = "regNumber") String regNumber) {
-//        System.out.println("Received regNumber: " + regNumber); // Log the received regNumber
-//        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
-//        if (confirmedStudent != null) {
-//            System.out.println("Student found: " + confirmedStudent); // Log the found student
-//            return ResponseEntity.ok(confirmedStudent);
-//        } else {
-//            System.out.println("Student not found for regNumber: " + regNumber); // Log when not found
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
 
     @GetMapping("/studentProfileForAdmin/{regNumber}")
     public ConfirmedStudent getConfirmedStudentByRegNumber(@RequestHeader("Authorization") String token,

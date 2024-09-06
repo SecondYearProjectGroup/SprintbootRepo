@@ -25,4 +25,8 @@ public class SupervisorService {
         return confirmedStudentRepository.findBySupervisorId(supervisorId);
     }
 
+    public Supervisor getByStudentRegNumber(String regNumber){
+        return supervisorRepository.findByConfirmedStudentRegNumber(regNumber);
+    }
+
 }

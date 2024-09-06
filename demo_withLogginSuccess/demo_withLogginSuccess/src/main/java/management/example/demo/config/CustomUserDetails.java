@@ -16,11 +16,13 @@ import java.util.stream.Collectors;
 @Setter
 public class CustomUserDetails implements UserDetails {
 
+    private Long userId;
     private String username;
     private String password;
     private Set<Role> roles;
 
-    public CustomUserDetails(String username, String password, Set<Role> roles) {
+    public CustomUserDetails(Long userId, String username, String password, Set<Role> roles) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.roles = roles;

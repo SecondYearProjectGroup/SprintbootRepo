@@ -1,9 +1,6 @@
 package management.example.demo.Service;
 
-import management.example.demo.Model.ConfirmedStudent;
-import management.example.demo.Model.Examiner;
-import management.example.demo.Model.Submission;
-import management.example.demo.Model.Supervisor;
+import management.example.demo.Model.*;
 import management.example.demo.Repository.ConfirmedStudentRepository;
 import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.SubmissionRepository;
@@ -30,6 +27,15 @@ public class ConfirmedStudentService {
     @Autowired
     private SubmissionRepository submissionRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private UserService userService;
+
 
     public List<ConfirmedStudent> listAll() {
         return confirmedStudentRepository.findAll();
@@ -53,21 +59,72 @@ public class ConfirmedStudentService {
 
             //Get the supervisor from the database
             //Get the student from the database
-            //Set the selected supervisor
-            //Again save the student
             Supervisor supervisor = supervisorOpt.get();
             ConfirmedStudent confirmedStudent = get(regNumber);
-            confirmedStudent.setSupervisor(supervisor);
-            confirmedStudentRepository.save(confirmedStudent);
 
-            //Get the list of supervisees of the supervisor
-            //Add the new student to the existing list
-            //Set the list and save them
-            List<ConfirmedStudent> supervisees = supervisor.getSupervisees();
-            supervisees.add(confirmedStudent);
-            supervisor.setSupervisees(supervisees);
-            supervisorRepository.save(supervisor);
+            //Get the current supervisor
+            Supervisor currentSupervisor = confirmedStudent.getSupervisor();
 
+            if (currentSupervisor != null && !currentSupervisor.getId().equals(supervisorId)){
+                // Decrement the number of supervisees for the current supervisor
+                currentSupervisor.setNoOfSupervisees(currentSupervisor.getNoOfSupervisees() - 1);
+                System.out.println(currentSupervisor.getId()+" \n" +  currentSupervisor.getFullName());
+                supervisorRepository.save(currentSupervisor); // Save the updated supervisor
+
+                // Remove the student from the old supervisor's supervisee list
+                currentSupervisor.getSupervisees().remove(confirmedStudent);
+                supervisorRepository.save(currentSupervisor); // Save after removing the student
+
+                // Send a notification to the old supervisor
+                String currentSupervisorEmail = currentSupervisor.getEmail();
+                String currentSupervisorSubject = "Student Reassignment Notification";
+                String currentSupervisorBody = "Dear " + currentSupervisor.getFullName() + ",\n\n" +
+                        "The student " + confirmedStudent.getFullName() + " (ID: " + confirmedStudent.getRegNumber() +
+                        ") has been reassigned to another supervisor.\n\n" +
+                        "Thank you for your support.\n\n" +
+                        "Best regards,\n" +
+                        "Post Graduate Studies,\n" +
+                        "Department of Computer Engineering, UOP";
+                emailService.sendMail(currentSupervisorEmail, currentSupervisorSubject, currentSupervisorBody);
+            }
+
+            // Ensure the student is not already in the new supervisor's list
+            if (!supervisor.getSupervisees().contains(confirmedStudent)) {
+                //Set the selected supervisor
+                //Again save the student
+                confirmedStudent.setSupervisor(supervisor);
+                confirmedStudentRepository.save(confirmedStudent);
+                // Add the student to the new supervisor's supervise list
+                List<ConfirmedStudent> supervisees = supervisor.getSupervisees();
+                supervisees.add(confirmedStudent);
+                //Increment the number of supervises
+                supervisor.setNoOfSupervisees(supervisor.getNoOfSupervisees() + 1);
+                supervisor.setSupervisees(supervisees);
+
+                // Save the updated supervisor
+                supervisorRepository.save(supervisor);
+
+                // Send a notification to the new supervisor
+                String newSupervisorEmail = supervisor.getEmail();
+                String subject = "New Student Assignment Notification";
+                String body = "Dear " + supervisor.getFullName() + ",\n\n" +
+                        "You have been assigned to a new student.\n\n" +
+                        "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
+                        "Student Name: " + confirmedStudent.getFullName() + "\n" +
+                        "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
+                        "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
+                        "Student's Contact Details:\n\n" +
+                        "Email: " + confirmedStudent.getEmail() + "\n" +
+                        "Phone: " + confirmedStudent.getContactNumber() + "\n" +
+                        "Thank you for your continued support.\n\n" +
+                        "Best regards,\n" +
+                        "Post Graduate Studies,\n" +
+                        "Department of Computer Engineering, UOP";
+                emailService.sendMail(newSupervisorEmail, subject, body);
+                Optional<User> userSupervisor =  userService.findById(supervisorId);
+                User user = userSupervisor.get();
+                notificationService.sendNotification(user, subject, "You have assigned to new student");
+            }
             return supervisor;
         }
         else {

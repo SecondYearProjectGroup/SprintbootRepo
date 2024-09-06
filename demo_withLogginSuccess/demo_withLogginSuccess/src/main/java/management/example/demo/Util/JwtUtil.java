@@ -3,6 +3,7 @@ package management.example.demo.Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import management.example.demo.config.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -37,11 +38,24 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
+//    public String generateToken(UserDetails userDetails) {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("roles", userDetails.getAuthorities());  // Add roles to claims
+//        return createToken(claims, userDetails.getUsername());
+//    }
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", userDetails.getAuthorities());  // Add roles to claims
-        return createToken(claims, userDetails.getUsername());
+
+        // Cast UserDetails to CustomUserDetails to access userId
+        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+
+        claims.put("roles", customUserDetails.getAuthorities());  // Add roles to claims
+        claims.put("userId", customUserDetails.getUserId());      // Add userId to claims
+
+        return createToken(claims, customUserDetails.getUsername());
     }
+
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -57,5 +71,11 @@ public class JwtUtil {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+    public Long extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("userId", Long.class);  // Extract userId from the claims
+    }
+
 }
 

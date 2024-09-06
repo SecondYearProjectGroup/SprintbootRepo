@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -31,6 +32,7 @@ public class ConfirmedStudent {
     private String publications;
     private String programOfStudy;
     private String status;
+    private Date registeredDate;
 
     //This attribute is created for generating registration number
     @CreationTimestamp
@@ -44,11 +46,6 @@ public class ConfirmedStudent {
 
     //Student's submissions
     @OneToMany
-    @JoinTable(
-            name = "student_submission",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "submission_id")
-    )
     @Getter
     private List<Submission> submissions;
 

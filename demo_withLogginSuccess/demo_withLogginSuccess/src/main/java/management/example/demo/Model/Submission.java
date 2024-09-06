@@ -22,6 +22,7 @@ public class Submission {
     private LocalDateTime openDate;
     private LocalDateTime deadline;
     private Boolean submissionStatus;
+    private LocalDateTime lastModified;
 
     //Submissions
     @ManyToOne
