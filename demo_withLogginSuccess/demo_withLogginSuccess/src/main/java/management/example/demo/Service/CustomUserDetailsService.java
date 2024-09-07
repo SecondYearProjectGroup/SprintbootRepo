@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Username or password not found");
         }
-        return new CustomUserDetails(user.getUsername(), user.getPassword(), user.getRoles());
+        return new CustomUserDetails(user.getId(),user.getUsername(), user.getPassword(), user.getRoles());
     }
 
     private Collection<? extends GrantedAuthority> authorities(Set<Role> roles) {

@@ -1,6 +1,9 @@
 package management.example.demo.Model;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +23,7 @@ public class Examiner {
     private String email;
 
     @ManyToMany(mappedBy = "examiners")
+    @JsonManagedReference
     private List<Submission> submissions;
 
 

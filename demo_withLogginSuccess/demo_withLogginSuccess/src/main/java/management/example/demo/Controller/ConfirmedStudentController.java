@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -65,6 +66,8 @@ public class ConfirmedStudentController {
             submission.setFileMetadataList(uploadResults);
             //Set the submission status as true - Submitted
             submission.setSubmissionStatus(true);
+            //Set the date and time as last update
+            submission.setLastModified(LocalDateTime.now());
 
             // Save the updated submission
             submissionService.saveSubmissionsParameters(submission);

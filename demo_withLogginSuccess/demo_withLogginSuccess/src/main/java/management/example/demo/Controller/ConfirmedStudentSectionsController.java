@@ -50,12 +50,21 @@ public class ConfirmedStudentSectionsController {
 
             //Save in the submission repository
             if(tile.getType().equals("submission")){
-                Submission submission = new Submission();
-                submission.setTile(tile);
-                submission.setConfirmedStudent(confirmedStudent);
-                submission.setTitle(tile.getTitle());
-                submission.setSubmissionStatus(false);
-                submissionService.saveSubmissionsParameters(submission);
+                //For pre-submission (for supervisor feedbacks)
+                Submission preSubmission = new Submission();
+                preSubmission.setTile(tile);
+                preSubmission.setConfirmedStudent(confirmedStudent);
+                preSubmission.setTitle("Pre Submission" + tile.getTitle());
+                preSubmission.setSubmissionStatus(false);
+                submissionService.saveSubmissionsParameters(preSubmission);
+
+                //For final submission (for examiner reviews)
+                Submission finalSubmission = new Submission();
+                finalSubmission.setTile(tile);
+                finalSubmission.setConfirmedStudent(confirmedStudent);
+                finalSubmission.setTitle(tile.getTitle());
+                finalSubmission.setSubmissionStatus(false);
+                submissionService.saveSubmissionsParameters(finalSubmission);
             } else if (tile.getType().equals("forum")) {
                 Forum forum = new Forum();
                 forum.setConfirmedStudent(confirmedStudent);
