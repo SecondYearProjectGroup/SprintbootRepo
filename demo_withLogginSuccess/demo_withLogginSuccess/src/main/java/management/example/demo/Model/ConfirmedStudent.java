@@ -1,5 +1,6 @@
 package management.example.demo.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,8 @@ import java.util.List;
 public class ConfirmedStudent {
     @Id
     private String regNumber;
+
+    private String registrationNumber;
 
     //Username for logging the system
 //    private String username;
@@ -41,26 +44,26 @@ public class ConfirmedStudent {
     @Getter
     @ManyToOne
     @JoinColumn(name = "supervisor_id")
-    //Assign Supervisor to the student
+    //@JsonManagedReference("confirmedStudent-supervisor") // Ensure this matches the back-reference in Supervisor
+    @JsonIgnore
     private Supervisor supervisor;
 
     //Student's submissions
     @OneToMany
     @Getter
+    @JoinColumn(name = "confirmed_student_id")
+    //@JsonManagedReference("confirmedStudent-submissions")
+    @JsonIgnore
     private List<Submission> submissions;
 
 
 
     //Feedbacks from the supervisors or examiners
     @OneToMany
-    @JoinTable(
-            name = "student_submission",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "submission_id")
-    )
     @Getter
-        private List<Forum> forums;
-
+    //@JsonManagedReference("confirmedStudent-forums")
+    @JsonIgnore
+    private List<Forum> forums;
 
 
     //confirmed postgraduate student count in the year
@@ -74,12 +77,6 @@ public class ConfirmedStudent {
     @Getter
     @Transient
     static int year = 2024;
-
-    //Manage the count variable
-    //Constructor
-//    public ConfirmedStudent(){
-//        count++;
-//    }
 
     public static int setCountToOne() {
         return ConfirmedStudent.count = 1;

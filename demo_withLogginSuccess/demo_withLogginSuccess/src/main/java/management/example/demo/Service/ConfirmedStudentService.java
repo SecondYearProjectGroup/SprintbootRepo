@@ -166,4 +166,13 @@ public class ConfirmedStudentService {
         return confirmedStudentRepository.findBySubmissions_Id(submissionId);
     }
 
+    //Edit details
+    public ConfirmedStudent editDetails(String regNumber){
+        return confirmedStudentRepository.save(get(regNumber));
+    }
+
+    public ConfirmedStudent save(ConfirmedStudent confirmedStudent){
+        return confirmedStudentRepository.save(confirmedStudent);
+    }
+
 }

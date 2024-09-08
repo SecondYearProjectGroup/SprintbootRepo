@@ -1,6 +1,8 @@
 package management.example.demo.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +29,8 @@ public class Submission {
     //Submissions
     @ManyToOne
     @JoinColumn(name = "student_id")
+    //@JsonBackReference("confirmedStudent-submissions")
+    @JsonIgnore
     private ConfirmedStudent confirmedStudent;
 
     //Examiners who is assigned to submissions
@@ -37,7 +41,7 @@ public class Submission {
             inverseJoinColumns = @JoinColumn(name = "examiner_id")
     )
     @Getter
-    @JsonBackReference
+    @JsonManagedReference("submissions-examiners")
     private List<Examiner> examiners = new ArrayList<>();
 
     //To have the relationship with the feedback entity
@@ -47,11 +51,11 @@ public class Submission {
     @OneToOne
     @MapsId
     @JoinColumn(name = "tile_id")
-    @JsonBackReference
+    @JsonBackReference("submission-tile")
     private Tile tile;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference("submission-fileMetadatas")
     private List<FileMetadata> fileMetadataList = new ArrayList<>();
 
     // Add a file metadata to the submission

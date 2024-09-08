@@ -1,6 +1,6 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,8 @@ public class Tile {
     private String regNumber;
 
     @ManyToOne
-    @JoinColumn(name = "section_id")
+    //@JsonBackReference("tiles_confirmedStudentSections")
+    //@JsonIgnore
     private ConfirmedStudentSections confirmedStudentSections;
 
     public Tile() {}
@@ -33,16 +34,19 @@ public class Tile {
 
 
     @OneToOne(mappedBy = "tile")
-    @JsonManagedReference
+    //@JsonManagedReference("tile-submission")
+    @JsonIgnore
     private Submission submission;
 
     @OneToOne(mappedBy = "tile")
-    @JsonManagedReference
+    //@JsonManagedReference
+    @JsonIgnore
     private Forum forum;
 
 
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @JsonIgnore
     private ConfirmedStudent confirmedStudent;
     // Getters and Setters
 }

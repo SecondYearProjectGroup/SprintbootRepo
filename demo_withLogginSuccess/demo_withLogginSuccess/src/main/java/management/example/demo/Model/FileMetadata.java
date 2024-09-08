@@ -1,6 +1,6 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +24,7 @@ public class FileMetadata {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "submission_id")  // Foreign key column in FileMetadata table
-    @JsonManagedReference
+    //@JsonBackReference("fileMetadatas-submission")
+    @JsonIgnore
     private Submission submission;
 }

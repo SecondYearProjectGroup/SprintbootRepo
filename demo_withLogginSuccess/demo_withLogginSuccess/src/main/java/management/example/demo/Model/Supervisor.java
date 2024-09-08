@@ -1,6 +1,8 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Supervisor {
 
     @Id
@@ -30,15 +33,8 @@ public class Supervisor {
             joinColumns = @JoinColumn(name = "supervisor_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    @JsonIgnore
+    @JsonBackReference("confirmedStudent-supervisor") // This links to the @JsonManagedReference in ConfirmedStudent
     private List<ConfirmedStudent> supervisees;
 
-//    @Getter
-//    @Setter
-//    @OneToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private User user;
-
-    // Getters and setters
 
 }

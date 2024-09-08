@@ -19,9 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -386,6 +384,38 @@ public class AdminController {
             e.printStackTrace();
             return new ResponseEntity<>("File upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //Edit student details
+    @PostMapping(value = "/editDetailsByAdmin/{regNumber}", consumes = "application/json")
+    public ResponseEntity<String> editStudentDetails(
+            @PathVariable(name = "regNumber") String regNumber,
+            @RequestBody ConfirmedStudent updatedStudent) {
+
+        // Find existing student by registration number
+        ConfirmedStudent existingStudent = confirmedStudentService.get(regNumber);
+
+        // Update the necessary fields
+        if (updatedStudent.getStatus() != null) {
+            //System.out.println(updatedStudent.getStatus());
+            existingStudent.setStatus(updatedStudent.getStatus());
+        }
+        if (updatedStudent.getRegisteredDate() != null) {
+            //System.out.println(updatedStudent.getRegisteredDate());
+            existingStudent.setRegisteredDate(updatedStudent.getRegisteredDate());
+        }
+        if (updatedStudent.getRegistrationNumber() != null) {
+            //System.out.println(updatedStudent.getRegNumber());
+            existingStudent.setRegistrationNumber(updatedStudent.getRegistrationNumber());
+        }
+
+
+        confirmedStudentService.editDetails(regNumber);
+        // Create a response map
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Student details updated successfully.");
+
+        return ResponseEntity.ok(response.toString());
     }
 
 
