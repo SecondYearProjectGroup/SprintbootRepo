@@ -1,6 +1,6 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -23,7 +23,8 @@ public class Examiner {
     private String email;
 
     @ManyToMany(mappedBy = "examiners")
-    @JsonManagedReference
+    //@JsonBackReference("examiners-submissions")
+    @JsonIgnore
     private List<Submission> submissions;
 
 

@@ -1,6 +1,8 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Forum {
 
     @Id
@@ -19,15 +22,19 @@ public class Forum {
 
     @ManyToOne
     @JoinColumn(name = "submission_id")
+    @JsonIgnore
     private Submission submission;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "tile_id")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnore
     private Tile tile;
 
     @ManyToOne
     @JoinColumn(name = "student_id")
+   // @JsonBackReference("confirmedStudent-forums")
+    @JsonIgnore
     private ConfirmedStudent confirmedStudent;
 }
