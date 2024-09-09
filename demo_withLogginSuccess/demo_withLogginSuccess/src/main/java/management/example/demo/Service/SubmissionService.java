@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,8 +54,24 @@ public class SubmissionService  {
     public void deleteExaminerFromSubmission(Long submissionId, Long examinerId) {
         submissionRepository.removeExaminerFromSubmission(submissionId, examinerId);
     }
-    
 
+
+//    public List<StudentSubmissionExaminerDto> getAllStudentSubmissions() {
+//        List<Object[]> results = submissionRepository.findAllStudentSubmissionDetailsRaw();
+//        return results.stream()
+//                .map(result -> new StudentSubmissionExaminerDto(
+//                        (String) result[0], // regNumber
+//                        (String) result[1], // registrationNumber
+//                        (String) result[2], // nameWithInitials
+//                        (String) result[3], // title
+//                        (LocalDateTime) result[4], // deadline
+//                        (Boolean) result[5], // submissionStatus
+//                        Arrays.asList(((String) result[6]).split(", ")) // examiners
+//                ))
+//                .collect(Collectors.toList());
+//    }
+
+    // Service Method
     public List<StudentSubmissionExaminerDto> getAllStudentSubmissions() {
         List<Object[]> results = submissionRepository.findAllStudentSubmissionDetailsRaw();
         return results.stream()
@@ -62,9 +80,17 @@ public class SubmissionService  {
                         (String) result[1], // registrationNumber
                         (String) result[2], // nameWithInitials
                         (String) result[3], // title
-                        Arrays.asList(((String) result[4]).split(", ")) // examiners
+                        convertToLocalDateTime((Timestamp) result[4]), // deadline
+                        (Boolean) result[5], // submissionStatus
+                        Arrays.asList(((String) result[6]).split(", ")) // examiners
                 ))
                 .collect(Collectors.toList());
+    }
+
+
+    // Utility method to convert Timestamp to LocalDateTime
+    private LocalDateTime convertToLocalDateTime(Timestamp timestamp) {
+        return timestamp != null ? timestamp.toLocalDateTime() : null;
     }
 
 

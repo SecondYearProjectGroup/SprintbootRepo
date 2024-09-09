@@ -10,6 +10,8 @@ import management.example.demo.Repository.SupervisorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -193,22 +195,18 @@ public class ConfirmedStudentService {
                 .collect(Collectors.toList());
     }
 
-    public List<StudentSubmissionExaminerDto> getStudentSubmissionsAndExaminers() {
-        List<ConfirmedStudent> students = confirmedStudentRepository.findAll(); // Fetch all students
-
-        // Map the students to the DTO
-        return students.stream()
-                .flatMap(student -> student.getSubmissions().stream()  // For each student, get the submissions
-                        .map(submission -> new StudentSubmissionExaminerDto(
-                                student.getRegNumber(),
-                                student.getRegistrationNumber(),
-                                student.getNameWithInitials(),
-                                submission.getTitle(),
-                                submission.getExaminers().stream() // Get the examiners for the submission
-                                        .map(Examiner::getFullName)   // Convert each examiner to their full name
-                                        .collect(Collectors.toList())
-                        ))
-                )
+    public List<StudentSubmissionExaminerDto> getAllStudentSubmissions() {
+        List<Object[]> results = submissionRepository.findAllStudentSubmissionDetailsRaw();
+        return results.stream()
+                .map(result -> new StudentSubmissionExaminerDto(
+                        (String) result[0], // regNumber
+                        (String) result[1], // registrationNumber
+                        (String) result[2], // nameWithInitials
+                        (String) result[3], // title
+                        (LocalDateTime) result[4], // deadline
+                        (Boolean) result[5], // submissionStatus
+                        Arrays.asList(((String) result[6]).split(", ")) // examiners
+                ))
                 .collect(Collectors.toList());
     }
 

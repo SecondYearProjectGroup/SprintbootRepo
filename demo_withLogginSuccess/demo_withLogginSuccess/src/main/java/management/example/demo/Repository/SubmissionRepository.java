@@ -25,12 +25,12 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
     @Query(value = "DELETE FROM submission_examiner WHERE submission_id = :submissionId AND examiner_id = :examinerId", nativeQuery = true)
     void removeExaminerFromSubmission(@Param("submissionId") Long submissionId, @Param("examinerId") Long examinerId);
 
-    @Query(value = "SELECT cs.reg_number AS regNumber,cs.registration_number AS registrationNumber, cs.name_with_initials AS nameWithInitials, s.title AS title, GROUP_CONCAT(e.full_name) AS examiners " +
+    @Query(value = "SELECT cs.reg_number AS regNumber,cs.registration_number AS registrationNumber, cs.name_with_initials AS nameWithInitials, s.title AS title,s.deadline AS deadline,s.submission_status AS submissionStatus, GROUP_CONCAT(e.full_name) AS examiners " +
             "FROM submission s " +
             "JOIN confirmed_student cs ON s.student_id = cs.reg_number " +
             "JOIN submission_examiner se ON s.id = se.submission_id " +
             "JOIN examiner e ON se.examiner_id = e.id " +
-            "GROUP BY cs.reg_number, cs.name_with_initials, s.title", nativeQuery = true)
+            "GROUP BY  cs.reg_number, cs.registration_number, cs.name_with_initials, s.title, s.deadline, s.submission_status", nativeQuery = true)
     List<Object[]> findAllStudentSubmissionDetailsRaw();
 
 }
