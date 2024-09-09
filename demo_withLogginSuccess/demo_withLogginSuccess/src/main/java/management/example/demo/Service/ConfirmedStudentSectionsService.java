@@ -17,6 +17,10 @@ public class ConfirmedStudentSectionsService {
         return confirmedStudentSectionsRepository.findByregNumber(regNumber);
     }
 
+    public List<ConfirmedStudentSections> getSectionsByRegNumberAndTab(String regNumber, String tab) {
+        return confirmedStudentSectionsRepository.findByRegNumberAndActiveTab(regNumber, tab);
+    }
+
     public ConfirmedStudentSections saveSection(ConfirmedStudentSections section) {
         return confirmedStudentSectionsRepository.save(section);
     }

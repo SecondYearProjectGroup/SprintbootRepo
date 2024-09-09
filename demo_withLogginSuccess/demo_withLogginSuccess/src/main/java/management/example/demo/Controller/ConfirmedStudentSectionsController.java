@@ -30,9 +30,16 @@ public class ConfirmedStudentSectionsController {
     @Autowired
     private ForumService forumService;
 
-    @GetMapping("/{regNumber}")
-    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumber(@PathVariable String regNumber) {
-        List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumber(regNumber);
+//    @GetMapping("/{regNumber}/{tab}")
+//    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab) {
+//        List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumber(regNumber);
+//
+//        return ResponseEntity.ok(sections);
+//    }
+
+    @GetMapping("/{regNumber}/{tab}")
+    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab) {
+        List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumberAndTab(regNumber, tab);
         return ResponseEntity.ok(sections);
     }
 
@@ -41,6 +48,9 @@ public class ConfirmedStudentSectionsController {
         System.out.println("Received section: " + section);
         // Retrieve the student associated with the section
         String sectionStudent = section.getRegNumber();
+
+        //Set the tab
+        System.out.println(section.getActiveTab());
 
         // Set the student attribute for each tile to match the section's student
         section.getTiles().forEach(tile -> {

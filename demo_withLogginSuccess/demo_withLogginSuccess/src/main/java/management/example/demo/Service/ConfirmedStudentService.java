@@ -1,5 +1,6 @@
 package management.example.demo.Service;
 
+import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ConfirmedStudentRepository;
 import management.example.demo.Repository.ExaminerRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ConfirmedStudentService {
@@ -174,5 +176,18 @@ public class ConfirmedStudentService {
     public ConfirmedStudent save(ConfirmedStudent confirmedStudent){
         return confirmedStudentRepository.save(confirmedStudent);
     }
+
+    public List<StudentSupervisorDto> getStudentRegNumbersAndSupervisorNames() {
+        List<ConfirmedStudent> students = confirmedStudentRepository.findAllBy();
+
+        return students.stream()
+                .map(confirmedStudent -> new StudentSupervisorDto(
+                        confirmedStudent.getRegNumber(),
+                        confirmedStudent.getRegistrationNumber(),
+                        confirmedStudent.getNameWithInitials(),
+                        confirmedStudent.getSupervisor() != null ? confirmedStudent.getSupervisor().getFullName() : "No Supervisor"))
+                .collect(Collectors.toList());
+    }
+
 
 }
