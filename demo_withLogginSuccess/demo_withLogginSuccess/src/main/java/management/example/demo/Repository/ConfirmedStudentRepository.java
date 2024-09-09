@@ -20,4 +20,6 @@ public interface ConfirmedStudentRepository extends JpaRepository<ConfirmedStude
     long countByCurrentYear(@Param("currentYear") int currentYear);
 
     ConfirmedStudent findBySubmissions_Id(Long submissionId);
+
+    List<ConfirmedStudent> findAllBy();
 }

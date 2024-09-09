@@ -1,6 +1,7 @@
 package management.example.demo.Controller;
 
 import jakarta.mail.MessagingException;
+import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.StudentRepository;
@@ -416,6 +417,12 @@ public class AdminController {
         response.put("message", "Student details updated successfully.");
 
         return ResponseEntity.ok(response.toString());
+    }
+
+    //Get assigned supervisors
+    @GetMapping("/assignedSupervisors")
+    public List<StudentSupervisorDto> getAssignedSupervisors() {
+        return confirmedStudentService.getStudentRegNumbersAndSupervisorNames();
     }
 
 
