@@ -1,5 +1,6 @@
 package management.example.demo.Service;
 
+import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ConfirmedStudentRepository;
@@ -37,6 +38,9 @@ public class ConfirmedStudentService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SubmissionService submissionService;
 
 
     public List<ConfirmedStudent> listAll() {
@@ -186,6 +190,25 @@ public class ConfirmedStudentService {
                         confirmedStudent.getRegistrationNumber(),
                         confirmedStudent.getNameWithInitials(),
                         confirmedStudent.getSupervisor() != null ? confirmedStudent.getSupervisor().getFullName() : "No Supervisor"))
+                .collect(Collectors.toList());
+    }
+
+    public List<StudentSubmissionExaminerDto> getStudentSubmissionsAndExaminers() {
+        List<ConfirmedStudent> students = confirmedStudentRepository.findAll(); // Fetch all students
+
+        // Map the students to the DTO
+        return students.stream()
+                .flatMap(student -> student.getSubmissions().stream()  // For each student, get the submissions
+                        .map(submission -> new StudentSubmissionExaminerDto(
+                                student.getRegNumber(),
+                                student.getRegistrationNumber(),
+                                student.getNameWithInitials(),
+                                submission.getTitle(),
+                                submission.getExaminers().stream() // Get the examiners for the submission
+                                        .map(Examiner::getFullName)   // Convert each examiner to their full name
+                                        .collect(Collectors.toList())
+                        ))
+                )
                 .collect(Collectors.toList());
     }
 
