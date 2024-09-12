@@ -47,12 +47,12 @@ public class StudentController {
             @RequestParam("attachment") MultipartFile attachment) throws MessagingException {
 
         // Handle file upload
-        //String attachementFileName = "";
-        List<String> attachmentData = new ArrayList<>();
+
+        List<String> attachemntData = new ArrayList<>();
         if (!attachment.isEmpty()) {
-            attachmentData = fileUploadService.uploadFile(attachment);
-            student.setAttachementFile(attachmentData.get(0));
-            student.setAttachementFileOriginalName(attachmentData.get(1));
+            attachemntData = fileUploadService.uploadFile(attachment);
+            student.setAttachementFile(attachemntData.get(0));
+            student.setAttachementFileOriginalName(attachemntData.get(1));
         }
 
         // Save the enrolled student

@@ -35,9 +35,9 @@ public class User {
     @Column(name = "role")
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference  // Prevent recursive serialization of Notifications
-    private List<Notification> notifications;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    @JsonManagedReference  // Prevent recursive serialization of Notifications
+//    private List<Notification> notifications;
 
 
     @OneToMany(mappedBy = "user")
