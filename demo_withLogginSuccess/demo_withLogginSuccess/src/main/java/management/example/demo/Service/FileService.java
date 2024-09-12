@@ -167,4 +167,49 @@ public class FileService {
         return fileMetadataRepository.findFileMetadataDtoBySubmissionId(submissionId);
     }
 
+
+
+    public String deleteFile(Long fileId) {
+        // Fetch file metadata from the database
+        FileMetadata fileMetadata = fileMetadataRepository.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
+
+        try {
+            // Construct the file path
+            Path filePath = Paths.get(uploadDir).resolve(fileMetadata.getFileName()).normalize();
+
+            // Delete the file from the file system
+            Files.deleteIfExists(filePath);
+
+            // Remove the file metadata from the database
+            fileMetadataRepository.deleteById(fileId);
+
+            return "File deleted successfully";
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete the file: " + e.getMessage());
+        }
+    }
+
+    // Optionally, delete by file name
+    public String deleteFileByName(String fileName) {
+        // Fetch file metadata by file name
+        FileMetadata fileMetadata = fileMetadataRepository.findByFileName(fileName)
+                .orElseThrow(() -> new RuntimeException("File not found with name " + fileName));
+
+        try {
+            // Construct the file path
+            Path filePath = Paths.get(uploadDir).resolve(fileMetadata.getFileName()).normalize();
+
+            // Delete the file from the file system
+            Files.deleteIfExists(filePath);
+
+            // Remove the file metadata from the database
+            fileMetadataRepository.delete(fileMetadata);
+
+            return "File deleted successfully";
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete the file: " + e.getMessage());
+        }
+    }
+
 }
