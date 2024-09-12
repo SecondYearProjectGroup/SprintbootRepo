@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class UserController {
 
@@ -27,9 +29,10 @@ public class UserController {
     }
 
     @GetMapping("/profile-user")
-    public User loadUserData(@RequestHeader("Authorization") String token){
+    public Optional<User> loadUserData(@RequestHeader("Authorization") String token){
         String jwtToken = token.substring(7);
         String username = jwtUtil.extractUsername(jwtToken);
-        return userService.findByUsername(username);
+        Long userId = jwtUtil.extractUserId(jwtToken);
+        return userService.findById(userId);
     }
 }

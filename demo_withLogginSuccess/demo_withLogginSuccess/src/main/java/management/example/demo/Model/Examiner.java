@@ -27,5 +27,4 @@ public class Examiner {
     @JsonIgnore
     private List<Submission> submissions;
 
-
 }

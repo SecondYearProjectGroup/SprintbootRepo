@@ -78,6 +78,12 @@ public class FileController {
     }
 
 
+    @DeleteMapping("/delete-picture/{fileId}")
+    public ResponseEntity<String> deleteProfilePicture(@PathVariable Long fileId) {
+        String result = fileUploadService.deleteFile(fileId);
+        return ResponseEntity.ok(result);
+    }
+
 
 
 //    @GetMapping("/download/{id}/{attachmentFile}")

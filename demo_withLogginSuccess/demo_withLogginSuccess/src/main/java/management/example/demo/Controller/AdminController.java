@@ -1,6 +1,7 @@
 package management.example.demo.Controller;
 
 import jakarta.mail.MessagingException;
+import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ExaminerRepository;
@@ -425,6 +426,11 @@ public class AdminController {
         return confirmedStudentService.getStudentRegNumbersAndSupervisorNames();
     }
 
+    @GetMapping("/report-submissions-examiners")
+    public ResponseEntity<List<StudentSubmissionExaminerDto>> getAllStudentSubmissions() {
+        List<StudentSubmissionExaminerDto> submissions = submissionService.getAllStudentSubmissions();
+        return ResponseEntity.ok(submissions);
+    }
 
 }
 

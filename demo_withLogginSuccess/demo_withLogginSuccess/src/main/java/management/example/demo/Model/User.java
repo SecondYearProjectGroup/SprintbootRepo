@@ -22,10 +22,9 @@ public class User {
     private String username;
 
     private String name;
-    //private String LastName;
     private String email;
     private String password;
-    //private String role;
+    private String contactNumber;
 
 
     //To handle the role-based access
@@ -39,6 +38,9 @@ public class User {
     @JsonManagedReference  // Prevent recursive serialization of Notifications
     private List<Notification> notifications;
 
+    // Relationships
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference

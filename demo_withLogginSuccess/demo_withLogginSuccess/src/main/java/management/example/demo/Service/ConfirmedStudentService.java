@@ -1,5 +1,6 @@
 package management.example.demo.Service;
 
+import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ConfirmedStudentRepository;
@@ -9,6 +10,8 @@ import management.example.demo.Repository.SupervisorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +40,9 @@ public class ConfirmedStudentService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SubmissionService submissionService;
 
 
     public List<ConfirmedStudent> listAll() {
@@ -186,6 +192,21 @@ public class ConfirmedStudentService {
                         confirmedStudent.getRegistrationNumber(),
                         confirmedStudent.getNameWithInitials(),
                         confirmedStudent.getSupervisor() != null ? confirmedStudent.getSupervisor().getFullName() : "No Supervisor"))
+                .collect(Collectors.toList());
+    }
+
+    public List<StudentSubmissionExaminerDto> getAllStudentSubmissions() {
+        List<Object[]> results = submissionRepository.findAllStudentSubmissionDetailsRaw();
+        return results.stream()
+                .map(result -> new StudentSubmissionExaminerDto(
+                        (String) result[0], // regNumber
+                        (String) result[1], // registrationNumber
+                        (String) result[2], // nameWithInitials
+                        (String) result[3], // title
+                        (LocalDateTime) result[4], // deadline
+                        (Boolean) result[5], // submissionStatus
+                        Arrays.asList(((String) result[6]).split(", ")) // examiners
+                ))
                 .collect(Collectors.toList());
     }
 
