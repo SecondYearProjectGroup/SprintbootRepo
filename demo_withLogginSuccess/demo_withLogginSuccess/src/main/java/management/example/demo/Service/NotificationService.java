@@ -49,6 +49,11 @@ public class NotificationService {
         return notificationRepository.findByUserIdAndReadFalse(user.getId());
     }
 
+    // New method to get the count of unread notifications
+    public long getUnreadNotificationCount(User user) {
+        return notificationRepository.countByUserIdAndReadFalse(user.getId());
+    }
+
     @Transactional
     public void markAsRead(List<Long> notificationIds) {
         notificationRepository.findAllById(notificationIds).forEach(notification -> {

@@ -34,6 +34,15 @@ public class NotificationController {
         return notificationService.getUnreadNotifications(user);
     }
 
+    @GetMapping("/unread/count")
+    public Long getUnreadNotificationCount(@RequestHeader ("Authorization") String token){
+        String jwtToken = token.substring(7);
+        String username = jwtUtil.extractUsername(jwtToken);
+        User user = userRepository.findByUsername(username);
+        return notificationService.getUnreadNotificationCount(user);
+    }
+
+
 
 
     public ResponseEntity<?> getUnreadNotifications(Principal principal) {
