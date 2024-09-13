@@ -28,7 +28,6 @@ public class Submission {
     //Submissions
     @ManyToOne
     @JoinColumn(name = "student_id")
-    //@JsonBackReference("confirmedStudent-submissions")
     @JsonIgnore
     private ConfirmedStudent confirmedStudent;
 

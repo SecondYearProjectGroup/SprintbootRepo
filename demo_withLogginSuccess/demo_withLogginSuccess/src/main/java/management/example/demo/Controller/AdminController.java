@@ -200,7 +200,7 @@ public class AdminController {
                             "Department of Computer Engineering,UOP\n",
                     examiner.getFullName(),
                     submission.getTitle(),
-                    submission.getId()
+                    submission.getTile().getId()
                     //confirmedStudent.getRegNumber(),
                     //confirmedStudent.getFullName()
             );
@@ -404,7 +404,7 @@ public class AdminController {
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/setDate/{tileId}")
+    @PostMapping("/setVivaDate/{tileId}")
     public ResponseEntity<String> setVivaDate( @PathVariable(name = "tileId") Long  tileId,
                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline) {
         Viva viva = vivaService.get(tileId);
@@ -412,20 +412,18 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Viva not found");
         }
         viva.setVivaDate(deadline);
-        submissionService.saveSubmissionsParameters(submissionService.get(tileId));
+        vivaService.saveViva(viva);
 
         ////////////////////////////////
         //Generate the Email Notifications for the students
         ConfirmedStudent confirmedStudent = viva.getConfirmedStudent();
         String toEmail = confirmedStudent.getEmail();
-        String subject = "Deadline Set for Submission of Progress Reports";
+        String subject = "Year-End Evaluation Viva Scheduled";
         String body = String.format(
-                "This is a reminder that the date  your progress reports has been set.\n\n" +
-                        "Deadline: %s \n \n" +
-                        "Please ensure that your reports are submitted by the specified deadline. " +
-                        "Late submissions may not be accepted or could result in a penalty," +
-                        "Complete and upload your reports on time." +
-                        "If you have any questions or need further clarification, please don't hesitate to reach out your supervisor."
+                "This is a reminder that your year end evaluations viva has been scheduled.\n\n" +
+                        "Date: %s \n \n" +
+                        "Please make sure to be prepared and arrive on time. " +
+                        "If you have any questions or need further information, feel free to reach out. "
                 , viva.getVivaDate()
         );
         emailService.sendMail(toEmail, subject, body);
@@ -433,12 +431,12 @@ public class AdminController {
         //Generate the Notifications for the students
         //Get the userId from the student registration number
         User user = userService.findByUsername(confirmedStudent.getRegNumber());
-        String notificationBody = "Deadline for submitting your progress reports has been set.";
+        String notificationBody = "Your year end evaluations viva has been scheduled";
         notificationService.sendNotification(user, subject, notificationBody);
         /////////////////////////////////
 
-        System.out.println("Deadline has set successfully.");
-        return ResponseEntity.ok("Deadline has set successfully.");
+        System.out.println("Year end evaluation viva date has set successfully.");
+        return ResponseEntity.ok("Year end evaluation viva date has set successfully.");
     }
 
 }

@@ -143,6 +143,7 @@ public class ConfirmedStudentService {
 
     //Assign Examiners to each student's report submissions
     public List<Examiner> assignExaminers(Long submissionId, List<Long> examinerIds) {
+        System.out.println("Come in tile id:" + submissionId);
         Optional<Submission> submissionOpt = submissionRepository.findById(submissionId);
 
         if (submissionOpt.isPresent()) {
