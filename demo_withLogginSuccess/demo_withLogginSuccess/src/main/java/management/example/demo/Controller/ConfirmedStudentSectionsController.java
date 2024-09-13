@@ -74,10 +74,9 @@ public class ConfirmedStudentSectionsController {
 //                finalSubmission.setSubmissionStatus(false);
 //                submissionService.saveSubmissionsParameters(finalSubmission);
             } else if (tile.getType().equals("forum")) {
-                Forum forum = new Forum();
-                forum.setTile(tile);
-                forum.setConfirmedStudent(confirmedStudent);
-                forumService.saveForum(forum);
+                Feedback feedback = new Feedback();
+                feedback.setConfirmedStudent(confirmedStudent);
+                forumService.saveForum(feedback);
             }
             else if (tile.getType().equals("viva")){
                 Viva viva = new Viva();

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Forum {
+public class Feedback {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +19,20 @@ public class Forum {
 
     private String body;
     //There should be an option to upload the marked report
+    private String fileName;
+
+    //To mark the pre or final report submission feedback
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "submission_id")
     @JsonIgnore
     private Submission submission;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "tile_id")
-    //@JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "examiner_id")
     @JsonIgnore
-    private Tile tile;
+    private Examiner examiner;
 
     @ManyToOne
     @JoinColumn(name = "student_id")

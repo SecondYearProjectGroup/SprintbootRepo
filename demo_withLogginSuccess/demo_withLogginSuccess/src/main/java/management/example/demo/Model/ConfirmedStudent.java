@@ -63,7 +63,7 @@ public class ConfirmedStudent {
     @Getter
     //@JsonManagedReference("confirmedStudent-forums")
     @JsonIgnore
-    private List<Forum> forums;
+    private List<Feedback> feedbacks;
 
 
     //confirmed postgraduate student count in the year

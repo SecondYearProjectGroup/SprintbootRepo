@@ -17,12 +17,12 @@ public class Viva {
     private Long id;
     private String title;
     private LocalDateTime vivaDate;
+    private String comments;
 
 
     //Vivas
     @ManyToOne
     @JoinColumn(name = "student_id")
-    //@JsonBackReference("confirmedStudent-submissions")
     @JsonIgnore
     private ConfirmedStudent confirmedStudent;
 

@@ -1,6 +1,5 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -46,12 +45,12 @@ public class Submission {
 
     //To have the relationship with the feedback entity
     @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Forum> feedbacks = new ArrayList<>();
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "tile_id")
-    @JsonBackReference("submission-tile")
+    @JsonIgnore
     private Tile tile;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)

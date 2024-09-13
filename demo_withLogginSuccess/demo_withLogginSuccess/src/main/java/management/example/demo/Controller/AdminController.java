@@ -69,6 +69,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private VivaService vivaService;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -150,58 +152,6 @@ public class AdminController {
         adminService.addStaff(name, email, roles);
     }
 
-    //Assign the Supervisors
-    //@PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping("/assignSupervisor/{regNumber}")
-//    public ResponseEntity<String> assignSupervisor(@PathVariable(name = "regNumber") String regNumber, @RequestParam Long supervisorId) {
-//
-//        //Retrieve the student from the student entity using the provided id.
-//        ConfirmedStudent confirmedStudent = confirmedStudentService.get(regNumber);
-//
-//        //System.out.println(confirmedStudent.getRegNumber());
-//
-//        //Find the supervisor
-//        //This can be clear after adding "assignSupervisor submit button" click to the if condition
-//        Optional<Supervisor> supervisorOpt = supervisorRepository.findById(supervisorId);
-//
-//        //For this if condition button click should be added.
-//        if (supervisorOpt.isPresent()) {
-//            Supervisor supervisor = confirmedStudentService.assignSupervisor(regNumber, supervisorId);
-//            //Increment the number of supervisees for the supervisor
-//            int supervisees = supervisor.getNoOfSupervisees() + 1;
-//            supervisor.setNoOfSupervisees(supervisees);
-//
-//            //Send the email to the supervisor informing the student's details
-//            String toEmail = supervisor.getEmail();
-//            String subject = "New Student Assignment Notification ";
-//            String body = "Dear " + supervisor.getFullName() + ",\n\n" +
-//                    "You have been assigned to a new student.\n\n" +
-//                    "Student ID: " + confirmedStudent.getRegNumber() + "\n" +
-//                    "Student Name: " + confirmedStudent.getFullName() + "\n" +
-//                    "Course/Program: " + confirmedStudent.getProgramOfStudy() + "\n" +
-//                    "Please reach out to the student to introduce yourself and outline the next steps.\n\n" +
-//                    "Students Contact Details:\n\n" +
-//                    "Email: " + confirmedStudent.getEmail() + "\n" +
-//                    "Phone: " + confirmedStudent.getContactNumber() + "\n" +
-//                    "Thank you for your continued support.\n\n" +
-//                    "Best regards,\n" +
-//                    "Post Graduate Studies,\n" +
-//                    "Department of Computer Engineering,UOP\n" +
-//                    "Post Graduate Studies,\n" +
-//                    "[Your Institution/Organization]";
-//            String notificationBody = "You have been assigned to a new student";
-//            emailService.sendMail(toEmail,subject,body);
-//            Optional<User> userSupervisor =  userService.findById(supervisorId);
-//            User user = userSupervisor.get();
-//            notificationService.sendNotification(user, subject, notificationBody);
-//            System.out.println("Successfully assigned.");
-//            return ResponseEntity.ok("Supervisor assigned successfully.");
-//        } else {
-//            System.out.println("Failed");
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student or Supervisor not found.");
-//        }
-//    }
-
     // Controller endpoint to assign or change supervisor
     @PostMapping("/assignSupervisor/{regNumber}")
     public ResponseEntity<String> assignSupervisor(@PathVariable(name = "regNumber") String regNumber, @RequestParam Long supervisorId) {
@@ -222,7 +172,8 @@ public class AdminController {
 
     //Assign the Examiners to submissions
     //For each report examiners have to be assigned.
-    //For url, report id should be added.
+    //For url, report id should be added
+    // Here whenever the examiners are assigned feedback forms has to create.
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/assignExaminers/{SubmissionId}")
     public ResponseEntity<String> assignExaminer( @PathVariable(name = "SubmissionId") Long submissionId, @RequestParam List<Long> examinerIds) {
@@ -261,6 +212,12 @@ public class AdminController {
             Optional<User> userExaminer =  userService.findById(examiner.getId());
             User user = userExaminer.get();
             notificationService.sendNotification(user, subject, notificationBody);
+
+            //Forming the feedback forms
+            Feedback feedback = new Feedback();
+            feedback.setSubmission(submission);
+            feedback.setType("final");
+            feedback.setExaminer(examiner);
 
         }
         return ResponseEntity.ok("Examiners assigned successfully.");
@@ -443,6 +400,45 @@ public class AdminController {
     public ResponseEntity<List<StudentSubmissionExaminerDto>> getAllStudentSubmissions() {
         List<StudentSubmissionExaminerDto> submissions = submissionService.getAllStudentSubmissions();
         return ResponseEntity.ok(submissions);
+    }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/setDate/{tileId}")
+    public ResponseEntity<String> setVivaDate( @PathVariable(name = "tileId") Long  tileId,
+                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline) {
+        Viva viva = vivaService.get(tileId);
+        if ( viva == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Viva not found");
+        }
+        viva.setVivaDate(deadline);
+        submissionService.saveSubmissionsParameters(submissionService.get(tileId));
+
+        ////////////////////////////////
+        //Generate the Email Notifications for the students
+        ConfirmedStudent confirmedStudent = viva.getConfirmedStudent();
+        String toEmail = confirmedStudent.getEmail();
+        String subject = "Deadline Set for Submission of Progress Reports";
+        String body = String.format(
+                "This is a reminder that the date  your progress reports has been set.\n\n" +
+                        "Deadline: %s \n \n" +
+                        "Please ensure that your reports are submitted by the specified deadline. " +
+                        "Late submissions may not be accepted or could result in a penalty," +
+                        "Complete and upload your reports on time." +
+                        "If you have any questions or need further clarification, please don't hesitate to reach out your supervisor."
+                , viva.getVivaDate()
+        );
+        emailService.sendMail(toEmail, subject, body);
+        /////////////////////////////////
+        //Generate the Notifications for the students
+        //Get the userId from the student registration number
+        User user = userService.findByUsername(confirmedStudent.getRegNumber());
+        String notificationBody = "Deadline for submitting your progress reports has been set.";
+        notificationService.sendNotification(user, subject, notificationBody);
+        /////////////////////////////////
+
+        System.out.println("Deadline has set successfully.");
+        return ResponseEntity.ok("Deadline has set successfully.");
     }
 
 }
