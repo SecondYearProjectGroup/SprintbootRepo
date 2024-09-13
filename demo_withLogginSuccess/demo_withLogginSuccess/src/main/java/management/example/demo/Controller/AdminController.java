@@ -330,8 +330,15 @@ public class AdminController {
     }
 
     //List all supervisors to admin
+    @GetMapping("/supervisorsToAdmin")
+    public List<Supervisor> getAllSupervisors(){
+        List<Supervisor> list = supervisorService.listAll();
+        return list;
+    }
+
+    //List supervisors removing Selected Supervisors
     @GetMapping("/supervisors/{regNumber}")
-    public List<Supervisor> getAllSupervisors(@PathVariable(name = "regNumber") String regNumber){
+    public List<Supervisor> getNotAssignedSupervisors(@PathVariable(name = "regNumber") String regNumber){
         Supervisor assignedSupervisor = supervisorService.getByStudentRegNumber(regNumber);
         List<Supervisor> list = supervisorService.listAll();
         list.remove(assignedSupervisor);
@@ -339,8 +346,14 @@ public class AdminController {
     }
 
     // List all examiners to admin
+    @GetMapping("/examinersToAdmin")
+    public List<Examiner> getAllExaminers(){
+        return examinerService.listAll(); // All examiners
+    }
+
+    // List examiners removing Selected Examiners
     @GetMapping("/examiners/{submissionId}")
-    public List<Examiner> getAllExaminers(@PathVariable(name = "submissionId") Long submissionId){
+    public List<Examiner> getNotAssignedExaminers(@PathVariable(name = "submissionId") Long submissionId){
         List<Examiner> list1 = examinerService.findBySubmissionId(submissionId); // Examiners assigned to the submission
         List<Examiner> list2 = examinerService.listAll(); // All examiners
         // Remove all examiners in list1 from list2

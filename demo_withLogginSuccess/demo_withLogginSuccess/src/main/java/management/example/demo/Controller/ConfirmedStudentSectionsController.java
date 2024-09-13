@@ -1,13 +1,7 @@
 package management.example.demo.Controller;
 
-import management.example.demo.Model.ConfirmedStudent;
-import management.example.demo.Model.ConfirmedStudentSections;
-import management.example.demo.Model.Forum;
-import management.example.demo.Model.Submission;
-import management.example.demo.Service.ConfirmedStudentSectionsService;
-import management.example.demo.Service.ConfirmedStudentService;
-import management.example.demo.Service.ForumService;
-import management.example.demo.Service.SubmissionService;
+import management.example.demo.Model.*;
+import management.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +23,9 @@ public class ConfirmedStudentSectionsController {
 
     @Autowired
     private ForumService forumService;
+
+    @Autowired
+    private VivaService vivaService;
 
 //    @GetMapping("/{regNumber}/{tab}")
 //    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab) {
@@ -60,6 +57,7 @@ public class ConfirmedStudentSectionsController {
 
             //Save in the submission repository
             if(tile.getType().equals("submission")){
+
                 //For pre-submission (for supervisor feedbacks)
                 Submission preSubmission = new Submission();
                 preSubmission.setTile(tile);
@@ -77,8 +75,15 @@ public class ConfirmedStudentSectionsController {
 //                submissionService.saveSubmissionsParameters(finalSubmission);
             } else if (tile.getType().equals("forum")) {
                 Forum forum = new Forum();
+                forum.setTile(tile);
                 forum.setConfirmedStudent(confirmedStudent);
                 forumService.saveForum(forum);
+            }
+            else if (tile.getType().equals("viva")){
+                Viva viva = new Viva();
+                viva.setTile(tile);
+                viva.setConfirmedStudent(confirmedStudent);
+                vivaService.saveViva(viva);
             }
         });
 
