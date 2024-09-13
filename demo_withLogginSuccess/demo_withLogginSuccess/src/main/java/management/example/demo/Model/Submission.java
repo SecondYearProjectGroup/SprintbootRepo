@@ -1,6 +1,5 @@
 package management.example.demo.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -51,7 +50,7 @@ public class Submission {
     @OneToOne
     @MapsId
     @JoinColumn(name = "tile_id")
-    @JsonBackReference("submission-tile")
+    @JsonIgnore
     private Tile tile;
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
