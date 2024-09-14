@@ -22,7 +22,7 @@ public class ConfirmedStudentSectionsController {
     private SubmissionService submissionService;
 
     @Autowired
-    private ForumService forumService;
+    private FeedbackService feedbackService;
 
     @Autowired
     private VivaService vivaService;
@@ -85,7 +85,7 @@ public class ConfirmedStudentSectionsController {
             } else if (tile.getType().equals("forum")) {
                 Feedback feedback = new Feedback();
                 feedback.setConfirmedStudent(confirmedStudent);
-                forumService.saveForum(feedback);
+                feedbackService.saveForum(feedback);
             }
             else if (tile.getType().equals("viva")){
                 Viva viva = new Viva();

@@ -71,6 +71,8 @@ public class AdminController {
     private FileService fileService;
     @Autowired
     private VivaService vivaService;
+    @Autowired
+    private FeedbackService feedbackService;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -218,6 +220,7 @@ public class AdminController {
             feedback.setSubmission(submission);
             feedback.setType("final");
             feedback.setExaminer(examiner);
+            feedbackService.saveForum(feedback);
 
         }
         return ResponseEntity.ok("Examiners assigned successfully.");
