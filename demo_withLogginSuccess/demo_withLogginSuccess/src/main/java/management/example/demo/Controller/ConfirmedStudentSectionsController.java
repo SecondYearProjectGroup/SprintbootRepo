@@ -90,6 +90,7 @@ public class ConfirmedStudentSectionsController {
             else if (tile.getType().equals("viva")){
                 Viva viva = new Viva();
                 viva.setTile(tile);
+                viva.setTitle(tile.getTitle());
                 viva.setConfirmedStudent(confirmedStudent);
                 vivaService.saveViva(viva);
             }
