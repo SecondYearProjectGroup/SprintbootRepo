@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,7 +83,9 @@ public class SubmissionService  {
                         (String) result[3], // title
                         convertToLocalDateTime((Timestamp) result[4]), // deadline
                         (Boolean) result[5], // submissionStatus
-                        Arrays.asList(((String) result[6]).split(", ")) // examiners
+                        //convertToLocalDateTime((Timestamp) result[6]),
+                        null,
+                        Arrays.asList(((String) result[7]).split(", ")) // examiners
                 ))
                 .collect(Collectors.toList());
     }
@@ -94,5 +97,29 @@ public class SubmissionService  {
     }
 
 
+    public List<StudentSubmissionExaminerDto> getStudentSubmissionExaminerDetails(Long examinerId) {
+        List<Object[]> results = submissionRepository.findStudentSubmissionExaminerDetailsByExaminerId(examinerId);
+        List<StudentSubmissionExaminerDto> dtos = new ArrayList<>();
+
+        for (Object[] result : results) {
+            String regNumber = (String) result[0];
+            String registrationNumber = (String) result[1];
+            String nameWithInitials = (String) result[2];
+            String title = (String) result[3];
+            LocalDateTime deadline = (LocalDateTime) result[4];
+            Boolean submissionStatus = (Boolean) result[5];
+            LocalDateTime deadlineToReview = (LocalDateTime) result[6];
+            //String examiners = (String) result[6]; // This will be a comma-separated list of examiner names
+
+            // Convert comma-separated examiners list to a list if needed
+            //List<String> examinerList = Arrays.asList(examiners.split(","));
+
+            StudentSubmissionExaminerDto dto = new StudentSubmissionExaminerDto(
+                    regNumber, registrationNumber, nameWithInitials, title, deadline, submissionStatus, deadlineToReview, null
+            );
+            dtos.add(dto);
+        }
+        return dtos;
+    }
 
 }

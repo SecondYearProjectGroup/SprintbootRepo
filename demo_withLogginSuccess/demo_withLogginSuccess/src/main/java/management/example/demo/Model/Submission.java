@@ -24,11 +24,11 @@ public class Submission {
     private LocalDateTime deadline;
     private Boolean submissionStatus;
     private LocalDateTime lastModified;
+    private LocalDateTime deadlineToReview;
 
     //Submissions
     @ManyToOne
     @JoinColumn(name = "student_id")
-    //@JsonBackReference("confirmedStudent-submissions")
     @JsonIgnore
     private ConfirmedStudent confirmedStudent;
 
@@ -45,7 +45,7 @@ public class Submission {
 
     //To have the relationship with the feedback entity
     @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Forum> feedbacks = new ArrayList<>();
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToOne
     @MapsId

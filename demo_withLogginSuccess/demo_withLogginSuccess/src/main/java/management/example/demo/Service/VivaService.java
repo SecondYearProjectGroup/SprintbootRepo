@@ -11,6 +11,10 @@ public class VivaService {
     @Autowired
     private VivaRepository vivaRepository;
 
+    public Viva get(Long id){
+        return vivaRepository.findById(id).get();
+    }
+
     public Viva saveViva(Viva viva) {
         return vivaRepository.save(viva);
     }

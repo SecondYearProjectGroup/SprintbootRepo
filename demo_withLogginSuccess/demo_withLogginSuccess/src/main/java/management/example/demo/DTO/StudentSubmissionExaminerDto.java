@@ -15,16 +15,18 @@ public class StudentSubmissionExaminerDto {
     private String title;
     private LocalDateTime deadline;
     private Boolean submissionStatus;
+    private LocalDateTime deadlineToReview;
     private List<String> examiners;
 
     // Constructors, Getters, and Setters
-    public StudentSubmissionExaminerDto(String regNumber, String registrationNumber, String nameWithInitials, String title, LocalDateTime deadline,Boolean submissionStatus, List<String> examiners) {
+    public StudentSubmissionExaminerDto(String regNumber, String registrationNumber, String nameWithInitials, String title, LocalDateTime deadline,Boolean submissionStatus,LocalDateTime deadlineToReview, List<String> examiners) {
         this.regNumber = regNumber;
         this.registrationNumber = registrationNumber;
         this.nameWithInitials = nameWithInitials;
         this.title = title;
         this.deadline= deadline;
         this.submissionStatus= submissionStatus;
+        this.deadlineToReview = deadlineToReview;
         this.examiners = examiners;
     }
 

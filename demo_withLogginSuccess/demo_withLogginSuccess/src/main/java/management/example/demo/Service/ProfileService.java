@@ -1,5 +1,8 @@
 package management.example.demo.Service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import management.example.demo.DTO.UserProfileUpdateRequest;
 import management.example.demo.Model.ConfirmedStudent;
 import management.example.demo.Model.Profile;
@@ -24,6 +27,8 @@ import java.util.Optional;
 
 @Service
 public class ProfileService {
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private ProfileRepository profileRepository;
@@ -36,12 +41,15 @@ public class ProfileService {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private UserService userService;
 
     @Value("${upload.path}")
     private String uploadDir;
 
     public boolean updateStudentProfile(String username, UserProfileUpdateRequest profileUpdateRequest) {
         Optional<ConfirmedStudent> confirmedStudentOptional = confirmedStudentRepository.findById(username);
+        User user = userService.findByUsername(username);
 
         if (confirmedStudentOptional.isPresent()) {
             ConfirmedStudent confirmedStudent = confirmedStudentOptional.get();
@@ -52,10 +60,12 @@ public class ProfileService {
 
             if (profileUpdateRequest.getContactNumber() != null && !profileUpdateRequest.getContactNumber().isEmpty()) {
                 confirmedStudent.setContactNumber(profileUpdateRequest.getContactNumber());
+                user.setContactNumber(profileUpdateRequest.getContactNumber());
             }
 
             if (profileUpdateRequest.getEmail() != null && !profileUpdateRequest.getEmail().isEmpty()) {
                 confirmedStudent.setEmail(profileUpdateRequest.getEmail());
+                user.setEmail(profileUpdateRequest.getEmail());
             }
 
             confirmedStudentRepository.save(confirmedStudent);
@@ -64,6 +74,46 @@ public class ProfileService {
             return false;
         }
     }
+
+    //Update the profile - staff members
+    @Transactional
+    public boolean updateStaffMemberProfile(Long userId, UserProfileUpdateRequest profileUpdateRequest) {
+        Optional<User> userOpt = userService.findById(userId);
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            // Detach the user entity to avoid collection-related checks
+            entityManager.detach(user);
+
+            // Update fields only if not null or empty in the request
+            if (profileUpdateRequest.getName() != null && !profileUpdateRequest.getName().isEmpty()) {
+                user.setName(profileUpdateRequest.getName());
+            }
+
+            if (profileUpdateRequest.getUsername() != null && !profileUpdateRequest.getUsername().isEmpty()) {
+                user.setUsername(profileUpdateRequest.getUsername());
+            }
+
+            if (profileUpdateRequest.getContactNumber() != null && !profileUpdateRequest.getContactNumber().isEmpty()) {
+                user.setContactNumber(profileUpdateRequest.getContactNumber());
+            }
+
+            if (profileUpdateRequest.getEmail() != null && !profileUpdateRequest.getEmail().isEmpty()) {
+                user.setEmail(profileUpdateRequest.getEmail());
+            }
+
+            // Reattach and save the updated user entity
+            entityManager.merge(user);
+            return true;
+        } else {
+            return false; // User not found
+        }
+    }
+
+
+
+
 
     public String updateProfilePicture(MultipartFile file , Long userId) {
         // Attempt to find the profile by its ID
@@ -152,5 +202,14 @@ public class ProfileService {
         }
     }
 
+    public void detachUser(User user) {
+        // This will detach the entity from the persistence context, so any changes won't be tracked
+        entityManager.detach(user);
+    }
+
+    public void saveUser(User user) {
+        // This will merge the entity back into the persistence context and persist changes
+        entityManager.merge(user);
+    }
 
 }

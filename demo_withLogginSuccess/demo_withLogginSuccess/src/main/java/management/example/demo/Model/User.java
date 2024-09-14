@@ -28,6 +28,12 @@ public class User {
 
 
     //To handle the role-based access
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @Enumerated(EnumType.STRING)
+//    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+//    @Column(name = "role")
+//    //@org.hibernate.annotations.Immutable
+//    private Set<Role> roles = new HashSet<>();
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))

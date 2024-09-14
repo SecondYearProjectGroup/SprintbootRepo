@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findByUserIdAndReadFalse(Long userId);
+
+    //Method to get the count of unread notifications
+    long countByUserIdAndReadFalse(Long userId);
 }

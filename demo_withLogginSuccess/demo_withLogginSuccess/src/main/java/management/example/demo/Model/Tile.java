@@ -38,11 +38,6 @@ public class Tile {
     @JsonIgnore
     private Submission submission;
 
-    @OneToOne(mappedBy = "tile")
-    //@JsonManagedReference
-    @JsonIgnore
-    private Forum forum;
-
 
     @ManyToOne
     @JoinColumn(name = "student_id")

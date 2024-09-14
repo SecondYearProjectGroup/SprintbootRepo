@@ -1,5 +1,7 @@
 package management.example.demo.Controller;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import management.example.demo.DTO.UserProfileUpdateRequest;
 import management.example.demo.Repository.ProfileRepository;
 import management.example.demo.Service.ProfileService;
@@ -18,6 +20,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private ProfileService profileService;
@@ -32,6 +36,18 @@ public class ProfileController {
     @PutMapping("/student/update/{id}")
     public ResponseEntity<String> updateProfile(@PathVariable("id") String username, @RequestBody UserProfileUpdateRequest profileUpdateRequest) {
         boolean updateSuccess = profileService.updateStudentProfile(username, profileUpdateRequest);
+
+        if (updateSuccess) {
+            return ResponseEntity.ok("Profile updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Profile update failed");
+        }
+    }
+
+    // New method to handle other profile updates for staff members
+    @PutMapping("/user/update/{userId}")
+    public ResponseEntity<String> updateProfileStaffMembers(@PathVariable("userId") Long userId, @RequestBody UserProfileUpdateRequest profileUpdateRequest) {
+        boolean updateSuccess = profileService.updateStaffMemberProfile(userId, profileUpdateRequest);
 
         if (updateSuccess) {
             return ResponseEntity.ok("Profile updated successfully");

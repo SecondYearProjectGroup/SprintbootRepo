@@ -51,8 +51,7 @@ public class ConfirmedStudent {
     //Student's submissions
     @OneToMany
     @Getter
-    @JoinColumn(name = "confirmed_student_id")
-    //@JsonManagedReference("confirmedStudent-submissions")
+    @JoinColumn(name = "student_id")
     @JsonIgnore
     private List<Submission> submissions;
 
@@ -63,7 +62,7 @@ public class ConfirmedStudent {
     @Getter
     //@JsonManagedReference("confirmedStudent-forums")
     @JsonIgnore
-    private List<Forum> forums;
+    private List<Feedback> feedbacks;
 
 
     //confirmed postgraduate student count in the year

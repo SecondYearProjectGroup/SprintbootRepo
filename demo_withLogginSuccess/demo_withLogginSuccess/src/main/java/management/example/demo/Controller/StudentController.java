@@ -66,7 +66,7 @@ public class StudentController {
                 "Address : " + student.getAddress() + "\n";
         emailService.sendMail(toEmail, subject, body);
         //Replace this with the ADMIN USERNAME
-        User user = userRepository.findByUsername("e20197");
+        User user = userRepository.findByUsername("e20500");
         notificationService.sendNotification(user, subject, body);
 
         System.out.println("Successfully enrolled.");

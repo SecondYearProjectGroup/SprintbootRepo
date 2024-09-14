@@ -143,6 +143,7 @@ public class ConfirmedStudentService {
 
     //Assign Examiners to each student's report submissions
     public List<Examiner> assignExaminers(Long submissionId, List<Long> examinerIds) {
+        System.out.println("Come in tile id:" + submissionId);
         Optional<Submission> submissionOpt = submissionRepository.findById(submissionId);
 
         if (submissionOpt.isPresent()) {
@@ -205,7 +206,8 @@ public class ConfirmedStudentService {
                         (String) result[3], // title
                         (LocalDateTime) result[4], // deadline
                         (Boolean) result[5], // submissionStatus
-                        Arrays.asList(((String) result[6]).split(", ")) // examiners
+                        (LocalDateTime) result[6], //Deadline to review for examiners
+                        Arrays.asList(((String) result[7]).split(", ")) // examiners
                 ))
                 .collect(Collectors.toList());
     }
