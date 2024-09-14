@@ -439,6 +439,47 @@ public class AdminController {
         return ResponseEntity.ok("Year end evaluation viva date has set successfully.");
     }
 
+    //Set deadlines for submission reviewing for examiners
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/setDeadlineToReview/{tileId}")
+    public ResponseEntity<String> setDeadlineToReview( @PathVariable(name = "tileId") Long  tileId,
+                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline) {
+        Submission submission = submissionService.get(tileId);
+        if (submission == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Submission not found");
+        }
+        submission.setDeadlineToReview(deadline);
+        submissionService.saveSubmissionsParameters(submissionService.get(tileId));
+
+        ////////////////////////////////
+        //Generate the Email Notifications for the students
+        List<Examiner> examiners = submission.getExaminers();
+        for (Examiner examiner: examiners){
+            String toEmail = examiner.getEmail();
+            String subject = "Reminder to Review Assigned Student Reports";
+            String body = String.format(
+                    "Please be kind enough to provide feedback or examine the assigned reports " +
+                            "within the given time period. The deadline for submission is  %s \n \n"
+                    , submission.getDeadlineToReview()
+            );
+            emailService.sendMail(toEmail, subject, body);
+            /////////////////////////////////
+            //Generate the Notifications for the students
+            //Get the userId from the student registration number
+            Optional<User> userOpt = userService.findById(examiner.getId());
+            User user = userOpt.get();
+            String notificationBody  = String.format(
+                    "Examine the assigned reports " +
+                            "within the given time period. The deadline for submission is  %s \n \n"
+                    , submission.getDeadlineToReview()
+            );
+            notificationService.sendNotification(user, subject, notificationBody);
+            /////////////////////////////////
+        }
+        System.out.println("Deadline has set to review the report submissions successfully.");
+        return ResponseEntity.ok("Deadline has set successfully.");
+    }
+
 }
 
     //To download as an excel
