@@ -212,4 +212,9 @@ public class FileService {
         }
     }
 
+    //Get all fileMetadatas related to submission(submitted by the student)
+    public List<FileMetadata> getAllFilesSubmittedByStudent(Long submissionId){
+        return fileMetadataRepository.findBySubmissionId(submissionId);
+    }
+
 }

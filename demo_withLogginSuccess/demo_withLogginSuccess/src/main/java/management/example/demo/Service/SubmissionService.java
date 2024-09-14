@@ -1,6 +1,7 @@
 package management.example.demo.Service;
 
 import management.example.demo.DTO.StudentSubmissionExaminerDto;
+import management.example.demo.Model.FileMetadata;
 import management.example.demo.Model.Submission;
 import management.example.demo.Repository.SubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +121,14 @@ public class SubmissionService  {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+    //Remove the submitted files by the student
+    public void removeSubmittedSubmissionFiles(Long submissionId){
+        List<FileMetadata> fileList= fileUploadService.getAllFilesSubmittedByStudent(submissionId);
+        for (FileMetadata fileMetadata: fileList){
+            fileUploadService.deleteFileByName(fileMetadata.getFileName());
+        }
     }
 
 }
