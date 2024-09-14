@@ -155,14 +155,20 @@ public class ProfileService {
 
     public Resource getProfilePicture(Long userId) {
         // Fetch the profile picture metadata using the user ID
-        Profile profile = profileRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Profile picture not found for user ID " + userId));
+        Optional<Profile> optionalProfile = profileRepository.findById(userId);
 
-        // Check if the profile picture is present
-        // If there is no any profile picture it has to return an indicator that there is no profile picture
-        //Here having the error below is normal
+        if (optionalProfile.isEmpty()) {
+            System.out.println("Profile not found for user ID: " + userId);
+            // Return a default image or handle the response accordingly
+            return null; // Handle this appropriately (e.g., returning a default image)
+        }
+
+        Profile profile = optionalProfile.get();
+
+        // Check if the profile picture is set
         if (profile.getProfilePicture() == null) {
-            throw new RuntimeException("Profile picture not set for user ID " + userId);
+            System.out.println("No profile picture set for user ID: " + userId);
+            return null; // Or handle this case as you prefer
         }
 
         try {
@@ -172,10 +178,12 @@ public class ProfileService {
             if (resource.exists() && resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException("Profile picture not found or is not readable");
+                System.out.println("Profile picture file not found or unreadable for user ID: " + userId);
+                return null;
             }
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Error: " + e.getMessage());
+            System.out.println("Error retrieving profile picture for user ID: " + userId + ". Error: " + e.getMessage());
+            return null;
         }
     }
 
