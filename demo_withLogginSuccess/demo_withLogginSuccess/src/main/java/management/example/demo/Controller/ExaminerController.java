@@ -1,10 +1,13 @@
 package management.example.demo.Controller;
 
 import management.example.demo.DTO.StudentSubmissionExaminerDto;
+import management.example.demo.Model.ConfirmedStudentSections;
 import management.example.demo.Model.Examiner;
+import management.example.demo.Service.ConfirmedStudentSectionsService;
 import management.example.demo.Service.ExaminerService;
 import management.example.demo.Service.SubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +23,9 @@ public class ExaminerController {
     @Autowired
     private SubmissionService submissionService;
 
+    @Autowired
+    private ConfirmedStudentSectionsService confirmedStudentSectionsService;
+
     @GetMapping("/getAssignedExaminers/{SubmissionId}")
     public List<Examiner> loadAssignedExaminers(@PathVariable(name = "SubmissionId") Long submissionId){
         return examinerService.findBySubmissionId(submissionId);
@@ -29,5 +35,12 @@ public class ExaminerController {
     @GetMapping("/getAllSubmissions-examiner/{examinerId}")
     public List<StudentSubmissionExaminerDto> getAllSubmissionsExaminer(@PathVariable(name = "examinerId") Long examinerId){
         return submissionService.getStudentSubmissionExaminerDetails(examinerId);
+    }
+
+    //Get all the final submissions for examiners
+    @GetMapping("/sections/examiners/{regNumber}/{tab}")
+    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab, String tileType) {
+        List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumberAndTabForExaminers(regNumber, tab, "finalSubmission");
+        return ResponseEntity.ok(sections);
     }
 }

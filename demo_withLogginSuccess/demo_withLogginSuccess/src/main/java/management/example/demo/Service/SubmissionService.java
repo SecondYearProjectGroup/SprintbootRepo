@@ -85,7 +85,7 @@ public class SubmissionService  {
                         (Boolean) result[5], // submissionStatus
                         //convertToLocalDateTime((Timestamp) result[6]),
                         null,
-                        Arrays.asList(((String) result[7]).split(", ")) // examiners
+                        Arrays.asList(((String) result[6]).split(", ")) // examiners
                 ))
                 .collect(Collectors.toList());
     }
