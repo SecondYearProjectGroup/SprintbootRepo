@@ -60,4 +60,10 @@ public class NotificationController {
     public void markAsRead(@RequestBody List<Long> notificationIds) {
         notificationService.markAsRead(notificationIds);
     }
+
+    @PutMapping("/markAsRead/{notificationId}")
+    public void markAsRead(@PathVariable Long notificationId) {
+        notificationService.markAsReadEachNotification(notificationId);
+    }
+
 }
