@@ -70,10 +70,18 @@ public class ProfileController {
     @GetMapping("/picture/{userId}")
     public ResponseEntity<Resource> getProfilePicture(@PathVariable Long userId) {
         Resource file = profileService.getProfilePicture(userId);
+
+        if (file == null) {
+            // Handle the case where the file is not found (return a 404 or default image)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null); // or a default image resource
+        }
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
+
 
 
     //Handle to return the JSON response from the backend
