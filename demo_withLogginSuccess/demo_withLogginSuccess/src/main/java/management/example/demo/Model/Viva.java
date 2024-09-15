@@ -16,6 +16,7 @@ public class Viva {
     @Id
     private Long id;
     private String title;
+    private String status;
     private LocalDateTime vivaDate;
     private String comments;
 

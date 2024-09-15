@@ -92,6 +92,7 @@ public class ConfirmedStudentSectionsController {
                 viva.setTile(tile);
                 viva.setTitle(tile.getTitle());
                 viva.setConfirmedStudent(confirmedStudent);
+                viva.setStatus("Pending");
                 vivaService.saveViva(viva);
             }
         });

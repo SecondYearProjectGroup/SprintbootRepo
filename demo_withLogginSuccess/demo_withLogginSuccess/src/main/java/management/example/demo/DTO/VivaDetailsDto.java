@@ -7,11 +7,14 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class VIvaDetailsDto {
+public class VivaDetailsDto {
 
 
     private String title;
     private LocalDateTime vivaDate;
     private String comments;
+    private String regNumber;
+    private String registrationNumber;
+    private String status;
 
 }
