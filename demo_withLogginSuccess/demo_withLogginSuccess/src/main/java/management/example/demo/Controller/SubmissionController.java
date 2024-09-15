@@ -61,4 +61,11 @@ public class SubmissionController {
         submissionService.deleteExaminerFromSubmission(submissionId, examinerId);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/delete/submittedFiles/{submissionId}")
+    public ResponseEntity<Void> deleteSubmittedFiles(
+            @PathVariable Long submissionId) {
+        submissionService.removeSubmittedSubmissionFiles(submissionId);
+        return ResponseEntity.noContent().build();
+    }
 }
