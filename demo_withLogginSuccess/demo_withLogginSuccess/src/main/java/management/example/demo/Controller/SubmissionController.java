@@ -41,6 +41,8 @@ public class SubmissionController {
         dto.setDueDate(submission.getDeadline());
         dto.setTitle(submission.getTitle());
         dto.setSubmissionStatus(submission.getSubmissionStatus());
+        dto.setLastModified(submission.getLastModified());
+        dto.setDeadlineToReview(submission.getDeadlineToReview());
 
         return ResponseEntity.ok(dto);
     }
