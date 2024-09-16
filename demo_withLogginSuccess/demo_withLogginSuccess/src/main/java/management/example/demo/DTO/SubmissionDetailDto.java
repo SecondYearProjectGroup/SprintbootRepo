@@ -12,4 +12,6 @@ public class SubmissionDetailDto {
     private LocalDateTime openedDate;
     private LocalDateTime dueDate;
     private Boolean submissionStatus;
+    private LocalDateTime lastModified;
+    private LocalDateTime deadlineToReview;
 }
