@@ -312,14 +312,95 @@ public class AdminController {
     }
 
     // List examiners removing Selected Examiners
+//    @GetMapping("/examiners/{submissionId}")
+//    public List<Examiner> getNotAssignedExaminers(@PathVariable(name = "submissionId") Long submissionId){
+//        List<Examiner> list1 = examinerService.findBySubmissionId(submissionId); // Examiners assigned to the submission
+//        List<Examiner> list2 = examinerService.listAll(); // All examiners
+//        // Remove all examiners in list1 from list2
+//        list2.removeAll(list1);
+//        return list2; // Return remaining examiners in list2 not in list1
+//    }
+
+//    @GetMapping("/examiners/{submissionId}")
+//    public List<Examiner> getNotAssignedExaminers(@PathVariable(name = "submissionId") Long submissionId) {
+//        // Retrieve the examiner related to the supervisor of the confirmed student from the tile
+//        Optional<Examiner> supervisorExaminer = tileService.getTile(submissionId)  // Get Tile by submissionId
+//                .map(Tile::getConfirmedStudent)   // Extract ConfirmedStudent from Tile
+//                .map(ConfirmedStudent::getSupervisor)  // Extract Supervisor from ConfirmedStudent
+//                .map(Supervisor::getId)  // Extract Supervisor's userId
+//                .flatMap(userId -> examinerService.getExaminer(userId));  // Find Examiner by userId if Supervisor is an Examiner
+//
+//        // Get list of examiners already assigned to the submission
+//        List<Examiner> assignedExaminers = examinerService.findBySubmissionId(submissionId);
+//
+//        // Get list of all examiners in the system
+//        List<Examiner> allExaminers = examinerService.listAll();
+//
+//        // Remove assigned examiners from the list of all examiners
+//        allExaminers.removeAll(assignedExaminers);
+//
+//        // Remove supervisor (if found and they are an examiner) from the list of all examiners
+//        supervisorExaminer.ifPresent(allExaminers::remove);
+//
+//        // Return the remaining examiners who are not assigned and not the supervisor
+//        return allExaminers;
+//    }
+
     @GetMapping("/examiners/{submissionId}")
-    public List<Examiner> getNotAssignedExaminers(@PathVariable(name = "submissionId") Long submissionId){
-        List<Examiner> list1 = examinerService.findBySubmissionId(submissionId); // Examiners assigned to the submission
-        List<Examiner> list2 = examinerService.listAll(); // All examiners
-        // Remove all examiners in list1 from list2
-        list2.removeAll(list1);
-        return list2; // Return remaining examiners in list2 not in list1
+    public List<Examiner> getNotAssignedExaminers(@PathVariable(name = "submissionId") Long submissionId) {
+        // Step 1: Get the Tile by submissionId
+        Optional<Tile> tile = tileService.getTile(submissionId);
+        tile.ifPresentOrElse(
+                t -> System.out.println("Tile found: " + t),
+                () -> System.out.println("No Tile found for submissionId: " + submissionId)
+        );
+
+        // Step 2: Extract ConfirmedStudent from the Tile
+        Optional<ConfirmedStudent> confirmedStudent = tile.map(Tile::getConfirmedStudent);
+        confirmedStudent.ifPresentOrElse(
+                cs -> System.out.println("ConfirmedStudent found: " + cs),
+                () -> System.out.println("No ConfirmedStudent found in the Tile.")
+        );
+
+        // Step 3: Extract Supervisor from the ConfirmedStudent
+        Optional<Supervisor> supervisor = confirmedStudent.map(ConfirmedStudent::getSupervisor);
+        supervisor.ifPresentOrElse(
+                s -> System.out.println("Supervisor found: " + s),
+                () -> System.out.println("No Supervisor found for the ConfirmedStudent.")
+        );
+
+        // Step 4: Extract Supervisor's userId
+        Optional<Long> supervisorId = supervisor.map(Supervisor::getId);
+        supervisorId.ifPresentOrElse(
+                id -> System.out.println("Supervisor's userId: " + id),
+                () -> System.out.println("No userId found for the Supervisor.")
+        );
+
+        // Step 5: Find Examiner by Supervisor's userId
+        Optional<Examiner> supervisorExaminer = supervisorId.flatMap(userId -> examinerService.getExaminer(userId));
+        supervisorExaminer.ifPresentOrElse(
+                examiner -> System.out.println("Examiner found for Supervisor: " + examiner),
+                () -> System.out.println("No Examiner found for Supervisor's userId.")
+        );
+
+        // Continue with the rest of your logic...
+        // Get list of examiners assigned to the submission
+        List<Examiner> assignedExaminers = examinerService.findBySubmissionId(submissionId);
+
+        // Get list of all examiners
+        List<Examiner> allExaminers = examinerService.listAll();
+
+        // Remove all assigned examiners from the list of all examiners
+        allExaminers.removeAll(assignedExaminers);
+
+        // If the examiner related to the userId is present, remove them as well
+        supervisorExaminer.ifPresent(allExaminers::remove);
+
+        // Return the remaining examiners
+        return allExaminers;
     }
+
+
 
     @GetMapping("/studentProfileForAdmin/{regNumber}")
     public ConfirmedStudent getConfirmedStudentByRegNumber(@RequestHeader("Authorization") String token,

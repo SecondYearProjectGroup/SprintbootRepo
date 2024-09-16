@@ -52,6 +52,7 @@ public class ConfirmedStudentSectionsController {
         // Set the student attribute for each tile to match the section's student
         section.getTiles().forEach(tile -> {
             tile.setRegNumber(sectionStudent);
+            tile.setConfirmedStudent(confirmedStudentService.get(sectionStudent));
             System.out.println("Updated Tile with Student: " + tile);
             ConfirmedStudent confirmedStudent = confirmedStudentService.get(sectionStudent);
 
@@ -65,14 +66,12 @@ public class ConfirmedStudentSectionsController {
                 preSubmission.setTitle(tile.getTitle());
                 preSubmission.setSubmissionStatus(false);
                 submissionService.saveSubmissionsParameters(preSubmission);
-//
-//                //For final submission (for examiner reviews)
-//                Submission finalSubmission = new Submission();
-//                finalSubmission.setTile(tile);
-//                finalSubmission.setConfirmedStudent(confirmedStudent);
-//                finalSubmission.setTitle(tile.getTitle());
-//                finalSubmission.setSubmissionStatus(false);
-//                submissionService.saveSubmissionsParameters(finalSubmission);
+
+                //To create the feedbacks for the supervisors
+                Feedback feedback = new Feedback();
+                feedback.setConfirmedStudent(confirmedStudent);
+                feedbackService.saveForum(feedback);
+
             } else if (tile.getType().equals("finalSubmission")) {
 
                 Submission finalSubmission = new Submission();

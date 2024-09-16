@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExaminerService {
@@ -13,8 +14,8 @@ public class ExaminerService {
     @Autowired
     private ExaminerRepository examinerRepository;
 
-    public Examiner getExaminer(Long id){
-        return examinerRepository.findById(id).get();
+    public Optional<Examiner> getExaminer(Long userId){
+        return examinerRepository.findById(userId);
     }
 
     public List<Examiner> listAll(){
