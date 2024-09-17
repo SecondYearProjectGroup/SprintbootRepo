@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/feedbacks")
@@ -23,7 +24,7 @@ public class FeedbackController {
     }
 
     // Update feedback with body and file for Examiners
-    @PutMapping("/submission/{submissionId}/examiner/{examinerId}")
+    @PutMapping("/submission/{submissionId}/examiner/update/{examinerId}")
     public ResponseEntity<Feedback> updateExaminerFeedback(
             @PathVariable Long submissionId,
             @PathVariable Long examinerId,
@@ -33,6 +34,19 @@ public class FeedbackController {
         Feedback updatedFeedback = feedbackService.updateFeedback(submissionId, examinerId, body, file);
         return ResponseEntity.ok(updatedFeedback);
     }
+
+
+    // Load feedback related to the submission and examiner
+    @GetMapping("/submission/{submissionId}/examiner/{examinerId}")
+    public ResponseEntity<Feedback> loadFeedbackForExaminer(
+            @PathVariable Long submissionId,
+            @PathVariable Long examinerId) {
+
+        Optional<Feedback> feedbackOpt = feedbackService.getFeedbackRelatedToExaminer(submissionId, examinerId);
+        return feedbackOpt.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 
     // Update feedback with body and file for Examiners
     @PutMapping("/supervisorSubmission/{submissionId}")
@@ -44,4 +58,6 @@ public class FeedbackController {
         Feedback updatedFeedback = feedbackService.updateSupervisorFeedback(submissionId, body, file);
         return ResponseEntity.ok(updatedFeedback);
     }
+
+
 }

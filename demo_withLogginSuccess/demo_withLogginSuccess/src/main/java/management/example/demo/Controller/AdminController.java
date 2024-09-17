@@ -1,5 +1,10 @@
 package management.example.demo.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
 import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.DTO.StudentSupervisorDto;
@@ -220,6 +225,7 @@ public class AdminController {
             feedback.setSubmission(submission);
             feedback.setType("final");
             feedback.setExaminer(examiner);
+            feedback.setConfirmedStudent(submission.getConfirmedStudent());
             feedbackService.saveForum(feedback);
 
         }
@@ -474,7 +480,15 @@ public class AdminController {
         return ResponseEntity.ok(response.toString());
     }
 
-    //Get assigned supervisors
+    //To generate the API documentation
+    @Operation(summary = "Get Assigned Supervisors",
+            description = "Fetches the list of students along with their assigned supervisors.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of students and supervisors retrieved",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = StudentSupervisorDto.class))),
+            @ApiResponse(responseCode = "403", description = "Unauthorized access")
+    })
     @GetMapping("/assignedSupervisors")
     public List<StudentSupervisorDto> getAssignedSupervisors() {
         return confirmedStudentService.getStudentRegNumbersAndSupervisorNames();
