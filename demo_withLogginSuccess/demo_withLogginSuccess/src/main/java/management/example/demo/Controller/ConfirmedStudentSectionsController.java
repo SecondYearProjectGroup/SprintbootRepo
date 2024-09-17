@@ -70,6 +70,7 @@ public class ConfirmedStudentSectionsController {
                 //To create the feedbacks for the supervisors
                 Feedback feedback = new Feedback();
                 feedback.setConfirmedStudent(confirmedStudent);
+                feedback.setSubmission(preSubmission);
                 feedbackService.saveForum(feedback);
 
             } else if (tile.getType().equals("finalSubmission")) {

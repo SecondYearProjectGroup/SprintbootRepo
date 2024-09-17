@@ -76,4 +76,23 @@ public class FeedbackService {
     }
 
 
+    // To update the Supervisor feedback
+    public Feedback updateSupervisorFeedback(Long submissionId, String body, MultipartFile file) throws IOException {
+        Optional<Feedback> feedbackOpt = feedbackRepository.findBySubmissionId(submissionId);
+        if (feedbackOpt.isPresent()){
+            Feedback feedback = feedbackOpt.get();
+            feedback.setBody(body);
+            if (!file.isEmpty()) {
+                String fileName = file.getOriginalFilename();
+                feedback.setFileName(fileName);
+                //To handle the fileMetadata
+                fileService.uploadFile(file);
+            }
+            return feedbackRepository.save(feedback);
+        } else {
+            throw new IllegalArgumentException("Feedback not found");
+        }
+    }
+
+
 }

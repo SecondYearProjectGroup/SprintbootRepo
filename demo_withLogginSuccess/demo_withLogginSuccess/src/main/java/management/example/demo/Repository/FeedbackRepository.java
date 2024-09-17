@@ -17,4 +17,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     @Query("SELECT f FROM Feedback f WHERE f.submission.id = :submissionId AND f.examiner.Id = :examinerId")
     Optional<Feedback> findBySubmissionIdAndExaminerId(@Param("submissionId") Long submissionId, @Param("examinerId") Long examinerId);
 
+    // Custom query to find feedback by submission ID
+    @Query("SELECT f FROM Feedback f WHERE f.submission.id = :submissionId")
+    Optional<Feedback> findBySubmissionId(@Param("submissionId") Long submissionId);
+
 }
