@@ -94,5 +94,8 @@ public class FeedbackService {
         }
     }
 
-
+    //To get the examiner related feedback whenever it gives the submission id and examiner id
+    public Optional<Feedback> getFeedbackRelatedToExaminer(Long submissionId, Long examinerId){
+        return feedbackRepository.findBySubmissionIdAndExaminerId(submissionId, examinerId);
+    }
 }

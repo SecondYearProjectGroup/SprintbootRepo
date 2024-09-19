@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .requestMatchers("/ws/**").permitAll()
                 .requestMatchers("/supervisors").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
+                //.anyRequest().permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
