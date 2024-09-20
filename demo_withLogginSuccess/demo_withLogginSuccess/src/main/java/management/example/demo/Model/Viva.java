@@ -8,8 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @Entity
 public class Viva {
 
@@ -20,8 +20,6 @@ public class Viva {
     private LocalDateTime vivaDate;
     private String comments;
 
-
-    //Vivas
     @ManyToOne
     @JoinColumn(name = "student_id")
     @JsonIgnore
@@ -33,3 +31,4 @@ public class Viva {
     @JsonBackReference("viva-tile")
     private Tile tile;
 }
+

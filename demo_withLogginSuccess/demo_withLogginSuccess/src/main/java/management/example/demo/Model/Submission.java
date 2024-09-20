@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+
 @Setter
+@Getter
 @Entity
 public class Submission {
 
@@ -26,12 +27,6 @@ public class Submission {
     private LocalDateTime lastModified;
     private LocalDateTime deadlineToReview;
 
-    //Submissions
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    @JsonIgnore
-    private ConfirmedStudent confirmedStudent;
-
     //Examiners who is assigned to submissions
     @ManyToMany
     @JoinTable(
@@ -43,9 +38,10 @@ public class Submission {
     @JsonManagedReference("submissions-examiners")
     private List<Examiner> examiners = new ArrayList<>();
 
-    //To have the relationship with the feedback entity
-    @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Feedback> feedbacks = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    @JsonIgnore
+    private ConfirmedStudent confirmedStudent;
 
     @OneToOne
     @MapsId
@@ -53,20 +49,13 @@ public class Submission {
     @JsonIgnore
     private Tile tile;
 
-    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("submission-fileMetadatas")
     private List<FileMetadata> fileMetadataList = new ArrayList<>();
 
-    // Add a file metadata to the submission
-    public void addFileMetadata(FileMetadata fileMetadata) {
-        fileMetadataList.add(fileMetadata);
-        fileMetadata.setSubmission(this);
-    }
-
-    // Remove a file metadata from the submission
-    public void removeFileMetadata(FileMetadata fileMetadata) {
-        fileMetadataList.remove(fileMetadata);
-        fileMetadata.setSubmission(null);
-    }
-
+    // Methods to add/remove file metadata
 }
+

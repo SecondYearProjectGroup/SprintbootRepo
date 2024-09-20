@@ -15,6 +15,10 @@ public class ConfirmedStudentSectionsService {
     @Autowired
     private ConfirmedStudentSectionsRepository confirmedStudentSectionsRepository;
 
+    public ConfirmedStudentSections getSectionById(Long id) {
+        return confirmedStudentSectionsRepository.findById(id).orElse(null);
+    }
+
     public List<ConfirmedStudentSections> getSectionsByRegNumber(String regNumber) {
         return confirmedStudentSectionsRepository.findByregNumber(regNumber);
     }

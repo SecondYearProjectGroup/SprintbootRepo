@@ -20,23 +20,13 @@ public class ConfirmedStudentSections {
     private String buttonName;
     private String activeTab;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)  // Add cascade here
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
             name = "section_tiles",
             joinColumns = @JoinColumn(name = "section_id"),
             inverseJoinColumns = @JoinColumn(name = "tile_id")
     )
-    @Getter
     private List<Tile> tiles;
-    // Getters and Setters
 
-    public ConfirmedStudentSections() {}
-
-    public ConfirmedStudentSections(String regNumber, String buttonName, List<Tile> tiles) {
-        this.regNumber = regNumber;
-        this.buttonName = buttonName;
-        this.tiles = tiles;
-    }
-
-    // Getters and Setters
+    // Constructor, getters, setters, etc.
 }

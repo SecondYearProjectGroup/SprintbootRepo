@@ -3,6 +3,7 @@ package management.example.demo.Controller;
 import management.example.demo.Model.*;
 import management.example.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,12 @@ public class ConfirmedStudentSectionsController {
     public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab) {
         List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumberAndTab(regNumber, tab);
         return ResponseEntity.ok(sections);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ConfirmedStudentSections> getSectionById(@PathVariable Long id) {
+        ConfirmedStudentSections section = confirmedStudentSectionsService.getSectionById(id);
+        return new ResponseEntity<>(section, HttpStatus.OK);
     }
 
     @PostMapping
@@ -102,6 +109,182 @@ public class ConfirmedStudentSectionsController {
         ConfirmedStudentSections savedSection = confirmedStudentSectionsService.saveSection(section);
         return ResponseEntity.ok(savedSection);
     }
+
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ConfirmedStudentSections> updateSection(@PathVariable Long id, @RequestBody ConfirmedStudentSections updatedSection) {
+//        ConfirmedStudentSections section = confirmedStudentSectionsService.getSectionById(id);
+//
+//        if (section == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Handle if the section doesn't exist
+//        }
+//
+//        String sectStudent = updatedSection.getRegNumber();
+//        if (sectStudent == null) {
+//            throw new IllegalArgumentException("Section student regNumber must not be null.");
+//        }
+//        ConfirmedStudent confirmedStudent = confirmedStudentService.get(sectStudent);
+//
+//        // Only update fields if they are provided in the request
+//        if (updatedSection.getButtonName() != null) {
+//            section.setButtonName(updatedSection.getButtonName());
+//        }
+//
+//        if (updatedSection.getActiveTab() != null) {
+//            section.setActiveTab(updatedSection.getActiveTab());
+//        }
+//
+//        // Update the tiles collection without clearing all of them
+//        if (updatedSection.getTiles() != null) {
+//            // Remove old tiles that are not in the updated list
+//            section.getTiles().removeIf(existingTile ->
+//                    updatedSection.getTiles().stream().noneMatch(newTile ->
+//                            newTile.getId() != null && newTile.getId().equals(existingTile.getId())));
+//
+//            // Add or update tiles from the updatedSection
+//            for (Tile updatedTile : updatedSection.getTiles()) {
+//                if (updatedTile.getId() == null) {
+//                    // New tile, add it
+//                    section.getTiles().add(updatedTile);
+//
+//                    // Set relationships and create new associated entities if necessary
+//                    updatedTile.setRegNumber(sectStudent);
+//                    updatedTile.setConfirmedStudent(confirmedStudent);
+//
+//                    // Create new entities based on tile type
+//                    if (updatedTile.getType().equals("submission")) {
+//                        Submission submission = new Submission();
+//                        submission.setTile(updatedTile);
+//                        submission.setConfirmedStudent(confirmedStudent);
+//                        submission.setTitle(updatedTile.getTitle());
+//                        submission.setSubmissionStatus(false);
+//                        submissionService.saveSubmissionsParameters(submission);
+//                    } else if (updatedTile.getType().equals("finalSubmission")) {
+//                        Submission finalSubmission = new Submission();
+//                        finalSubmission.setTile(updatedTile);
+//                        finalSubmission.setConfirmedStudent(confirmedStudent);
+//                        finalSubmission.setTitle(updatedTile.getTitle());
+//                        finalSubmission.setSubmissionStatus(false);
+//                        submissionService.saveSubmissionsParameters(finalSubmission);
+//                    } else if (updatedTile.getType().equals("viva")) {
+//                        Viva viva = new Viva();
+//                        viva.setTile(updatedTile);
+//                        viva.setTitle(updatedTile.getTitle());
+//                        viva.setConfirmedStudent(confirmedStudent);
+//                        viva.setStatus("Pending");
+//                        vivaService.saveViva(viva);
+//                    }
+//
+//                } else {
+//                    // Existing tile, find and update the corresponding tile
+//                    section.getTiles().stream()
+//                            .filter(existingTile -> existingTile.getId().equals(updatedTile.getId()))
+//                            .findFirst()
+//                            .ifPresent(existingTile -> {
+//                                existingTile.setType(updatedTile.getType());
+//                                existingTile.setTitle(updatedTile.getTitle()); // Update the title of the tile
+//
+//                                // Update the title in the associated submission and viva
+//                                if (existingTile.getSubmission() != null) {
+//                                    existingTile.getSubmission().setTitle(updatedTile.getTitle());  // Update title in submission
+//                                }
+//
+//                                if (existingTile.getViva() != null) {
+//                                    existingTile.getViva().setTitle(updatedTile.getTitle());  // Update title in viva
+//                                }
+//                            });
+//                }
+//            }
+//        }
+//
+//        // Save the updated section
+//        confirmedStudentSectionsService.saveSection(section);
+//        return new ResponseEntity<>(section, HttpStatus.OK);
+//    }
+
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ConfirmedStudentSections> updateSection(@PathVariable Long id, @RequestBody ConfirmedStudentSections updatedSection) {
+        ConfirmedStudentSections section = confirmedStudentSectionsService.getSectionById(id);
+
+        if (section == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Handle if the section doesn't exist
+        }
+
+        // Only update fields if they are provided in the request
+        if (updatedSection.getButtonName() != null) {
+            section.setButtonName(updatedSection.getButtonName());
+        }
+
+        if (updatedSection.getActiveTab() != null) {
+            section.setActiveTab(updatedSection.getActiveTab());
+        }
+
+        // Update the tiles collection without clearing all of them
+        if (updatedSection.getTiles() != null) {
+            // Remove old tiles that are not in the updated list
+            section.getTiles().removeIf(existingTile ->
+                    updatedSection.getTiles().stream().noneMatch(newTile ->
+                            newTile.getId() != null && newTile.getId().equals(existingTile.getId())));
+
+            // Add or update tiles from the updatedSection
+            for (Tile updatedTile : updatedSection.getTiles()) {
+                if (updatedTile.getId() == null) {
+                    // New tile, add it
+                    section.getTiles().add(updatedTile);
+                } else {
+                    // Existing tile, find and update the corresponding tile
+                    section.getTiles().stream()
+                            .filter(existingTile -> existingTile.getId().equals(updatedTile.getId()))
+                            .findFirst()
+                            .ifPresent(existingTile -> {
+                                existingTile.setType(updatedTile.getType());
+                                existingTile.setTitle(updatedTile.getTitle()); // Update the title of the tile
+
+                                // Update the title in the associated submission and viva
+                                if (existingTile.getSubmission() != null) {
+                                    existingTile.getSubmission().setTitle(updatedTile.getTitle());  // Update title in submission
+                                }
+
+                                if (existingTile.getViva() != null) {
+                                    existingTile.getViva().setTitle(updatedTile.getTitle());  // Update title in viva
+                                }
+                            });
+                }
+            }
+        }
+
+        // Save the updated section
+        confirmedStudentSectionsService.saveSection(section);
+        return new ResponseEntity<>(section, HttpStatus.OK);
+    }
+
+
+
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ConfirmedStudentSections> updateSection(@PathVariable Long id, @RequestBody ConfirmedStudentSections updatedSection) {
+//        ConfirmedStudentSections section = confirmedStudentSectionsService.getSectionById(id);
+//
+//        if (section == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Handle if the section doesn't exist
+//        }
+//
+//        // Update individual fields
+//        section.setButtonName(updatedSection.getButtonName());
+//        section.setActiveTab(updatedSection.getActiveTab());
+//
+//        // Update the tiles collection correctly
+//        section.getTiles().clear();
+//        for (Tile updatedTile : updatedSection.getTiles()) {
+//            section.getTiles().add(updatedTile);  // Add each new tile
+//        }
+//
+//        // Save the updated section
+//        confirmedStudentSectionsService.saveSection(section);
+//        return new ResponseEntity<>(section, HttpStatus.OK);
+//    }
 
 
 
