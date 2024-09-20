@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -92,4 +93,8 @@ public class AdminService {
         return savedUser;
     }
 
+    //Check the staff members and load their data if he is in the database
+    public Optional<User> loadStaffMember(String email){
+        return userRepository.findByEmail(email);
+    }
 }
