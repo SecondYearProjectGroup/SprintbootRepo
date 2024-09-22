@@ -19,17 +19,14 @@ public class Student {
     private String contactNumber;
     private String email;
     private String address;
-//    private String university;
-//    private String fromDate;
-//    private String toDate;
-//    private String degree;
-//    private String field;
-//    private String classPass;
     private String publications;
     private String programOfStudy;
     private String status;
-    private String attachementFile;
-    private String attachementFileOriginalName;
+    // New fields for Student ID and Birth Certificate
+    private String studentIdDocument;
+    private String studentIdDocumentOriginalName;
+    private String birthCertificate;
+    private String birthCertificateOriginalName;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FileMetadata> fileMetadata;
