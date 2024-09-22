@@ -61,6 +61,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow preflight requests
                 .requestMatchers("/login", "/signup", "/enroll", "/css/**", "/js/**", "/img/**").permitAll()
                 .requestMatchers("/ws/**").permitAll()
+                .requestMatchers("/profile/search/**").permitAll()
+                .requestMatchers("/profile/change-password").permitAll()
                 .requestMatchers("/supervisors").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated()
                 //.anyRequest().permitAll()

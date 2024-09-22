@@ -5,15 +5,18 @@ import management.example.demo.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/files")
@@ -31,11 +34,34 @@ public class FileController {
 //        return "uploadForm";
 //    }
 
+//    @PostMapping("/upload")
+//    public String uploadFile(@RequestParam("file") MultipartFile file, Model model) {
+//        //String message = fileUploadService.uploadFile(file);
+//        //model.addAttribute("message", message);
+//        return "uploadForm";
+//    }
+
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, Model model) {
-        //String message = fileUploadService.uploadFile(file);
-        //model.addAttribute("message", message);
-        return "uploadForm";
+    public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile attachment) {
+        Map<String, String> response = new HashMap<>();
+        if (attachment.isEmpty()) {
+            response.put("message", "File is empty.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        try {
+            // Upload the file using your service
+            List<String> attachemntData = fileUploadService.uploadFile(attachment);
+
+            // The first element contains the file path, the second the original filename
+            response.put("filePath", attachemntData.get(0));
+            response.put("originalFileName", attachemntData.get(1));
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("message", "File upload failed.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 //    @GetMapping("/download/{id}")

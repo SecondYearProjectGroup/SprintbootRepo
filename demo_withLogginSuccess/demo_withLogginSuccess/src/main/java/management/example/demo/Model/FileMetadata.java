@@ -27,4 +27,9 @@ public class FileMetadata {
     //@JsonBackReference("fileMetadatas-submission")
     @JsonIgnore
     private Submission submission;
+
+
+    @ManyToOne
+    @JoinColumn(name = "qualification_id")
+    private EducationalQualification educationalQualification;
 }

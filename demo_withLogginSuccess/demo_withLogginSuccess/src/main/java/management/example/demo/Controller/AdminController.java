@@ -9,9 +9,7 @@ import jakarta.mail.MessagingException;
 import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
-import management.example.demo.Repository.ExaminerRepository;
-import management.example.demo.Repository.StudentRepository;
-import management.example.demo.Repository.SupervisorRepository;
+import management.example.demo.Repository.*;
 import management.example.demo.Service.*;
 import management.example.demo.Util.JwtUtil;
 import management.example.demo.enums.Role;
@@ -78,6 +76,10 @@ public class AdminController {
     private VivaService vivaService;
     @Autowired
     private FeedbackService feedbackService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
@@ -148,16 +150,54 @@ public class AdminController {
     }
 
 
-    @PostMapping("/addStaffMembers")
-    public void addStaffMembers(@RequestParam String name, @RequestParam String email, @RequestParam List<String> role) throws Exception {
+//    @PostMapping("/addStaffMembers")
+//    public void addStaffMembers(@RequestParam String name, @RequestParam String email, @RequestParam List<String> role) throws Exception {
+//
+//        // Convert the list of strings to the set of Role enums
+//        Set<Role> roles = role.stream()
+//                .map(roleId -> Role.valueOf(roleId.toUpperCase()))
+//                .collect(Collectors.toSet());
+//
+//        adminService.addStaff(name, email, roles);
+//    }
 
-        // Convert the list of strings to the set of Role enums
+    @PostMapping("/addStaffMembers")
+    public ResponseEntity<String> addOrUpdateStaffMember(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam List<String> role) throws Exception {
+
+        // Convert the list of role strings to a set of Role enums
         Set<Role> roles = role.stream()
-                .map(roleId -> Role.valueOf(roleId.toUpperCase()))
+                .map(roleName -> Role.valueOf(roleName.toUpperCase()))
                 .collect(Collectors.toSet());
 
-        adminService.addStaff(name, email, roles);
+        System.out.println("Email: " + email + ", Name: " + name);
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        System.out.println("User exists: " + existingUser.isPresent());
+
+        if (existingUser.isPresent()) {
+            // If the user exists, update their details (name and roles)
+            User user = existingUser.get();
+            user.setName(name); // Update name
+
+            // Update roles
+            user.getRoles().clear(); // Clear existing roles
+            roles.forEach(user::addRole); // Add new roles
+
+            // Save the updated user
+            userRepository.save(user);
+
+            return ResponseEntity.ok("Staff member details updated successfully.");
+        } else {
+            // If the user does not exist, create a new user
+            adminService.addStaff(name, email, roles);
+
+            return ResponseEntity.ok("New staff member added successfully.");
+        }
     }
+
+
 
     // Controller endpoint to assign or change supervisor
     @PostMapping("/assignSupervisor/{regNumber}")
@@ -270,6 +310,15 @@ public class AdminController {
         String notificationBody = "Deadline for submitting your progress reports has been set.";
         notificationService.sendNotification(user, subject, notificationBody);
         /////////////////////////////////
+        //To add the deadlines to the student calendar
+        Event event = new Event();
+        event.setUser(user);
+        event.setName(submission.getTitle());
+        event.setType("event");
+        event.setStartDate(submission.getDeadline().toLocalDate());
+        event.setEndDate(submission.getDeadline().toLocalDate());
+        eventRepository.save(event);
+        ////////////////////////////////
 
         System.out.println("Deadline has set successfully.");
         return ResponseEntity.ok("Deadline has set successfully.");
@@ -532,6 +581,15 @@ public class AdminController {
         String notificationBody = "Your year end evaluations viva has been scheduled";
         notificationService.sendNotification(user, subject, notificationBody);
         /////////////////////////////////
+        //To add the viva date to the student calendar
+        Event event = new Event();
+        event.setUser(user);
+        event.setName(viva.getTitle());
+        event.setType("event");
+        event.setStartDate(viva.getVivaDate().toLocalDate());
+        event.setEndDate(viva.getVivaDate().toLocalDate());
+        eventRepository.save(event);
+        //////////////////////
 
         System.out.println("Year end evaluation viva date has set successfully.");
         return ResponseEntity.ok("Year end evaluation viva date has set successfully.");
@@ -576,6 +634,16 @@ public class AdminController {
         }
         System.out.println("Deadline has set to review the report submissions successfully.");
         return ResponseEntity.ok("Deadline has set successfully.");
+    }
+
+    //Load staff member details
+    @GetMapping("load/staff/{email}")
+    public ResponseEntity<User> loadStaffMember(@PathVariable String email) {
+        Optional<User> staffMember = adminService.loadStaffMember(email);
+        // Return 200 OK with the User object
+        // Return 404 Not Found if staff member not found
+        return staffMember.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(null));
     }
 
 }

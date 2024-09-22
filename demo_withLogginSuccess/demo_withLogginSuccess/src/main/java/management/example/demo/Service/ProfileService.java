@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +45,8 @@ public class ProfileService {
     private FileService fileService;
     @Autowired
     private UserService userService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Value("${upload.path}")
     private String uploadDir;
@@ -220,4 +224,31 @@ public class ProfileService {
         entityManager.merge(user);
     }
 
+
+    //To change the password
+    public User changePassword(String email, String newPassword) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            return userRepository.save(user);
+        } else {
+            // Handle the case where the user is not found
+            throw new UsernameNotFoundException("User with email " + email + " not found");
+        }
+    }
+
+    //To return the user by the email
+    public User searchByEmail(String email){
+        Optional<User> userOpt = userRepository.findByEmail(email);
+
+        if (userOpt.isPresent()){
+            return userOpt.get();
+        }
+        else {
+            // Handle the case where the user is not found
+            throw new UsernameNotFoundException("User with email " + email + " not found");
+        }
+    }
 }

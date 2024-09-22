@@ -49,12 +49,13 @@ public class SecurityConfigTest {
     }
 
     @Test
-    public void login_ShouldReturnError_WhenCredentialsAreInvalid() throws Exception {
+    public void login_ShouldReturnError_WhenCredentialsAreInvalid()
+            throws Exception {
         // Perform login request with invalid credentials
         mockMvc.perform(post("/login")
-                        .param("username", "testuser")
-                        .param("password", "wrongpassword"))
-                .andExpect(status().isFound())
-                .andExpect(header().string("Location", "/login?error"));
+        .param("username", "testuser")
+        .param("password", "wrongpassword"))
+        .andExpect(status().isFound())
+        .andExpect(header().string("Location", "/login?error"));
     }
 }

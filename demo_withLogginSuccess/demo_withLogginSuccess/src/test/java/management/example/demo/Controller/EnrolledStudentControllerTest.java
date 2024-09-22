@@ -1,16 +1,21 @@
 package management.example.demo.Controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-
+import jakarta.mail.MessagingException;
 import management.example.demo.Model.Student;
 import management.example.demo.Service.EmailService;
 import management.example.demo.Service.EnrolledStudentService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EnrolledStudentControllerTest {
@@ -54,17 +59,21 @@ public class EnrolledStudentControllerTest {
 //        assertEquals("Approval email sent successfully.", response.getBody());
 //    }
 //
-//    @Test
-//    void testConfirmEnrollmentRejected() {
-//        when(enrolledStudentService.get(1L)).thenReturn(student);
-//        doNothing().when(emailService).sendMail(any(String.class), any(String.class), any(String.class));
-//
-//        ResponseEntity<String> response = enrollmentController.confirmEnrollment(1L, "rejected");
-//
-//        assertEquals(200, response.getStatusCodeValue());
-//        assertEquals("Rejection email sent successfully.", response.getBody());
-//    }
-//
+    @Test
+    void testConfirmEnrollmentRejected() throws MessagingException {
+        when(enrolledStudentService.get(1L)).thenReturn(student);
+        doNothing().when(emailService).sendMail
+                (any(String.class), any(String.class), any(String.class));
+
+        ResponseEntity<String> response =
+                enrollmentController.confirmEnrollment(1L, "rejected");
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Rejection email sent successfully.", response.getBody());
+    }
+
+
+    //
 //    @Test
 //    void testConfirmEnrollmentStudentNotFound() {
 //        when(enrolledStudentService.get(1L)).thenReturn(null);
