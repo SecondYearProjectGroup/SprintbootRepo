@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+
 @Setter
+@Getter
 @Entity
 public class Submission {
 
@@ -26,12 +27,6 @@ public class Submission {
     private LocalDateTime lastModified;
     private LocalDateTime deadlineToReview;
 
-    //Submissions
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    @JsonIgnore
-    private ConfirmedStudent confirmedStudent;
-
     //Examiners who is assigned to submissions
     @ManyToMany
     @JoinTable(
@@ -43,15 +38,20 @@ public class Submission {
     @JsonManagedReference("submissions-examiners")
     private List<Examiner> examiners = new ArrayList<>();
 
-    //To have the relationship with the feedback entity
-    @OneToMany(mappedBy = "submission" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Feedback> feedbacks = new ArrayList<>();
+    //Submissions related to a specific student
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    @JsonIgnore
+    private ConfirmedStudent confirmedStudent;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "tile_id")
     @JsonIgnore
     private Tile tile;
+
+    @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedbacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL)
     @JsonManagedReference("submission-fileMetadatas")
@@ -69,4 +69,6 @@ public class Submission {
         fileMetadata.setSubmission(null);
     }
 
+    // Methods to add/remove file metadata
 }
+
