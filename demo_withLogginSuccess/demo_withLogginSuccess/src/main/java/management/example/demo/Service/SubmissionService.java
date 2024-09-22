@@ -40,6 +40,7 @@ public class SubmissionService  {
     public Submission saveSubmissionsParameters(Submission submission){
         return submissionRepository.save(submission);
     }
+
     //Upload the file (report)
     public void saveSubmission(Submission submission, @RequestParam("file")MultipartFile file){
         List<String> attachmentData = fileUploadService.uploadFile(file);
