@@ -86,12 +86,12 @@ public class EnrolledStudentService {
         confirmedStudent.setContactNumber(user_.getContactNumber());
         confirmedStudent.setEmail(user_.getEmail());
         confirmedStudent.setAddress(user_.getAddress());
-        confirmedStudent.setUniversity(user_.getUniversity());
-        confirmedStudent.setFromDate(user_.getFromDate());
-        confirmedStudent.setToDate(user_.getToDate());
-        confirmedStudent.setDegree(user_.getDegree());
-        confirmedStudent.setField(user_.getField());
-        confirmedStudent.setClassPass(user_.getClassPass());
+//        confirmedStudent.setUniversity(user_.getUniversity());
+//        confirmedStudent.setFromDate(user_.getFromDate());
+//        confirmedStudent.setToDate(user_.getToDate());
+//        confirmedStudent.setDegree(user_.getDegree());
+//        confirmedStudent.setField(user_.getField());
+//        confirmedStudent.setClassPass(user_.getClassPass());
         confirmedStudent.setPublications(user_.getPublications());
         confirmedStudent.setProgramOfStudy(user_.getProgramOfStudy());
         confirmedStudent.setStatus("Provincial Registered");

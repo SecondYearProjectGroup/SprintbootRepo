@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,6 +94,29 @@ public class ProfileController {
         response.put("message", message);
 
         return ResponseEntity.ok(response);
+    }
+
+    //To search the user by email
+    @GetMapping("/search/{email}")
+    public ResponseEntity<Boolean> returnUserByEmail(@PathVariable String email){
+        try {
+            profileService.searchByEmail(email); // If user exists, this will succeed
+            return ResponseEntity.ok(true);   // Return true if user exists
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.ok(false);  // Return false if user not found
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestParam String email, @RequestParam String newPassword) {
+        try {
+            profileService.changePassword(email, newPassword);
+            return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
+        } catch (UsernameNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while changing the password.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
