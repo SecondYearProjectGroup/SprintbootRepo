@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
-    @Autowired
-    private ConfirmedStudentService confirmedStudentService;
 
     @Autowired
     private FeedbackRepository feedbackRepository;

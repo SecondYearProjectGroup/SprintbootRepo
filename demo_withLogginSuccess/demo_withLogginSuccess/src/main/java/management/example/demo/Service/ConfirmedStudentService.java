@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +40,8 @@ public class ConfirmedStudentService {
 
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private FeedbackService feedbackService;
 
 
     public List<ConfirmedStudent> listAll() {
@@ -143,32 +142,84 @@ public class ConfirmedStudentService {
 
     //Assign Examiners to each student's report submissions
     public List<Examiner> assignExaminers(Long submissionId, List<Long> examinerIds) {
-        System.out.println("Come in tile id:" + submissionId);
         Optional<Submission> submissionOpt = submissionRepository.findById(submissionId);
 
         if (submissionOpt.isPresent()) {
             Submission submission = submissionOpt.get();
 
-            //Iterate over the list of examiner ids, find each examiner and assign them
+            // Get the previously assigned examiners (might be empty)
+            List<Examiner> previouslyAssignedExaminers = submission.getExaminers();
+            for (Examiner examiner: previouslyAssignedExaminers){
+                System.out.println(examiner.getFullName());
+            }
+
+            if (previouslyAssignedExaminers == null) {
+                previouslyAssignedExaminers = new ArrayList<>();
+            }
+
             for (Long examinerId : examinerIds) {
                 Optional<Examiner> examinerOpt = examinerRepository.findById(examinerId);
                 if (examinerOpt.isPresent()) {
                     Examiner examiner = examinerOpt.get();
-                    submission.getExaminers().add(examiner);
 
-                    //Get the list of submissions assigned to the examiners
-                    //Add the newly added submission to the existing list of submissions
-                    //Save them
-                    List<Submission> submissions = examiner.getSubmissions();
-                    submissions.add(submission);
-                    examinerRepository.save(examiner);
+                    // Only assign if this examiner is not already assigned
+                    if (!previouslyAssignedExaminers.contains(examiner)) {
+                        submission.getExaminers().add(examiner);
+
+                        // Add the submission to the examiner's list
+                        List<Submission> submissions = examiner.getSubmissions();
+                        submissions.add(submission);
+                        examinerRepository.save(examiner);
+
+
+                        //Send mails to the examiners to informing the submission assignment
+                        String toEmail = examiner.getEmail();
+                        String subject = "You have been assigned as an examiner for a new submission";
+                        String body = String.format(
+                                "Dear %s,\n\n" +
+                                        "We are pleased to inform you that you have been assigned as an examiner for a new submission in our system. The details of the submission are as follows:\n\n" +
+                                        "Submission Title: %s\n" +
+                                        "Submission ID: %d\n" +
+                                        //                            "Student RegNumber: %s\n" +
+                                        //                            "Student Name: %s\n\n"  +
+                                        "Please access the submission through the system at your earliest convenience. Your timely feedback is crucial for the student's progress and will be highly appreciated.\n\n" +
+                                        "Best regards,\n" +
+                                        "Post Graduate Studies,\n" +
+                                        "Department of Computer Engineering,UOP\n",
+                                examiner.getFullName(),
+                                submission.getTitle(),
+                                submission.getTile().getId()
+                                //confirmedStudent.getRegNumber(),
+                                //confirmedStudent.getFullName()
+                        );
+
+                        //Send the emails to examiners
+                        emailService.sendMail(toEmail, subject, body);
+                        //Push the  notifications
+                        String notificationBody = "You have been assigned as an examiner for a new submission";
+                        Optional<User> userExaminer = userService.findById(examiner.getId());
+                        User user = userExaminer.get();
+                        notificationService.sendNotification(user, subject, notificationBody);
+
+                        //Forming the feedback forms
+                        Feedback feedback = new Feedback();
+                        feedback.setSubmission(submission);
+                        feedback.setType("final");
+                        feedback.setExaminer(examiner);
+                        feedback.setConfirmedStudent(submission.getConfirmedStudent());
+                        feedbackService.saveForum(feedback);
+                    }
+
                 }
             }
+
             return submission.getExaminers();
         }
-        // Handle the case where the submission is not found.
+
+        // Handle the case where the submission is not found
         return Collections.emptyList();
     }
+
 
     //Find the students by the submission id
     public ConfirmedStudent findConfirmedStudentBySubmissionID(Long submissionId){
