@@ -63,6 +63,45 @@ public class FileService {
         }
     }
 
+    //Upload a file and return the filemetadata object
+    public FileMetadata uploadFileAndReturnFileMetadata(MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("Please select a file to upload");
+        }
+
+        try {
+            // Generate a unique identifier for the file
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+            // Read the contents of the uploaded file into a byte array
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(uploadDir + uniqueFileName);
+
+            // Write the byte array to the specified path on the server
+            Files.write(path, bytes);
+
+            // Create and save the file metadata
+            FileMetadata fileMetadata = new FileMetadata();
+            fileMetadata.setFileName(uniqueFileName);  // Set the unique file name
+            fileMetadata.setOriginalFileName(file.getOriginalFilename());  // Set the original file name
+            fileMetadata.setFileType(file.getContentType());
+            fileMetadata.setFileSize(file.getSize());
+            fileMetadata.setUploadDate(LocalDateTime.now().toString());
+
+            // Save file metadata in the database
+            fileMetadataRepository.save(fileMetadata);
+
+            // Return the FileMetadata object
+            return fileMetadata;
+
+        } catch (IOException e) {
+            // Log the exception and throw a more meaningful message
+            e.printStackTrace();
+            throw new IllegalStateException("File upload failed. Please try again.");
+        }
+    }
+
+
 
 
     // Method to download the file

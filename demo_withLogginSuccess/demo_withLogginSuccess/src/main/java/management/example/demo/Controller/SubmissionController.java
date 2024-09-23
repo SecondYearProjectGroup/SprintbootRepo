@@ -56,6 +56,7 @@ public class SubmissionController {
         return fileMetadataDtos;
     }
 
+    //Delete the examiners who are assign to a submission
     @DeleteMapping("/examiners/{submissionId}/{examinerId}")
     public ResponseEntity<Void> deleteExaminer(
             @PathVariable Long submissionId,

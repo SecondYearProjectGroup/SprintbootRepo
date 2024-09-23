@@ -338,6 +338,16 @@ public class AdminController {
         return enrolledStudentService.listAll();
     }
 
+    @GetMapping("/enrolledstu/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        Optional<Student> studentOpt = enrolledStudentService.findById(id);
+        if (studentOpt.isPresent()) {
+            return new ResponseEntity<>(studentOpt.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     //List all confirmedStudents to admin
     @GetMapping("/students")
     public List<ConfirmedStudent> getAllConfirmedStudents(){
