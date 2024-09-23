@@ -11,6 +11,7 @@ import management.example.demo.Service.FileService;
 import management.example.demo.Service.NotificationService;
 import management.example.demo.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,36 +52,34 @@ public class StudentController {
 
         System.out.println("Received student data: " + student);
 
-        // Process the student data
-        if (student.getEducationalQualifications() == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Educational qualifications must not be null"));
-        }
+        // Validate educational qualifications
         List<EducationalQualification> qualifications = student.getEducationalQualifications();
-        System.out.println(qualifications);
+        if (qualifications == null || qualifications.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Educational qualifications must not be null or empty"));
+        }
 
-        int attachmentIndex = 0; // To track attachment file index
+        // Validate attachments count
+        if (attachments.size() < qualifications.size()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Not enough attachments provided for the qualifications"));
+        }
 
         // Iterate over each qualification and its corresponding attachments
-        for (EducationalQualification qualification : qualifications) {
+        for (int i = 0; i < qualifications.size(); i++) {
+            EducationalQualification qualification = qualifications.get(i);
+            MultipartFile attachment = attachments.get(i);
+
+            // Initialize list to hold attachments for the qualification
             List<FileMetadata> qualificationAttachments = new ArrayList<>();
 
-            // Assuming that each qualification can have multiple attachments
-            while (attachmentIndex < attachments.size()) {
-                MultipartFile attachment = attachments.get(attachmentIndex);
-
-                // Handle file upload for each attachment
-                if (!attachment.isEmpty()) {
-                    List<String> attachmentData = fileUploadService.uploadFile(attachment);
-
-                    // Create a new FileMetadata object for each uploaded file
-                    FileMetadata fileMetadata = new FileMetadata();
-                    fileMetadata.setFileName(attachmentData.get(0)); // Uploaded file path
-                    fileMetadata.setOriginalFileName(attachmentData.get(1)); // Original file name
-
+            if (!attachment.isEmpty()) {
+                try {
+                    // Upload the attachment and retrieve metadata
+                    FileMetadata fileMetadata = fileUploadService.uploadFileAndReturnFileMetadata(attachment);
                     qualificationAttachments.add(fileMetadata);
+                } catch (Exception e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(Map.of("error", "Failed to upload attachments. Please try again."));
                 }
-
-                attachmentIndex++; // Move to the next file
             }
 
             // Set the uploaded attachments to the qualification

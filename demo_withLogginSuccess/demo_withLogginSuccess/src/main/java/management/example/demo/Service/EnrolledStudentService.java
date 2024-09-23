@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -34,6 +35,10 @@ public class EnrolledStudentService {
 
     public List<Student> listAll() {
         return studentRepository.findAll();
+    }
+
+    public Optional<Student> findById(Long id){
+        return studentRepository.findById(id);
     }
 
     public Student get(long id){
