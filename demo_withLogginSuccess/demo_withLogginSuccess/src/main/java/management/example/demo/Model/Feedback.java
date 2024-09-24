@@ -15,6 +15,7 @@ public class Feedback {
     private Long id;
 
     private String body;
+    private String originalFileName;
     private String fileName;
     private String type;
 
@@ -25,7 +26,6 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "examiner_id")
-    @JsonIgnore
     private Examiner examiner;
 
     @ManyToOne
