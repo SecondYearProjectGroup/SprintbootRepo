@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
-    @Autowired
-    private ConfirmedStudentService confirmedStudentService;
 
     @Autowired
     private FeedbackRepository feedbackRepository;
@@ -84,9 +82,10 @@ public class FeedbackService {
             feedback.setBody(body);
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
-                feedback.setFileName(fileName);
                 //To handle the fileMetadata
-                fileService.uploadFile(file);
+                List<String> uploadedFileDetails = fileService.uploadFile(file);
+                feedback.setFileName(uploadedFileDetails.get(0));
+                feedback.setOriginalFileName(uploadedFileDetails.get(1));
             }
             return feedbackRepository.save(feedback);
         } else {

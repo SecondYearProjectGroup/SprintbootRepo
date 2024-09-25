@@ -74,8 +74,7 @@ public class AdminController {
     private FileService fileService;
     @Autowired
     private VivaService vivaService;
-    @Autowired
-    private FeedbackService feedbackService;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -230,45 +229,7 @@ public class AdminController {
 
         List<Examiner> examiners = confirmedStudentService.assignExaminers(submissionId, examinerIds);
 
-        //Send mails to the examiners to informing the submission assignment
-        for (Examiner examiner : examiners) {
-            String toEmail = examiner.getEmail();
-            String subject = "You have been assigned as an examiner for a new submission";
-            String body = String.format(
-                    "Dear %s,\n\n" +
-                            "We are pleased to inform you that you have been assigned as an examiner for a new submission in our system. The details of the submission are as follows:\n\n" +
-                            "Submission Title: %s\n" +
-                            "Submission ID: %d\n" +
-//                            "Student RegNumber: %s\n" +
-//                            "Student Name: %s\n\n"  +
-                            "Please access the submission through the system at your earliest convenience. Your timely feedback is crucial for the student's progress and will be highly appreciated.\n\n" +
-                            "Best regards,\n" +
-                            "Post Graduate Studies,\n" +
-                            "Department of Computer Engineering,UOP\n",
-                    examiner.getFullName(),
-                    submission.getTitle(),
-                    submission.getTile().getId()
-                    //confirmedStudent.getRegNumber(),
-                    //confirmedStudent.getFullName()
-            );
 
-            //Send the emails to examiners
-            emailService.sendMail(toEmail,subject,body);
-            //Push the  notifications
-            String notificationBody = "You have been assigned as an examiner for a new submission";
-            Optional<User> userExaminer =  userService.findById(examiner.getId());
-            User user = userExaminer.get();
-            notificationService.sendNotification(user, subject, notificationBody);
-
-            //Forming the feedback forms
-            Feedback feedback = new Feedback();
-            feedback.setSubmission(submission);
-            feedback.setType("final");
-            feedback.setExaminer(examiner);
-            feedback.setConfirmedStudent(submission.getConfirmedStudent());
-            feedbackService.saveForum(feedback);
-
-        }
         return ResponseEntity.ok("Examiners assigned successfully.");
     }
 

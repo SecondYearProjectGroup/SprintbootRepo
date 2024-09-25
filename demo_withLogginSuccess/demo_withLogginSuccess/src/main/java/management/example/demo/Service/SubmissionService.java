@@ -3,6 +3,7 @@ package management.example.demo.Service;
 import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.Model.FileMetadata;
 import management.example.demo.Model.Submission;
+import management.example.demo.Repository.FeedbackRepository;
 import management.example.demo.Repository.SubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class SubmissionService  {
 
     @Autowired
     private ExaminerService examinerService;
+    @Autowired
+    FeedbackRepository feedbackRepository;
 
     public Submission get(Long id){
         return submissionRepository.findById(id).get();
@@ -56,6 +59,7 @@ public class SubmissionService  {
 
     public void deleteExaminerFromSubmission(Long submissionId, Long examinerId) {
         submissionRepository.removeExaminerFromSubmission(submissionId, examinerId);
+        feedbackRepository.deleteBySubmissionIdAndExaminerId(submissionId, examinerId);
     }
 
 
