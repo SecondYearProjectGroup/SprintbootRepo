@@ -1,9 +1,7 @@
 package management.example.demo.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,5 +24,9 @@ public class Examiner {
     //@JsonBackReference("examiners-submissions")
     @JsonIgnore
     private List<Submission> submissions;
+
+    @OneToMany(mappedBy = "examiner" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Feedback> feedbacks;
 
 }
