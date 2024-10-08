@@ -1,5 +1,6 @@
 package management.example.demo.Service;
 
+import jakarta.transaction.Transactional;
 import management.example.demo.Model.Feedback;
 import management.example.demo.Model.Submission;
 import management.example.demo.Repository.FeedbackRepository;
@@ -62,10 +63,11 @@ public class FeedbackService {
             Feedback feedback = feedbackOpt.get();
             feedback.setBody(body);
             if (!file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
-                feedback.setFileName(fileName);
-                //To handle the fileMetadata
-                fileService.uploadFile(file);
+                    //String fileName = file.getOriginalFilename();
+                    //To handle the fileMetadata
+                    List<String> uploadedFileDetails = fileService.uploadFile(file);
+                    feedback.setFileName(uploadedFileDetails.get(0));
+                    feedback.setOriginalFileName(uploadedFileDetails.get(1));
             }
             return feedbackRepository.save(feedback);
         } else {
@@ -75,17 +77,20 @@ public class FeedbackService {
 
 
     // To update the Supervisor feedback
+    @Transactional
     public Feedback updateSupervisorFeedback(Long submissionId, String body, MultipartFile file) throws IOException {
         Optional<Feedback> feedbackOpt = feedbackRepository.findBySubmissionId(submissionId);
         if (feedbackOpt.isPresent()){
             Feedback feedback = feedbackOpt.get();
             feedback.setBody(body);
             if (!file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
+                //String fileName = file.getOriginalFilename();
                 //To handle the fileMetadata
                 List<String> uploadedFileDetails = fileService.uploadFile(file);
-                feedback.setFileName(uploadedFileDetails.get(0));
-                feedback.setOriginalFileName(uploadedFileDetails.get(1));
+                System.out.println(uploadedFileDetails.get(0));
+                System.out.println(uploadedFileDetails.get(1));
+                feedback.setFileName(uploadedFileDetails.get(1));
+                feedback.setOriginalFileName(uploadedFileDetails.get(0));
             }
             return feedbackRepository.save(feedback);
         } else {
