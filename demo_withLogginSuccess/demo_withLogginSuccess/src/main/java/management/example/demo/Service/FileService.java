@@ -41,6 +41,9 @@ public class FileService {
             Path path = Paths.get(uploadDir + uniqueFileName);
             // writes the byte array to the specified path on the server
             Files.write(path, bytes);
+
+            String fileDownloadUrl = "http://localhost:8080/download?file=" + uniqueFileName;
+
             String filePath = path.toString();
 
             // To save the file data into the database
@@ -63,7 +66,7 @@ public class FileService {
         }
     }
 
-    //Upload a file and return the filemetadata object
+    //Upload a file and return the fileMetadata object
     public FileMetadata uploadFileAndReturnFileMetadata(MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("Please select a file to upload");

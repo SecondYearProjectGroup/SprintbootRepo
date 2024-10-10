@@ -10,16 +10,14 @@ import management.example.demo.Service.EmailService;
 import management.example.demo.Service.FileService;
 import management.example.demo.Service.NotificationService;
 import management.example.demo.Service.StudentService;
+import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class StudentController {
@@ -106,15 +104,32 @@ public class StudentController {
         // Save the student with the associated qualifications and attachments
         studentService.saveStudent(student);
 
-        // Send an email notification to the admin
-        String toEmail = "admin@example.com";
-        String subject = "New Student Enrollment";
-        String body = "A new student has enrolled: " + student.getFullName();
-        emailService.sendMail(toEmail, subject, body);
+        // Find the admin user by role
+        Role adminRole = Role.ADMIN;  // Assuming you have an enum for roles
+        Optional<User> adminUserOptional = userRepository.findByRolesContaining(adminRole);
 
-        // Send a notification to the admin user
-        User adminUser = userRepository.findByUsername("e20197");
-        notificationService.sendNotification(adminUser, subject, body);
+        if (adminUserOptional.isPresent()) {
+            User adminUser = adminUserOptional.get();
+
+            // Get admin email and username
+            String adminEmail = adminUser.getEmail();
+            String adminUsername = adminUser.getUsername();
+
+            // Send an email notification to the admin
+            String templateName = "Enrollment Notification";
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("studentName", student.getFullName());
+            emailService.sendEmail(templateName, variables, adminEmail);
+
+            // Send a notification to the admin user
+            String subject = "New Student Enrollment";
+            String body = "A new student has enrolled: " + student.getFullName();
+            notificationService.sendNotification(adminUser, subject, body);
+        } else {
+            // Handle case where no admin user is found
+            System.out.println("Admin user not found.");
+        }
+
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Student enrolled successfully!");
