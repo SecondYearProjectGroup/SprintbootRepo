@@ -45,6 +45,10 @@ public class EnrolledStudentService {
         return studentRepository.findById(id).get();
     }
 
+    public Student save(Student student){
+        return studentRepository.save(student);
+    }
+
     public void delete(long id){
         studentRepository.deleteById(id);
     }
@@ -86,6 +90,7 @@ public class EnrolledStudentService {
 
         confirmedStudent.setRegNumber("PG_" + user_.getProgramOfStudy() + "_" + ((LocalDate.now().getYear())%100) + "_" + formattedCount);
 
+        confirmedStudent.setRegistrationNumber(user_.getRegistrationNumber());
         confirmedStudent.setNameWithInitials(user_.getNameWithInitials());
         confirmedStudent.setFullName(user_.getFullName());
         confirmedStudent.setContactNumber(user_.getContactNumber());
@@ -99,7 +104,8 @@ public class EnrolledStudentService {
 //        confirmedStudent.setClassPass(user_.getClassPass());
         confirmedStudent.setPublications(user_.getPublications());
         confirmedStudent.setProgramOfStudy(user_.getProgramOfStudy());
-        confirmedStudent.setStatus("Provincial Registered");
+        confirmedStudent.setStatus(user_.getStatus());
+        confirmedStudent.setRegisteredDate(user_.getRegisteredDate());
 
         //Save the approved student service in the User entity
         Set<Role> roles = new HashSet<>();

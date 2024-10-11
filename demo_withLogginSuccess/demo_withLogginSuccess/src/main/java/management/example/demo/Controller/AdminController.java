@@ -109,7 +109,7 @@ public class AdminController {
         }
 
         //Handle the APPROVED action
-        if ("Approved".equalsIgnoreCase(action)) {
+        if ("Enrolled".equalsIgnoreCase(action)) {
             ConfirmedStudent confirmedStudent = enrolledStudentService.saveStudent(student);
 
             //Set the details to the send the email
@@ -126,7 +126,7 @@ public class AdminController {
             emailService.sendEmailWithAttachment(toEmail, subject, body);
 
             //Set the status of the student as "Approved" in the student table
-            student.setStatus("Approved");
+            student.setRegistrationStatus("Enrolled");
             studentRepository.save(student);
 
             //Display the message
@@ -134,9 +134,9 @@ public class AdminController {
         }
 
         //Handle the REJECT action
-        else if ("Rejected".equalsIgnoreCase(action)) {
+        else if ("Cancelled".equalsIgnoreCase(action)) {
             //Set the status of the student as "Rejected" in the student table
-            student.setStatus("Rejected");
+            student.setRegistrationStatus("Cancelled");
             studentRepository.save(student);
             String toEmail = student.getEmail();
             String subject = "Your enrollment is rejected";
@@ -299,11 +299,41 @@ public class AdminController {
         return enrolledStudentService.listAll();
     }
 
+    //Get the enrolledStudent by id
     @GetMapping("/enrolledstu/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         Optional<Student> studentOpt = enrolledStudentService.findById(id);
         if (studentOpt.isPresent()) {
             return new ResponseEntity<>(studentOpt.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Update enrolledStudent details by id
+    @PutMapping("/enrolledstu/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student updatedStudent) {
+        Optional<Student> studentOpt = enrolledStudentService.findById(id);
+
+        if (studentOpt.isPresent()) {
+            Student student = studentOpt.get();
+
+            // Directly assign the fields from the updatedStudent to the existing student
+            if (updatedStudent.getRegistrationNumber() != null) {
+                student.setRegistrationNumber(updatedStudent.getRegistrationNumber()); // Ensure this is of type Date
+            }
+            if (updatedStudent.getRegisteredDate() != null) {
+                student.setRegisteredDate(updatedStudent.getRegisteredDate()); // Ensure this is of type Date
+            }
+            student.setNameWithInitials(updatedStudent.getNameWithInitials());
+            student.setFullName(updatedStudent.getFullName());
+            student.setEmail(updatedStudent.getEmail());
+            student.setContactNumber(updatedStudent.getContactNumber());
+            student.setStatus(updatedStudent.getStatus());
+            // ... repeat for other fields
+
+            enrolledStudentService.save(student);
+            return new ResponseEntity<>(student, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
