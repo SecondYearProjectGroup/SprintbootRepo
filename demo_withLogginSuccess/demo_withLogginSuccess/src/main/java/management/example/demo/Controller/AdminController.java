@@ -239,7 +239,7 @@ public class AdminController {
     @PostMapping("/setDeadline/{tileId}")
     public ResponseEntity<String> setDeadline( @PathVariable(name = "tileId") Long  tileId,
                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime deadline,
-                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime opendate) {
+                                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime opendate) throws MessagingException {
         Submission submission = submissionService.get(tileId);
         if (submission == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Submission not found");
@@ -254,16 +254,22 @@ public class AdminController {
         ConfirmedStudent confirmedStudent = submission.getConfirmedStudent();
         String toEmail = confirmedStudent.getEmail();
         String subject = "Deadline Set for Submission of Progress Reports";
-        String body = String.format(
-                "This is a reminder that the deadline for submitting your progress reports has been set.\n\n" +
-                        "Deadline: %s \n \n" +
-                        "Please ensure that your reports are submitted by the specified deadline. " +
-                        "Late submissions may not be accepted or could result in a penalty," +
-                        "Complete and upload your reports on time." +
-                        "If you have any questions or need further clarification, please don't hesitate to reach out your supervisor."
-                        , submission.getDeadline()
-        );
-        emailService.sendMail(toEmail, subject, body);
+//        String body = String.format(
+//                "This is a reminder that the deadline for submitting your progress reports has been set.\n\n" +
+//                        "Deadline: %s \n \n" +
+//                        "Please ensure that your reports are submitted by the specified deadline. " +
+//                        "Late submissions may not be accepted or could result in a penalty," +
+//                        "Complete and upload your reports on time." +
+//                        "If you have any questions or need further clarification, please don't hesitate to reach out your supervisor."
+//                        , submission.getDeadline()
+//        );
+        //emailService.sendMail(toEmail, subject, body);
+        // Prepare the variables for the template
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("deadline", submission.getDeadline().toString());
+
+        // Send the email using the template
+        emailService.sendEmail("Submission Deadline Reminder", variables, toEmail);
         /////////////////////////////////
         //Generate the Notifications for the students
         //Get the userId from the student registration number
@@ -562,24 +568,30 @@ public class AdminController {
         viva.setVivaDate(deadline);
         vivaService.saveViva(viva);
 
-        ////////////////////////////////
-        //Generate the Email Notifications for the students
-        ConfirmedStudent confirmedStudent = viva.getConfirmedStudent();
-        String toEmail = confirmedStudent.getEmail();
-        String subject = "Year-End Evaluation Viva Scheduled";
-        String body = String.format(
-                "This is a reminder that your year end evaluations viva has been scheduled.\n\n" +
-                        "Date: %s \n \n" +
-                        "Please make sure to be prepared and arrive on time. " +
-                        "If you have any questions or need further information, feel free to reach out. "
-                , viva.getVivaDate()
-        );
-        emailService.sendMail(toEmail, subject, body);
-        /////////////////////////////////
+        ////////////////////////////
+        // Generate the Email Notifications for the students
+                ConfirmedStudent confirmedStudent = viva.getConfirmedStudent();
+                String toEmail = confirmedStudent.getEmail();
+                String templateName = "yearEndEvaluationReminder"; // The name of your email template
+
+        // Prepare variables for the template
+                Map<String, Object> variables = new HashMap<>();
+                variables.put("date", viva.getVivaDate()); // Add any additional variables you may need
+
+        // Send the email using the sendEmail method
+                try {
+                    emailService.sendEmail(templateName, variables, toEmail);
+                } catch (MessagingException e) {
+                    // Handle the exception (log it, notify someone, etc.)
+                    e.printStackTrace();
+                }
+        /////////////////////////////
+
         //Generate the Notifications for the students
         //Get the userId from the student registration number
         User user = userService.findByUsername(confirmedStudent.getRegNumber());
         String notificationBody = "Your year end evaluations viva has been scheduled";
+        String subject = "Year-End Evaluation Viva Scheduled";
         notificationService.sendNotification(user, subject, notificationBody);
         /////////////////////////////////
         //To add the viva date to the student calendar
@@ -612,14 +624,22 @@ public class AdminController {
         //Generate the Email Notifications for the students
         List<Examiner> examiners = submission.getExaminers();
         for (Examiner examiner: examiners){
+            // Get the examiner's email and the deadline
             String toEmail = examiner.getEmail();
-            String subject = "Reminder to Review Assigned Student Reports";
-            String body = String.format(
-                    "Please be kind enough to provide feedback or examine the assigned reports " +
-                            "within the given time period. The deadline for submission is  %s \n \n"
-                    , submission.getDeadlineToReview()
-            );
-            emailService.sendMail(toEmail, subject, body);
+            String templateName = "reminderToReviewReports"; // Name of your email template
+
+            // Prepare variables for the template
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("deadline", submission.getDeadlineToReview()); // Add deadline to the variables
+
+            // Send the email using the sendEmail method
+            try {
+                emailService.sendEmail(templateName, variables, toEmail);
+            } catch (MessagingException e) {
+                // Handle the exception (log it, notify someone, etc.)
+                e.printStackTrace();
+            }
+
             /////////////////////////////////
             //Generate the Notifications for the students
             //Get the userId from the student registration number
@@ -630,6 +650,7 @@ public class AdminController {
                             "within the given time period. The deadline for submission is  %s \n \n"
                     , submission.getDeadlineToReview()
             );
+            String subject = "Reminder to Review Assigned Student Reports";
             notificationService.sendNotification(user, subject, notificationBody);
             /////////////////////////////////
         }

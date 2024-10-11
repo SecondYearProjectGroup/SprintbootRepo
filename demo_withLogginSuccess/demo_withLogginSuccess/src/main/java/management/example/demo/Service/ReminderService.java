@@ -8,6 +8,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,12 +44,18 @@ public class ReminderService {
                 // Calculate one month and one week before the deadline
                 LocalDateTime oneMonthBefore = deadline.minusMonths(1);
                 LocalDateTime oneWeekBefore = deadline.minusWeeks(1);
+                LocalDateTime oneDayBefore = deadline.minusDays(1);
+                LocalDateTime oneHourBefore = deadline.minusHours(1);
 
                 // Check if today is one month or one week before the deadline
                 if (now.isAfter(oneMonthBefore) && now.isBefore(oneMonthBefore.plusDays(1))) {
                     sendReminderEmail(submission, "1 Month");
                 } else if (now.isAfter(oneWeekBefore) && now.isBefore(oneWeekBefore.plusDays(1))) {
                     sendReminderEmail(submission, "1 Week");
+                } else if (now.isAfter(oneDayBefore) && now.isBefore(oneDayBefore.plusDays(1))) {
+                    sendReminderEmail(submission, "1 Day");
+                }else if (now.isAfter(oneHourBefore) && now.isBefore(deadline)) {
+                    sendReminderEmail(submission, "1 Hour");
                 }
             }
         }
@@ -71,6 +80,48 @@ public class ReminderService {
         notificationService.sendNotification(user, subject, body);
 
         //Generate the email for the supervisors
+    }
+
+    // Run the task every day at 12 AM
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void sendRegistrationReminders() {
+        List<ConfirmedStudent> students = confirmedStudentService.listAll(); // Implement this method to fetch all registered students
+
+        for (ConfirmedStudent student : students) {
+            Date registrationDate = student.getRegisteredDate();  // Ensure registration date is stored
+            LocalDateTime now = LocalDateTime.now();
+
+            long monthsSinceRegistration = ChronoUnit.MONTHS.between((Temporal) registrationDate, now);
+
+            // Check for specific intervals: 5, 11, 17, 23 months
+            if (monthsSinceRegistration == 5) {
+                sendReminder(student, "5 Months");
+            } else if (monthsSinceRegistration == 11) {
+                sendReminder(student, "11 Months");
+            } else if (monthsSinceRegistration == 17) {
+                sendReminder(student, "17 Months");
+            } else if (monthsSinceRegistration == 23) {
+                sendReminder(student, "23 Months");
+            }
+            // Continue for additional intervals as needed
+        }
+    }
+
+
+    private void sendReminder(ConfirmedStudent student, String timeFrame) {
+        // Generate the email content
+        String toEmail = student.getEmail();
+        String subject = "Reminder: " + timeFrame + " Since Registration";
+        String body = String.format(
+                "This is a reminder that %s have passed since your registration. " +
+                        "Please review your progress and contact your supervisor if needed.\n\n",
+                timeFrame
+        );
+        emailService.sendMail(toEmail, subject, body);
+
+        // Send in-app notification
+        User user = userService.findByUsername(student.getRegNumber());
+        notificationService.sendNotification(user, subject, body);
     }
 }
 

@@ -1,12 +1,15 @@
 package management.example.demo.Controller;
 
+import management.example.demo.Model.EmailTemplate;
 import management.example.demo.Service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/emails")
 public class EmailController {
 
     @Autowired
@@ -18,4 +21,16 @@ public class EmailController {
         emailService.sendMail(toEmail, subject, body);
         return "Email sent successfully!";
     }
+
+    @GetMapping
+    public List<EmailTemplate> getAllTemplates() {
+        return emailService.getAllTemplates();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public EmailTemplate updateTemplate(@PathVariable Long id, @RequestBody EmailTemplate templateDetails) throws Exception {
+        return emailService.updateTemplate(id, templateDetails);
+    }
+
 }
