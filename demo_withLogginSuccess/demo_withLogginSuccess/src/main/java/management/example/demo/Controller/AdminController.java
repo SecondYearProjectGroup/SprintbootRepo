@@ -269,7 +269,7 @@ public class AdminController {
         variables.put("deadline", submission.getDeadline().toString());
 
         // Send the email using the template
-        emailService.sendEmail("submissionDeadlineReminder", variables, toEmail);
+        emailService.sendEmail("Submission Deadline Reminder", variables, toEmail);
         /////////////////////////////////
         //Generate the Notifications for the students
         //Get the userId from the student registration number
