@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -15,6 +16,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String registrationNumber;
     private String nameWithInitials;
     private String fullName;
     private String contactNumber;
@@ -23,6 +25,8 @@ public class Student {
     private String publications;
     private String programOfStudy;
     private String status;
+    private Date registeredDate;
+    private String registrationStatus;
     // New fields for Student ID and Birth Certificate
     private String studentIdDocument;
     private String studentIdDocumentOriginalName;
