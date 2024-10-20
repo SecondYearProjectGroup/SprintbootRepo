@@ -32,9 +32,14 @@ public class EmailController {
 
     //All the default templates' userId has to be admin's id
     //To do
-    @GetMapping
-    public List<EmailTemplate> getAllTemplatesForAdminEdit() {
-        return emailService.getAllTemplatesForAdminAndDefaults();
+    @GetMapping("/forAdmin/{userId}")
+    public List<EmailTemplate> getAllTemplatesForAdminEdit(@PathVariable Long userId) {
+        return emailService.getAllTemplatesForAdminAndDefaults(userId);
+    }
+
+    @GetMapping("/forUser/{userId}")
+    public List<EmailTemplate> getAllTemplatesForUserId(@PathVariable Long userId) {
+        return emailService.getTemplatesUserId(userId);
     }
 
 

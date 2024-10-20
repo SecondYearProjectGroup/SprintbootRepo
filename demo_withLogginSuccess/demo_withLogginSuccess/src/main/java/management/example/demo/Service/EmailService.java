@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import management.example.demo.Model.EmailTemplate;
-import management.example.demo.Model.User;
 import management.example.demo.Repository.EmailTemplateRepository;
 import management.example.demo.Repository.UserRepository;
-import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,7 +17,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
@@ -117,18 +117,8 @@ public class EmailService {
 //    }
 
     //To load all the templates to admin
-    public List<EmailTemplate> getAllTemplatesForAdminAndDefaults() {
-        Role adminRole = Role.ADMIN; // Replace with your actual method of getting Role.ADMIN
-        Optional<User> adminUserOptional = userRepository.findByRolesContaining(adminRole);
-
-        if (adminUserOptional.isPresent()) {
-            Long adminUserId = adminUserOptional.get().getId();
-            // Assuming "default" is the type indicating a default template
-            String defaultType = "default";
-            return emailTemplateRepository.findByUserIdOrType(adminUserId, defaultType);
-        }
-
-        return Collections.emptyList(); // or handle it differently if no admin user is found
+    public List<EmailTemplate> getAllTemplatesForAdminAndDefaults(Long userId) {
+            return emailTemplateRepository.findByUserIdOrType(userId, "default");
     }
 
 //    public List<EmailTemplate> getAllTemplatesForAdmin() {
@@ -147,6 +137,11 @@ public class EmailService {
     public EmailTemplate getTemplateById(Long id) throws Exception {
         return emailTemplateRepository.findById(id).orElseThrow(() -> new Exception("Template not found"));
     }
+
+    public List<EmailTemplate> getTemplatesUserId(Long userId) {
+        return emailTemplateRepository.findByUserId(userId);
+    }
+
 
     public EmailTemplate updateTemplate(Long id, EmailTemplate templateDetails) throws Exception {
         EmailTemplate template = getTemplateById(id);
