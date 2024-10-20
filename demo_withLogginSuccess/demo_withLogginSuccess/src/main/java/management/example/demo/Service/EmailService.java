@@ -1,9 +1,14 @@
 package management.example.demo.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import management.example.demo.Model.EmailTemplate;
+import management.example.demo.Model.User;
 import management.example.demo.Repository.EmailTemplateRepository;
+import management.example.demo.Repository.UserRepository;
+import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,8 +19,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class EmailService {
@@ -28,6 +32,8 @@ public class EmailService {
 
     @Autowired
     private TemplateEngine stringTemplateEngine;
+    @Autowired
+    private UserRepository userRepository;
 
     // Simple Email
     public void sendMail(String toEmail, String subject, String body){
@@ -105,10 +111,38 @@ public class EmailService {
 
 
 
+
+//    public List<EmailTemplate> getAllTemplates() {
+//        return emailTemplateRepository.findAll();
+//    }
+
     //To load all the templates to admin
-    public List<EmailTemplate> getAllTemplates() {
-        return emailTemplateRepository.findAll();
+    public List<EmailTemplate> getAllTemplatesForAdminAndDefaults() {
+        Role adminRole = Role.ADMIN; // Replace with your actual method of getting Role.ADMIN
+        Optional<User> adminUserOptional = userRepository.findByRolesContaining(adminRole);
+
+        if (adminUserOptional.isPresent()) {
+            Long adminUserId = adminUserOptional.get().getId();
+            // Assuming "default" is the type indicating a default template
+            String defaultType = "default";
+            return emailTemplateRepository.findByUserIdOrType(adminUserId, defaultType);
+        }
+
+        return Collections.emptyList(); // or handle it differently if no admin user is found
     }
+
+//    public List<EmailTemplate> getAllTemplatesForAdmin() {
+//        // Assuming Role.ADMIN is an enum and you have a way to get the Role entity
+//        Role adminRole = Role.ADMIN; // Replace with your actual way of getting Role.ADMIN
+//        Optional<User> adminUserOptional = userRepository.findByRolesContaining(adminRole);
+//
+//        if (adminUserOptional.isPresent()) {
+//            Long adminUserId = adminUserOptional.get().getId();
+//            return emailTemplateRepository.findByUserId(adminUserId);
+//        }
+//
+//        return Collections.emptyList(); // or throw an exception if no admin user is found
+//    }
 
     public EmailTemplate getTemplateById(Long id) throws Exception {
         return emailTemplateRepository.findById(id).orElseThrow(() -> new Exception("Template not found"));
@@ -120,6 +154,29 @@ public class EmailService {
         template.setSubject(templateDetails.getSubject());
         template.setBody(templateDetails.getBody());
         return emailTemplateRepository.save(template);
+    }
+
+    public EmailTemplate addNewTemplate(EmailTemplate emailTemplate){
+        return emailTemplateRepository.save(emailTemplate);
+    }
+
+    //Send mail with the template and provided email address
+    public void sendEmailWithGivenDetailsToStudents(EmailTemplate emailTemplate, List<String> emails) throws MessagingException {
+        for (String email: emails){
+            Map<String, Object> variables = new HashMap<>();
+            sendEmail(emailTemplate.getName(), variables, email.toString());
+        }
+    }
+
+    public void sendEmailWithGivenDetails(Map<String, Object> payload) throws MessagingException {
+        EmailTemplate emailTemplate = new ObjectMapper().convertValue(payload.get("template"), EmailTemplate.class);
+        List<String> emails = new ObjectMapper().convertValue(payload.get("emails"), new TypeReference<List<String>>(){});
+
+        for (String email : emails) {
+            Map<String, Object> variables = new HashMap<>();
+            sendEmail(emailTemplate.getName(), variables, email);
+            System.out.println("Sending email to: " + email);  // Debugging log
+        }
     }
 
 

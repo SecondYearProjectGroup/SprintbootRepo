@@ -38,9 +38,9 @@ public class ExaminerController {
     }
 
     //Get all the final submissions for examiners
-    @GetMapping("/sections/examiners/{regNumber}/{tab}")
-    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab, String tileType) {
-        List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumberAndTabForExaminers(regNumber, tab, "finalSubmission");
+    @GetMapping("/sections/examiners/{regNumber}/{tab}/{examinerId}")
+    public ResponseEntity<List<ConfirmedStudentSections>> getSectionsByRegNumberAndTab(@PathVariable String regNumber, @PathVariable String tab, String tileType, @PathVariable Long examinerId) {
+        List<ConfirmedStudentSections> sections = confirmedStudentSectionsService.getSectionsByRegNumberAndTabForExaminers(regNumber, tab, "finalSubmission" , examinerId);
         return ResponseEntity.ok(sections);
     }
 }

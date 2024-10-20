@@ -20,6 +20,8 @@ public class EmailTemplate {
     @Column(columnDefinition = "LONGTEXT")
     private String body;
 
+    private Long userId;
+    private String type;
     // Getters and Setters
 
 }

@@ -27,7 +27,8 @@ public class ConfirmedStudentSectionsService {
         return confirmedStudentSectionsRepository.findByRegNumberAndActiveTab(regNumber, tab);
     }
 
-    public List<ConfirmedStudentSections> getSectionsByRegNumberAndTabForExaminers(String regNumber, String tab, String tileType) {
+    //
+    public List<ConfirmedStudentSections> getSectionsByRegNumberAndTabForExaminers(String regNumber, String tab, String tileType, Long examinerId) {
         List<ConfirmedStudentSections> sections = confirmedStudentSectionsRepository.findByRegNumberAndActiveTab(regNumber, tab);
 
         // Filter tiles inside each section based on the tile type
@@ -38,6 +39,18 @@ public class ConfirmedStudentSectionsService {
 
             section.setTiles(filteredTiles);  // Update the section with the filtered tiles
         }
+
+        // Filter tiles and submissions based on tile type and examiner ID
+//        for (ConfirmedStudentSections section : sections) {
+//            List<Tile> filteredTiles = section.getTiles().stream()
+//                    .filter(tile -> tile.getType().equals(tileType) && tile.getSubmission() != null)
+//                    .filter(tile -> tile.getSubmission().getExaminers().stream()
+//                            .anyMatch(examiner -> examiner.getId().equals(examinerId))
+//                    )
+//                    .collect(Collectors.toList());
+//
+//            section.setTiles(filteredTiles);  // Update the section with the filtered tiles
+//        }
 
         return sections;
     }
