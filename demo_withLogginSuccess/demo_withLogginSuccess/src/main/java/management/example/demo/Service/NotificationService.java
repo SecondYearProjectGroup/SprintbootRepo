@@ -50,6 +50,11 @@ public class NotificationService {
         return notificationRepository.findByUserIdAndReadFalse(user.getId());
     }
 
+    public List<Notification> getUnreadNotificationsForNotificationPage(User user) {
+        return notificationRepository.findByUserId(user.getId());
+    }
+
+
     // New method to get the count of unread notifications
     public long getUnreadNotificationCount(User user) {
         return notificationRepository.countByUserIdAndReadFalse(user.getId());

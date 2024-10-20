@@ -34,6 +34,14 @@ public class NotificationController {
         return notificationService.getUnreadNotifications(user);
     }
 
+    @GetMapping("/forPage")
+    public List<Notification> getUnreadNotificationsForPage(@RequestHeader ("Authorization") String token){
+        String jwtToken = token.substring(7);
+        String username = jwtUtil.extractUsername(jwtToken);
+        User user = userRepository.findByUsername(username);
+        return notificationService.getUnreadNotificationsForNotificationPage(user);
+    }
+
     @GetMapping("/unread/count")
     public Long getUnreadNotificationCount(@RequestHeader ("Authorization") String token){
         String jwtToken = token.substring(7);
@@ -41,8 +49,6 @@ public class NotificationController {
         User user = userRepository.findByUsername(username);
         return notificationService.getUnreadNotificationCount(user);
     }
-
-
 
 
     public ResponseEntity<?> getUnreadNotifications(Principal principal) {
