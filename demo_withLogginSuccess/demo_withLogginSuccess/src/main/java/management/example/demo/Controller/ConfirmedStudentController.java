@@ -1,9 +1,12 @@
 package management.example.demo.Controller;
 
+import jakarta.mail.MessagingException;
 import management.example.demo.Model.ConfirmedStudent;
+import management.example.demo.Model.EmailTemplate;
 import management.example.demo.Model.FileMetadata;
 import management.example.demo.Model.Submission;
 import management.example.demo.Service.ConfirmedStudentService;
+import management.example.demo.Service.EmailService;
 import management.example.demo.Service.FileService;
 import management.example.demo.Service.SubmissionService;
 import management.example.demo.Util.JwtUtil;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,6 +34,9 @@ public class ConfirmedStudentController {
 
     @Autowired
     private SubmissionService submissionService;
+
+    @Autowired
+    private EmailService emailService;
 
 
     //To get the current logging student register number
@@ -78,5 +85,13 @@ public class ConfirmedStudentController {
             e.printStackTrace();
             return new ResponseEntity<>("File upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    //Send emails to students
+    @PostMapping("/emails/send/stu/{regNumber}")
+    public void sendEmailsToStudentsByOtherParties(@RequestBody EmailTemplate emailTemplate, @PathVariable String regNumber) throws MessagingException {
+        List<String> emails= new ArrayList<>();
+        emails.add(confirmedStudentService.get(regNumber).getEmail());
+        emailService.sendEmailWithGivenDetailsToStudents(emailTemplate,emails);
     }
 }

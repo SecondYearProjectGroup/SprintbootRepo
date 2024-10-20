@@ -112,7 +112,7 @@ public class SubmissionService  {
             String registrationNumber = (String) result[1];
             String nameWithInitials = (String) result[2];
             String title = (String) result[3];
-            LocalDateTime deadline = (LocalDateTime) result[4];
+            LocalDateTime deadline =convertToLocalDateTime((Timestamp) result[4]);
             Boolean submissionStatus = (Boolean) result[5];
             LocalDateTime deadlineToReview = (LocalDateTime) result[6];
             //String examiners = (String) result[6]; // This will be a comma-separated list of examiner names
