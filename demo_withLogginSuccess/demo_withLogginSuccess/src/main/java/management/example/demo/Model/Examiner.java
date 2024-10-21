@@ -19,6 +19,7 @@ public class Examiner {
     private String fullName;
     private String department;
     private String email;
+    private Long noOfSubmissions;
 
     @ManyToMany(mappedBy = "examiners")
     //@JsonBackReference("examiners-submissions")

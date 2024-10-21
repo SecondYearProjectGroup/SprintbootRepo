@@ -35,6 +35,7 @@ public class VivaService {
 
         for (Viva viva : vivas) {
             VivaDetailsDto dto = new VivaDetailsDto();
+            dto.setId(viva.getId());
             dto.setTitle(viva.getTitle());
             dto.setVivaDate(viva.getVivaDate());
             dto.setComments(viva.getComments());

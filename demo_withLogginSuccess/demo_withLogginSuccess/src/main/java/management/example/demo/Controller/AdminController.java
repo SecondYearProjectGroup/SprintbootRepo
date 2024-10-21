@@ -572,7 +572,7 @@ public class AdminController {
         // Generate the Email Notifications for the students
                 ConfirmedStudent confirmedStudent = viva.getConfirmedStudent();
                 String toEmail = confirmedStudent.getEmail();
-                String templateName = "yearEndEvaluationReminder"; // The name of your email template
+                String templateName = "Year-End Evaluation Viva Scheduled"; // The name of your email template
 
         // Prepare variables for the template
                 Map<String, Object> variables = new HashMap<>();

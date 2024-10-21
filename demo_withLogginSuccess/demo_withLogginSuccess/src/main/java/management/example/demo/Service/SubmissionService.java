@@ -1,8 +1,10 @@
 package management.example.demo.Service;
 
 import management.example.demo.DTO.StudentSubmissionExaminerDto;
+import management.example.demo.Model.Examiner;
 import management.example.demo.Model.FileMetadata;
 import management.example.demo.Model.Submission;
+import management.example.demo.Repository.ExaminerRepository;
 import management.example.demo.Repository.FeedbackRepository;
 import management.example.demo.Repository.SubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +30,7 @@ public class SubmissionService  {
     private FileService fileUploadService;
 
     @Autowired
-    private ExaminerService examinerService;
+    private ExaminerRepository examinerRepository;
     @Autowired
     FeedbackRepository feedbackRepository;
 
@@ -57,9 +60,32 @@ public class SubmissionService  {
         submissionRepository.save(submission);
     }
 
+//    public void deleteExaminerFromSubmission(Long submissionId, Long examinerId) {
+//        submissionRepository.removeExaminerFromSubmission(submissionId, examinerId);
+//        feedbackRepository.deleteBySubmissionIdAndExaminerId(submissionId, examinerId);
+//    }
+
     public void deleteExaminerFromSubmission(Long submissionId, Long examinerId) {
+        // Remove the examiner from the submission
         submissionRepository.removeExaminerFromSubmission(submissionId, examinerId);
+
+        // Delete the associated feedback
         feedbackRepository.deleteBySubmissionIdAndExaminerId(submissionId, examinerId);
+
+        // Decrease the number of submissions for the examiner
+        Optional<Examiner> examinerOpt = examinerRepository.findById(examinerId);
+        if (examinerOpt.isPresent()) {
+            Examiner examiner = examinerOpt.get();
+
+            // Decrement the number of submissions, ensuring it doesn't go below 0
+            Long currentSubmissions = examiner.getNoOfSubmissions() != null ? examiner.getNoOfSubmissions() : 0L;
+            if (currentSubmissions > 0) {
+                examiner.setNoOfSubmissions(currentSubmissions - 1);
+            }
+
+            // Save the updated examiner entity
+            examinerRepository.save(examiner);
+        }
     }
 
 
@@ -86,12 +112,13 @@ public class SubmissionService  {
                         (String) result[0], // regNumber
                         (String) result[1], // registrationNumber
                         (String) result[2], // nameWithInitials
-                        (String) result[3], // title
-                        convertToLocalDateTime((Timestamp) result[4]), // deadline
-                        (Boolean) result[5], // submissionStatus
+                        (Long) result[3], //
+                        (String) result[4], // title
+                        convertToLocalDateTime((Timestamp) result[5]), // deadline
+                        (Boolean) result[6], // submissionStatus
                         //convertToLocalDateTime((Timestamp) result[6]),
                         null,
-                        Arrays.asList(((String) result[6]).split(", ")) // examiners
+                        Arrays.asList(((String) result[7]).split(", ")) // examiners
                 ))
                 .collect(Collectors.toList());
     }
@@ -111,17 +138,18 @@ public class SubmissionService  {
             String regNumber = (String) result[0];
             String registrationNumber = (String) result[1];
             String nameWithInitials = (String) result[2];
-            String title = (String) result[3];
-            LocalDateTime deadline =convertToLocalDateTime((Timestamp) result[4]);
-            Boolean submissionStatus = (Boolean) result[5];
-            LocalDateTime deadlineToReview = (LocalDateTime) result[6];
+            Long id = (Long) result[3];
+            String title = (String) result[4];
+            LocalDateTime deadline =convertToLocalDateTime((Timestamp) result[5]);
+            Boolean submissionStatus = (Boolean) result[6];
+            LocalDateTime deadlineToReview = (LocalDateTime) result[7];
             //String examiners = (String) result[6]; // This will be a comma-separated list of examiner names
 
             // Convert comma-separated examiners list to a list if needed
             //List<String> examinerList = Arrays.asList(examiners.split(","));
 
             StudentSubmissionExaminerDto dto = new StudentSubmissionExaminerDto(
-                    regNumber, registrationNumber, nameWithInitials, title, deadline, submissionStatus, deadlineToReview, null
+                    regNumber, registrationNumber, nameWithInitials,id,  title, deadline, submissionStatus, deadlineToReview, null
             );
             dtos.add(dto);
         }

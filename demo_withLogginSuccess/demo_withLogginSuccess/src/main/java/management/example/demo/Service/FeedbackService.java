@@ -56,7 +56,8 @@ public class FeedbackService {
     }
     
 
-//    To update the feedback
+    //To update the feedback
+    //To do - decrease the no of submissions when the examiner submitted their feedback
     public Feedback updateFeedback(Long submissionId, Long examinerId, String body, MultipartFile file) throws IOException {
         Optional<Feedback> feedbackOpt = feedbackRepository.findBySubmissionIdAndExaminerId(submissionId, examinerId);
         if (feedbackOpt.isPresent()){

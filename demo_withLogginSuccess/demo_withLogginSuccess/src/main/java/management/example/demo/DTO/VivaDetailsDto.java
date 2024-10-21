@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class VivaDetailsDto {
 
-
+    private Long id;
     private String title;
     private LocalDateTime vivaDate;
     private String comments;

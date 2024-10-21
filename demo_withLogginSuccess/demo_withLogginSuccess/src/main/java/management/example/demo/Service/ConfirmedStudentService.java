@@ -1,6 +1,5 @@
 package management.example.demo.Service;
 
-import management.example.demo.DTO.StudentSubmissionExaminerDto;
 import management.example.demo.DTO.StudentSupervisorDto;
 import management.example.demo.Model.*;
 import management.example.demo.Repository.ConfirmedStudentRepository;
@@ -10,8 +9,9 @@ import management.example.demo.Repository.SupervisorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -149,10 +149,6 @@ public class ConfirmedStudentService {
 
             // Get the previously assigned examiners (might be empty)
             List<Examiner> previouslyAssignedExaminers = submission.getExaminers();
-            for (Examiner examiner: previouslyAssignedExaminers){
-                System.out.println(examiner.getFullName());
-            }
-
             if (previouslyAssignedExaminers == null) {
                 previouslyAssignedExaminers = new ArrayList<>();
             }
@@ -169,10 +165,14 @@ public class ConfirmedStudentService {
                         // Add the submission to the examiner's list
                         List<Submission> submissions = examiner.getSubmissions();
                         submissions.add(submission);
+
+                        // Increment the number of submissions for the examiner
+                        Long currentSubmissions = examiner.getNoOfSubmissions() != null ? examiner.getNoOfSubmissions() : 0L;
+                        examiner.setNoOfSubmissions(currentSubmissions + 1);
+
                         examinerRepository.save(examiner);
 
-
-                        //Send mails to the examiners to informing the submission assignment
+                        // Send mails to the examiners to inform them of the submission assignment
                         String toEmail = examiner.getEmail();
                         String subject = "You have been assigned as an examiner for a new submission";
                         String body = String.format(
@@ -180,28 +180,25 @@ public class ConfirmedStudentService {
                                         "We are pleased to inform you that you have been assigned as an examiner for a new submission in our system. The details of the submission are as follows:\n\n" +
                                         "Submission Title: %s\n" +
                                         "Submission ID: %d\n" +
-                                        //                            "Student RegNumber: %s\n" +
-                                        //                            "Student Name: %s\n\n"  +
                                         "Please access the submission through the system at your earliest convenience. Your timely feedback is crucial for the student's progress and will be highly appreciated.\n\n" +
                                         "Best regards,\n" +
                                         "Post Graduate Studies,\n" +
-                                        "Department of Computer Engineering,UOP\n",
+                                        "Department of Computer Engineering, UOP\n",
                                 examiner.getFullName(),
                                 submission.getTitle(),
                                 submission.getTile().getId()
-                                //confirmedStudent.getRegNumber(),
-                                //confirmedStudent.getFullName()
                         );
 
-                        //Send the emails to examiners
+                        // Send the email to the examiner
                         emailService.sendMail(toEmail, subject, body);
-                        //Push the  notifications
+
+                        // Push the notification
                         String notificationBody = "You have been assigned as an examiner for a new submission";
                         Optional<User> userExaminer = userService.findById(examiner.getId());
                         User user = userExaminer.get();
                         notificationService.sendNotification(user, subject, notificationBody);
 
-                        //Forming the feedback forms
+                        // Form the feedback forms
                         Feedback feedback = new Feedback();
                         feedback.setSubmission(submission);
                         feedback.setType("final");
@@ -209,16 +206,12 @@ public class ConfirmedStudentService {
                         feedback.setConfirmedStudent(submission.getConfirmedStudent());
                         feedbackService.saveForum(feedback);
                     }
-
                 }
             }
-
-            return submission.getExaminers();
         }
-
-        // Handle the case where the submission is not found
-        return Collections.emptyList();
+        return submissionOpt.map(Submission::getExaminers).orElse(new ArrayList<>());
     }
+
 
 
     //Find the students by the submission id
@@ -247,21 +240,21 @@ public class ConfirmedStudentService {
                 .collect(Collectors.toList());
     }
 
-    public List<StudentSubmissionExaminerDto> getAllStudentSubmissions() {
-        List<Object[]> results = submissionRepository.findAllStudentSubmissionDetailsRaw();
-        return results.stream()
-                .map(result -> new StudentSubmissionExaminerDto(
-                        (String) result[0], // regNumber
-                        (String) result[1], // registrationNumber
-                        (String) result[2], // nameWithInitials
-                        (String) result[3], // title
-                        (LocalDateTime) result[4], // deadline
-                        (Boolean) result[5], // submissionStatus
-                        (LocalDateTime) result[6], //Deadline to review for examiners
-                        Arrays.asList(((String) result[7]).split(", ")) // examiners
-                ))
-                .collect(Collectors.toList());
-    }
+//    public List<StudentSubmissionExaminerDto> getAllStudentSubmissions() {
+//        List<Object[]> results = submissionRepository.findAllStudentSubmissionDetailsRaw();
+//        return results.stream()
+//                .map(result -> new StudentSubmissionExaminerDto(
+//                        (String) result[0], // regNumber
+//                        (String) result[1], // registrationNumber
+//                        (String) result[2], // nameWithInitials
+//                        (String) result[3], // title
+//                        (LocalDateTime) result[4], // deadline
+//                        (Boolean) result[5], // submissionStatus
+//                        (LocalDateTime) result[6], //Deadline to review for examiners
+//                        Arrays.asList(((String) result[7]).split(", ")) // examiners
+//                ))
+//                .collect(Collectors.toList());
+//    }
 
 
 }
