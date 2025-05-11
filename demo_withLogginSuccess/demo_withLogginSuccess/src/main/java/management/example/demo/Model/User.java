@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
+@Table(name = "app_user")
 public class User {
 
     @Id

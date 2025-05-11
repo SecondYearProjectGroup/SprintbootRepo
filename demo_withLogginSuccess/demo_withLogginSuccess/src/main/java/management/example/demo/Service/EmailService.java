@@ -41,7 +41,7 @@ public class EmailService {
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("dasunikawya2001@gmail.com");
+        message.setFrom("thathsaraishan@gmail.com");
         mailSender.send(message);
     }
 
@@ -66,14 +66,15 @@ public class EmailService {
         helper.setTo(toEmail);
         helper.setSubject(subject);
         helper.setText(body);
-        helper.setFrom("dasunikawya2001@gmail.com");
+        //helper.setFrom("myemail@gmail.com");
+        //helper.addAttachment(file.getName(), file);
+        //Path to the file
+        String pathToAttachment = "D:\\Other values\\CSS+cheat+sheet.pdf";
 
-        // Path to the file
-        String pathToAttachment = "C:\\Users\\ASUS\\Desktop\\Com Sem 4\\CO200 Second Year Project\\Required Docs\\RPGapplication.pdf";
+        //Define the file system resource
         FileSystemResource file = new FileSystemResource(new File(pathToAttachment));
-
-        // Add the attachment
-        helper.addAttachment("RPGapplication.pdf", file, "application/pdf");
+        //Attachment
+        helper.addAttachment("CSS+cheat+sheet.pdf", file , "application/pdf");
 
         // Send the email
         mailSender.send(mimeMessage);
