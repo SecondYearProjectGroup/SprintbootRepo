@@ -17,7 +17,6 @@ public class EmailTemplate {
     private String subject;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
     private String body;
 
     private Long userId;

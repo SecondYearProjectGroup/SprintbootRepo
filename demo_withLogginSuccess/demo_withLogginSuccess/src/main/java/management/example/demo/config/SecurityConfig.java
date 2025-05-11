@@ -4,6 +4,7 @@ import management.example.demo.Service.CustomUserDetailsService;
 import management.example.demo.Util.JwtRequestFilter;
 import management.example.demo.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,15 +34,13 @@ public class SecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Set specific allowed origin
+        configuration.setAllowedOrigins(Arrays.asList(frontendUrl)); // Set specific allowed origin
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -49,6 +48,11 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

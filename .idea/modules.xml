@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SprintbootRepo.iml" filepath="$PROJECT_DIR$/.idea/SprintbootRepo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/demo.iml" filepath="$PROJECT_DIR$/demo_withLogginSuccess/demo_withLogginSuccess/demo.iml" />
     </modules>
   </component>
 </project>
